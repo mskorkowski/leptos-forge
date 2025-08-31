@@ -1,0 +1,12 @@
+[toolchain]
+channel = "nightly"
+components = [
+    "rust-analyzer",
+    "rust-src",
+    "rustc-codegen-cranelift-preview",
+    "rustfmt",
+]
+targets = [
+    "x86_64-unknown-linux-gnu",
+    "wasm32-unknown-unknown"
+]
