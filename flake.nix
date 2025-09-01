@@ -19,14 +19,15 @@
       in {
         devShell = packages.mkShell rec {
           buildInputs = with packages; [
-            trunk
-            tailwindcss_4
+            clang
+            cargo-shear
             lld
-            rust-toolchain
+            mold-wrapped
             pkg-config
             rust-analyzer
-            mold-wrapped
-            clang
+            rust-toolchain
+            tailwindcss_4
+            trunk
           ];
           LD_LIBRARY_PATH = packages.lib.makeLibraryPath buildInputs;
         };
