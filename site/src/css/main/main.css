@@ -1,0 +1,150 @@
+@import "tailwindcss";
+
+@source inline("bg-left","bg-right");
+
+@source "../../../../libs/ui_layout";
+@source "../../../../libs/ui_components";
+@source "../../../../forge";
+@source "../../";
+
+@theme {
+  --color-forgebrown-50:  hsl(36deg 100.00% 96.32%);
+  --color-forgebrown-100: hsl(36deg 100.00% 91.86%);
+  --color-forgebrown-200: hsl(36deg 100.00% 83.23%);
+  --color-forgebrown-300: hsl(36deg 100.00% 70.49%);
+  --color-forgebrown-400: hsl(36deg 100.00% 49.31%);
+  --color-forgebrown-500: hsl(36deg 100.00% 41.07%);
+  --color-forgebrown-600: hsl(36deg 100.00% 33.43%);
+  --color-forgebrown-700: hsl(36deg 100.00% 26.76%);
+  --color-forgebrown-800: hsl(36deg 100.00% 21.27%);
+  --color-forgebrown-900: hsl(36deg 100.00% 17.54%);
+  --color-forgebrown-950: hsl(36deg 100.00% 9.96%);
+
+  --color-forgegreen-50:  hsl(147deg 20.80% 96.91%);
+  --color-forgegreen-100: hsl(147deg 20.80% 93.34%);
+  --color-forgegreen-200: hsl(147deg 20.80% 87.00%);
+  --color-forgegreen-300: hsl(147deg 20.80% 78.00%);
+  --color-forgegreen-400: hsl(147deg 20.80% 64.46%);
+  --color-forgegreen-500: hsl(147deg 20.80% 51.22%);
+  --color-forgegreen-600: hsl(147deg 20.80% 41.39%);
+  --color-forgegreen-700: hsl(147deg 20.80% 33.00%);
+  --color-forgegreen-800: hsl(147deg 20.80% 26.23%);
+  --color-forgegreen-900: hsl(147deg 20.80% 21.58%);
+  --color-forgegreen-950: hsl(147deg 20.80% 12.17%);
+
+  --color-forgered-50:  hsl(0deg 75.40% 98.00%);
+  --color-forgered-100: hsl(0deg 75.40% 96.00%);
+  --color-forgered-200: hsl(0deg 75.40% 91.83%);
+  --color-forgered-300: hsl(0deg 75.40% 86.00%);
+  --color-forgered-400: hsl(0deg 75.40% 76.63%);
+  --color-forgered-500: hsl(0deg 75.40% 66.35%);
+  --color-forgered-600: hsl(0deg 75.40% 52.97%);
+  --color-forgered-700: hsl(0deg 75.40% 41.69%);
+  --color-forgered-800: hsl(0deg 75.40% 33.42%);
+  --color-forgered-900: hsl(0deg 75.40% 27.83%);
+  --color-forgered-950: hsl(0deg 75.40% 16.00%);
+
+  --color-forgegray-50:  hsl(207deg 20.00% 97.39%);
+  --color-forgegray-100: hsl(207deg 20.00% 94.28%);
+  --color-forgegray-200: hsl(207deg 20.00% 88.59%);
+  --color-forgegray-300: hsl(207deg 20.00% 80.63%);
+  --color-forgegray-400: hsl(207deg 20.00% 68.79%);
+  --color-forgegray-500: hsl(207deg 20.00% 57.38%);
+  --color-forgegray-600: hsl(207deg 20.00% 46.56%);
+  --color-forgegray-700: hsl(207deg 20.00% 37.41%);
+  --color-forgegray-800: hsl(207deg 20.00% 29.57%);
+  --color-forgegray-900: hsl(207deg 20.00% 24.34%);
+  --color-forgegray-950: hsl(207deg 20.00% 13.64%);
+
+  --color-forgeblue-50:  hsl(209deg 100.00% 97.54%);
+  --color-forgeblue-100: hsl(209deg 100.00% 94.80%);
+  --color-forgeblue-200: hsl(209deg 100.00% 89.50%);
+  --color-forgeblue-300: hsl(209deg 100.00% 81.94%);
+  --color-forgeblue-400: hsl(209deg 100.00% 69.70%);
+  --color-forgeblue-500: hsl(209deg 100.00% 56.37%);
+  --color-forgeblue-600: hsl(209deg 100.00% 44.21%);
+  --color-forgeblue-700: hsl(209deg 100.00% 35.48%);
+  --color-forgeblue-800: hsl(209deg 100.00% 28.27%);
+  --color-forgeblue-900: hsl(209deg 100.00% 23.33%);
+  --color-forgeblue-950: hsl(209deg 100.00% 13.47%);
+
+  --animate-background-slide-left: background-slide-left;
+
+  @keyframes background-slide-left {
+    0% {
+        background-position: left;
+    }
+    100% {
+        background-position: right;
+    }
+  }
+
+  --animate-background-slide-right: background-slide-right;
+
+  @keyframes background-slide-right {
+    0% {
+        background-position: right;
+    }
+    100% {
+        background-position: left;
+    }
+  }
+  
+}
+
+@utility scrollbox {
+  @apply relative;
+}
+
+.scrollbox:has(.scrollable) {
+  @apply overflow-hidden;
+}
+
+@utility scrollable {
+  @apply absolute top-0 left-0 right-0 bottom-0 overflow-auto;
+}
+
+@utility forge-animate-once {
+  animation-iteration-count: 1;
+}
+
+@utility forge-animate-infinite {
+  animation-iteration-count: infinite;
+}
+
+@utility forge-animate-repeat-* {
+  animation-iteration-count: --value(integer);
+}
+
+@utility forge-animate-linear {
+  animation-timing-function: linear;
+}
+
+@utility forge-animate-ease-in-out {
+  animation-timing-function: ease-in-out;
+}
+
+@utility forge-animate-* {
+  animation-direction: normal;
+  animation-duration: --value(integer)ms;
+}
+
+@utility -forge-animate-* {
+  animation-direction: reverse;
+  animation-duration: --value(integer)ms;
+}
+
+@utility forge-animate-keep-last {
+  animation-fill-mode: forward;
+}
+
+@utility forge-animate-keep-first {
+  animation-fill-mode: backwards;
+}
+
+@utility forge-animate-keep-both {
+  animation-fill-mode: both;
+}
+
+@import "../../../../libs/ui_components/src/css/typography.css";
+@import "../../../../libs/ui_components/src/css/markdown.css";

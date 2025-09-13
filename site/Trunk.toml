@@ -1,0 +1,13 @@
+[[hooks]]
+stage = "pre_build"    # When to run hook, must be one of "pre_build", "build", "post_build"
+command = "clear"      # Command to run
+command_arguments = [] # Arguments to pass to command
+
+[serve]
+port = 8000
+
+[watch]
+watch = [
+    ".",
+    "../libs"
+]

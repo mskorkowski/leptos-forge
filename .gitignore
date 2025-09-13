@@ -29,3 +29,5 @@ Cargo.lock
 .direnv
 
 
+# Trunk dist files
+**/dist

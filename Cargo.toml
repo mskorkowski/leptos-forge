@@ -1,6 +1,9 @@
 [workspace]
 resolver = "3"
 members = [
+    "libs/*",
+    "forge",
+    "site",
 ]
 
 [workspace.package]
@@ -8,3 +11,62 @@ version = "0.1.0"
 edition = "2024"
 rust-version = "1.88"
 license = "MIT"
+
+[workspace.dependencies]
+# Internal dependencies
+
+forge =         { version = "0.1.0", path = "forge", package = "leptos_forge" }
+utils =         { version = "0.1.0", path = "libs/utils",  package = "leptos_forge_utils" }
+utils_leptos =  { version = "0.1.0", path = "libs/utils_leptos", package = "leptos_forge_utils_leptos" }
+ui_components = { version = "0.1.0", path = "libs/ui_components", package = "leptos_forge_ui_components" }
+ui_layout =     { version = "0.1.0", path = "libs/ui_layout", package = "leptos_forge_ui_layout" }
+
+# External dependencies
+cfg-if = "1"
+console_error_panic_hook = "0.1.7"
+console_log = "1.0.0"
+floating-ui-leptos = {version = "0.5.0" }
+http = "1"
+icondata = { version = "0.6", default-features = false, features = ["material-design-icons"] }
+js-sys = "0.3.77"
+leptos = { version = "0.8" }
+leptos_axum = { version = "0.8" }
+leptos_icons = { version = "0.7" }
+leptos_macro = { version = "0.8" }
+leptos_meta = { version = "0.8" }
+leptos-node-ref = "0.2.0"
+leptos_router = { version = "0.8" }
+leptos-use = { version = "0.16" }
+log = "0.4.20"
+pulldown-cmark = "0.13.0"
+reactive_graph = { version = "0.2.5" }
+reactive_stores = { version = "0.2.5" }
+
+# Unfortunately, testing-library-dom which has the `create_event` and `fire_event` has not been released on crates.io yet
+testing-library-dom = { version = "0.0.1", git="https://github.com/RustForWeb/testing-library.git", rev="05c93b5" }
+proptest = "1.5.0"
+send_wrapper="0.6.0"
+serde = "1.0.215"
+thiserror = "2.0.11"
+uuid = { version = "1.11.1", features = ["serde", "v4", "fast-rng"] }
+web-sys = { version = "0.3.69" }
+
+
+
+[workspace.lints.rustdoc]
+private_intra_doc_links = { level = "allow" }
+
+[workspace.lints.rust]
+missing_docs = { level = "deny" }
+unsafe_code = { level = "deny" }
+
+[workspace.lints.clippy]
+empty_docs = { level = "deny" }
+missing_docs_in_private_items = "deny"
+missing_safety_doc = "deny"
+missing_errors_doc = "deny"
+missing_fields_in_debug = "deny"
+missing_panics_doc = "deny"
+undocumented_unsafe_blocks = "deny"
+
+

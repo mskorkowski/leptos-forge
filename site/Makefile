@@ -1,0 +1,2 @@
+run:
+	trunk serve

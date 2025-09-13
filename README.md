@@ -3,6 +3,7 @@
 Leptos Forge is the library which helps with creating and testing user interfaces written in Rust and [Leptos](https://leptos.dev/).
 
 > **Warning**
+>
 > Leptos Forge is still at the early stages of development and is really bare-bone project. Many of the developer experience features
 > are not yet implemented.
 
@@ -55,3 +56,9 @@ Project is under MIT license. See [LICENSE](LICENSE) for details.
 ## Contributing
 
 Create an issue where you will describe what and why would you like to change. We will iron it out together. All PR are welcome.
+
+### Why Leptos Forge uses custom components
+
+Leptos Forge is using internally the components defined in the `libs/ui_components` crate. We've created these components so you can use them in the code
+related to your stories. This way Leptos Forge doesn't depend on any particular UI library, so you can use whatever you like without worrying about 
+compatibility issues.
