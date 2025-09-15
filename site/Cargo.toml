@@ -6,7 +6,7 @@ publish = false # we don't need this crate to be published to the crates.io
 
 
 [[bin]]
-name = "storybook"
+name = "site"
 path = "src/rust/main/main.rs"
 
 [dependencies]
@@ -56,3 +56,6 @@ rustflags = [
    "--cfg",
    "erase_components",
 ]
+
+[package.metadata.cargo_resources]
+resource_root = "target/resources"

@@ -2,6 +2,11 @@
 name = "leptos_forge_ui_components"
 version.workspace = true
 edition.workspace = true
+build="src/rust/build/build.rs"
+include = [
+    "src/css/main/markdown.css",
+    "src/css/main/typography.css",
+]
 
 [lib]
 path = "src/rust/main/lib.rs"
