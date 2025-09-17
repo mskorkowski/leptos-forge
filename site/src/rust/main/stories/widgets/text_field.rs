@@ -67,8 +67,8 @@ impl Story for BasicTextFieldStory {
         let text: URwSignal<String> = self.text;
 
         view! {
-            <TextField id="storybook-1-label-text-input" text=label label={"Label".to_string()} />
-            <TextField id="storybook-1-label-text-input" text=text label={"Text".to_string()} />
+            <TextField id="leptos-forge-1-label-text-input" text=label label={"Label".to_string()} />
+            <TextField id="leptos-forge-1-label-text-input" text=text label={"Text".to_string()} />
         }.into_any()
     }
 
@@ -127,7 +127,7 @@ impl Story for NonemptyTextFieldStory {
         let text: URwSignal<String> = self.text;
 
         view! {
-            <TextField id="storybook-1-label-text-input" text=text label=label />
+            <TextField id="leptos-forge-1-label-text-input" text=text label=label />
         }.into_any()
     }
 
@@ -136,8 +136,8 @@ impl Story for NonemptyTextFieldStory {
         let text: URwSignal<String> = self.text;
 
         view! {
-            <TextField id="storybook-1-label-text-input" text=label label={"Label".to_string()} />
-            <TextField id="storybook-1-label-text-input" text=text label={"Text".to_string()} />
+            <TextField id="leptos-forge-1-label-text-input" text=label label={"Label".to_string()} />
+            <TextField id="leptos-forge-1-label-text-input" text=text label={"Text".to_string()} />
         }.into_any()
     }
 

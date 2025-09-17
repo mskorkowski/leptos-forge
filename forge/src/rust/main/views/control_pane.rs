@@ -13,8 +13,8 @@ where
     UiStory: 'static + Story + Copy,
 {
     view! { 
-        <div class="storybook-control-pane-box basis-1/3 flex-none scrollbox print:hidden">
-            <div class="storybook-control-pane p-4 scrollable">
+        <div class="leptos-forge-control-pane-box basis-1/3 flex-none scrollbox print:hidden">
+            <div class="leptos-forge-control-pane p-4 scrollable">
                 { story.controls() }
             </div>
         </div>

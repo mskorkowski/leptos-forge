@@ -86,8 +86,8 @@ impl Story for BasicLabelStory {
         let text: URwSignal<String> = self.text;
 
         view! {
-            <TextField id="storybook-1-label-text-input" text=label label={"Label".to_string()} />
-            <TextField id="storybook-1-text-text-input" text=text label={"Text".to_string()} />
+            <TextField id="leptos-forge-1-label-text-input" text=label label={"Label".to_string()} />
+            <TextField id="leptos-forge-1-text-text-input" text=text label={"Text".to_string()} />
         }.into_any()
     }
 
@@ -298,7 +298,7 @@ impl Story for InlineLabelStory {
         let label: URwSignal<String> = self.label;
 
         view! {
-            <TextField id="storybook-1-label-text-input" text=label label={"Label".to_string()} />
+            <TextField id="leptos-forge-1-label-text-input" text=label label={"Label".to_string()} />
         }.into_any()
     }
 

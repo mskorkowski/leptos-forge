@@ -205,7 +205,7 @@ where
 
 /// Css classes of the buttons used in the test viewer to play tests
 fn test_view_button_class<S: ToString>(extra_classes: S) -> impl Attribute {
-    let class = format!("storybook-test-view-button bg-forgegray-300 -300 hover:bg-forgeblue-400 active:bg-forgeblue-600 active:text-forgegray-200 px-2 py-2 {}", extra_classes.to_string());
+    let class = format!("leptos-forge-test-view-button bg-forgegray-300 -300 hover:bg-forgeblue-400 active:bg-forgeblue-600 active:text-forgegray-200 px-2 py-2 {}", extra_classes.to_string());
 
     view!{
         <{..} class=class />

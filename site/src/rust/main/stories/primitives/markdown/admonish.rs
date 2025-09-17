@@ -109,7 +109,7 @@ impl Story for MarkdownAdmonishStory {
 
     fn controls(&self) -> AnyView {
         view!{
-            <Codearea id="storybook-markdown-demo-textarea" text=self.text label={"Markdown document".to_string()} />
+            <Codearea id="leptos-forge-markdown-demo-textarea" text=self.text label={"Markdown document".to_string()} />
         }.into_any()
     }
 

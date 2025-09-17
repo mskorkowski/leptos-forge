@@ -9,7 +9,7 @@ pub fn ComponentPanel(
     children: Children
 ) -> impl IntoView {
     view! { 
-        <div class="storybook-component-panel basis-2/3 flex flex-col flex-none pt-4 overflow-hidden print:basis-full print:flex-auto">
+        <div class="leptos-forge-component-panel basis-2/3 flex flex-col flex-none pt-4 overflow-hidden print:basis-full print:flex-auto">
             {children()}
         </div>
     }

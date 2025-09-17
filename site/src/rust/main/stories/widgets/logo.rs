@@ -55,8 +55,8 @@ impl Story for BasicLogoStory {
         let file: URwSignal<String> = self.file;
 
         view! {
-            <BlobFile id="storybook-1-image-upload" label="Select an image" file=file/>
-            <TextField text=label label="Alternative text" id="storybook-2-alt-text"/> 
+            <BlobFile id="leptos-forge-1-image-upload" label="Select an image" file=file/>
+            <TextField text=label label="Alternative text" id="leptos-forge-2-alt-text"/> 
         }.into_any()
     }
 

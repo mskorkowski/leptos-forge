@@ -1,12 +1,14 @@
-//! Trait for holding a huge sections of the storybook
+//! Trait for grouping the [stories][Story] together
 //! 
 
-/// Describes a section of the storybook
+/// Description of the [Section] shown when you don't implement a description
+/// 
+/// When you add section into your `leptos_forge` application it will show up in the UI
+/// as the description.
 const SECTION_DESC: &str = r#############"
 # Section";
 
-Sections are intended to wrap a multiple stories in the storybook under single umbrella
-
+Sections are intended to wrap a multiple stories in the book under single umbrella
 
 
 ## Implementing
@@ -30,7 +32,7 @@ The easiest way to implement it is by creating a `const &str`. For example this 
 const SECTION_DESC: &str = r############"
 # Section";
 
-Sections are intended to wrap a multiple stories in the storybook under single umbrella...
+Sections are intended to wrap a multiple stories in the book under single umbrella...
 
 "############
 ```
@@ -53,11 +55,11 @@ impl Section for MySection {
 
 "#############;
 
-/// Section in the storybook
+/// Section describing big chunk of the UI components
 /// 
-/// Sections are intended to wrap a multiple stories in the storybook under single umbrella
+/// Sections contain only Markdown text.
 pub trait Section: Default {
-    /// Description of the story
+    /// Function returns the text of the section
     fn description(&self) -> &'static str {
         SECTION_DESC
     }

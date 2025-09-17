@@ -1,4 +1,9 @@
-//! Storybook for components code
+//! Site for `leptos_forge`
+//! 
+//! The site is both the website with documentation about the `leptos_forge` and 
+//! the example at the same time.
+//! 
+//! We try to keep it clean, documented and easy to read.
 
 #![doc(test(attr(deny(unused))))]
 #![doc(test(attr(deny(dead_code))))]

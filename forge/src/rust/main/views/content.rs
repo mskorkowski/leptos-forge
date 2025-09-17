@@ -9,7 +9,7 @@ pub fn Content(
     children: Children,
 ) -> impl IntoView {
     view! {
-        <div class="storybook-content divide-solid flex flex-row flex-1 overflow-hidden print:overflow-visible">
+        <div class="leptos-forge-content divide-solid flex flex-row flex-1 overflow-hidden print:overflow-visible">
             { children() }
         </div>
     }

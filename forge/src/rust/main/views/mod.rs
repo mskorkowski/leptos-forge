@@ -1,4 +1,4 @@
-//! Internal components of the storybook
+//! Internal components of the `leptos_forge`
 
 pub mod widgets;
 pub mod canvas;

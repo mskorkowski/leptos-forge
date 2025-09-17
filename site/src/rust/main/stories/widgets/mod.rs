@@ -20,7 +20,7 @@ Widgets are most useful elements of the design language and can be used to creat
 
 "############;
 
-/// Widget section in the storybook
+/// Widget section on the site
 #[derive(Debug,Default,Clone, Copy)]
 pub struct Widgets;
 

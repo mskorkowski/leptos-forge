@@ -1,4 +1,4 @@
-//! Module for page of the ui storybook 
+//! Module contains the [Page] component
 
 #![allow(clippy::missing_docs_in_private_items)]
 
@@ -23,7 +23,7 @@ use super::description::Description;
 use super::tab_panel::TabName;
 
 
-/// Page of the ui storybook
+/// Page is the view for the single story about a component
 #[component]
 pub fn Page<S: 'static + Story + Default + Copy + ThreadSafe>(
     /// Phantom data of the story

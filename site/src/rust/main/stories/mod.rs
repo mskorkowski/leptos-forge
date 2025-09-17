@@ -1,14 +1,12 @@
 //! Stories for various components
 
 mod primitives;
-mod screen;
 mod widgets;
 
 use leptos::prelude::*;
 use primitives::button::BasicButtonStory;
 use primitives::switch::BasicSwitchStory;
 use primitives::switch::ToggledOnSwitchStory;
-use screen::Screens;
 use primitives::label::BasicLabelStory;
 use primitives::label::InlineLabelStory;
 use primitives::markdown::MarkdownAdmonishStory;
@@ -71,7 +69,5 @@ pub const ROUTES: &[RouteDef] = &[
         //     RouteDef::page::<ForceOpenSingleSelectStory>("force_open", "Force open"),
         //     RouteDef::page::<ComponentWithAStoreStory>("store_failure", "Store failure"),
         // ]),
-    ]),
-    RouteDef::section::<Screens>("components", "Components", &[
     ]),
 ];

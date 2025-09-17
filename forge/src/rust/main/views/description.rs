@@ -13,7 +13,7 @@ pub fn Description(
     text: &'static str
 ) -> impl IntoView {
     view! {
-        <div class="storybook-description flex flex-col basis-1/3 first:basis-1/1 px-4 py-4 overflow-auto print:hidden print:basis-0">
+        <div class="leptos-forge-description flex flex-col basis-1/3 first:basis-1/1 px-4 py-4 overflow-auto print:hidden print:basis-0">
             <Markdown src={text} />
         </div>
     }

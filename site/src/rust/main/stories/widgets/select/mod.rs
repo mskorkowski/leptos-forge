@@ -108,7 +108,7 @@ impl Story for BasicSingleSelectStory {
         view! {
             <div class="relative">
                 <SingleSelect
-                    id="storybook-1-select"
+                    id="leptos-forge-1-select"
                     label={self.label}
                     value={self.value}
                     items={
@@ -123,7 +123,7 @@ impl Story for BasicSingleSelectStory {
         let label: URwSignal<String> = self.label;
 
         view! {
-            <TextField text=label label="Alternative text" id="storybook-2-alt-text"/> 
+            <TextField text=label label="Alternative text" id="leptos-forge-2-alt-text"/> 
         }.into_any()
     }
 
@@ -158,7 +158,7 @@ impl Story for ForceOpenSingleSelectStory {
         view! {
             <div class="relative">
                 <SingleSelect
-                    id="storybook-1-select"
+                    id="leptos-forge-1-select"
                     label={self.label}
                     value={self.value}
                     items={
@@ -173,7 +173,7 @@ impl Story for ForceOpenSingleSelectStory {
         let label: URwSignal<String> = self.label;
 
         view! {
-            <TextField text=label label="Alternative text" id="storybook-2-alt-text"/> 
+            <TextField text=label label="Alternative text" id="leptos-forge-2-alt-text"/> 
         }.into_any()
     }
 

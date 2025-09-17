@@ -81,9 +81,10 @@ impl PathSpec {
     /// 
     /// ```rust
     /// 
-    /// # use storybook::app::navigation::PathSpec;
+    /// # use leptos_forge::app::navigation::PathSpec;
     /// 
-    /// 
+    /// let root = PathSpec::Root; // root = `/` path in URL
+    /// let components = root.extend("components"); // components = `/components` path in URL
     /// 
     /// ```
     /// 
@@ -205,7 +206,8 @@ impl RouteDef{
 
     /// Creates a new section route
     /// 
-    /// Section is the part of storybook which encompasses a bigger group of stories
+    /// Section creates a new Markdown only page, It's intended use is to group a bunch of related [pages][RouteDef::page] and [componens][RouteDef::component]
+    /// together
     pub const fn section<S: 'static + Section + Default + Copy + Send>(path: &'static str, label: &'static str, subroutes: &'static [RouteDef]) -> RouteDef {
         RouteDef{
             path,

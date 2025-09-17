@@ -85,8 +85,8 @@ impl Story for BasicPasswordFieldStory {
         );
 
         view! {
-            <TextField id="storybook-1-label-text-input" text=label label={"Label".to_string()} />
-            <TextField id="storybook-1-label-text-input" text=text label={"Text".to_string()} />
+            <TextField id="leptos-forge-1-label-text-input" text=label label={"Label".to_string()} />
+            <TextField id="leptos-forge-1-label-text-input" text=text label={"Text".to_string()} />
         }.into_any()
     }
 
@@ -170,8 +170,8 @@ impl Story for NonemptyPasswordFieldStory {
         );
 
         view! {
-            <TextField id="storybook-1-label-text-input" text=label label={"Label".to_string()} />
-            <TextField id="storybook-1-label-text-input" text=text label={"Text".to_string()} />
+            <TextField id="leptos-forge-1-label-text-input" text=label label={"Label".to_string()} />
+            <TextField id="leptos-forge-1-label-text-input" text=text label={"Text".to_string()} />
         }.into_any()
     }
 
@@ -255,8 +255,8 @@ impl Story for NonemptyVisiblePasswordFieldStory {
         );
 
         view! {
-            <TextField id="storybook-1-label-text-input" text=label label={"Label".to_string()} />
-            <TextField id="storybook-1-label-text-input" text=text label={"Text".to_string()} />
+            <TextField id="leptos-forge-1-label-text-input" text=label label={"Label".to_string()} />
+            <TextField id="leptos-forge-1-label-text-input" text=text label={"Text".to_string()} />
         }.into_any()
     }
 

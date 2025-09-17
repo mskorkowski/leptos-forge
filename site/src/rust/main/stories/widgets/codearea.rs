@@ -66,8 +66,8 @@ impl Story for BasicCodeareaStory {
         let text: URwSignal<String> = self.text;
 
         view! {
-            <TextField id="storybook-1-label-text-input" text=label label={"Label".to_string()} />
-            <TextField id="storybook-1-label-text-input" text=text label={"Text".to_string()} />
+            <TextField id="leptos-forge-1-label-text-input" text=label label={"Label".to_string()} />
+            <TextField id="leptos-forge-1-label-text-input" text=text label={"Text".to_string()} />
         }.into_any()
     }
 
@@ -126,7 +126,7 @@ impl Story for NonemptyCodeareaStory {
         let text: URwSignal<String> = self.text;
 
         view! {
-            <Codearea id="storybook-1-label-text-input" text=text label=label />
+            <Codearea id="leptos-forge-1-label-text-input" text=text label=label />
         }.into_any()
     }
 
@@ -135,8 +135,8 @@ impl Story for NonemptyCodeareaStory {
         let text: URwSignal<String> = self.text;
 
         view! {
-            <TextField id="storybook-1-label-text-input" text=label label={"Label".to_string()} />
-            <TextField id="storybook-1-label-text-input" text=text label={"Text".to_string()} />
+            <TextField id="leptos-forge-1-label-text-input" text=label label={"Label".to_string()} />
+            <TextField id="leptos-forge-1-label-text-input" text=text label={"Text".to_string()} />
         }.into_any()
     }
 
