@@ -1,0 +1,9 @@
+@import "tailwindcss";
+
+@source inline("bg-left","bg-right");
+
+@source "../../";
+
+
+@import "../../../target/resources/leptos_forge/common.css";
+@import "../../../target/resources/leptos_forge.css";

@@ -1,0 +1,10 @@
+
+
+
+@utility forge-text-standard {
+    @apply text-sm;
+}
+
+@utility forge-text-small {
+    @apply text-xs;
+}

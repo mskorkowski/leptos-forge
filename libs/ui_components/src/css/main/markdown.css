@@ -1,0 +1,237 @@
+.markdown {
+    @apply bg-white m-4 p-8;    
+}
+
+.markdown h2,h3,h4,h5,h6 {
+    @apply pt-2 mb-6 font-bold;
+}
+
+.markdown h1:first-child {
+    @apply text-9xl font-bold;
+}
+
+.markdown h1:first-child:has(+ h1) {
+    @apply inline-block;
+}
+
+.markdown h1:first-child + h1 {
+    @apply inline-block text-4xl pt-0 text-forgegray-700 font-bold;
+}
+
+
+.markdown h1 {
+    @apply text-4xl pt-1 mb-9 font-bold;
+}
+
+.markdown h2 {
+    @apply text-3xl font-bold;
+}
+
+.markdown h3 {
+    @apply text-2xl font-bold;
+}
+
+.markdown h4 {
+    @apply text-xl font-bold;
+}
+
+.markdown h5 {
+    @apply text-lg font-bold;
+}
+
+.markdown h6 {
+    @apply text-base font-bold;
+}
+
+.markdown p {
+    @apply text-base font-normal mb-6;
+}
+
+.markdown p code {
+    @apply bg-forgeblue-50 font-mono text-base font-normal mb-6;
+}
+
+.markdown blockquote {
+    @apply border-l-forgeblue-800 border-solid bg-forgegray-100 mb-6 py-3 px-3;
+}
+
+.markdown blockquote.markdown-alert-note::before {
+    @apply text-forgeblue-700 font-bold;
+    content: "ℹ️ Note!";
+}
+
+.markdown blockquote.markdown-alert-note {
+    @apply border-l-forgeblue-700 border-solid border-l-3;
+}
+
+.markdown blockquote.markdown-alert-tip::before {
+    @apply text-green-700 font-bold;
+    content: "💡 Tip!";
+}
+
+.markdown blockquote.markdown-alert-tip {
+    @apply border-l-green-700 border-solid border-l-3;
+}
+
+.markdown blockquote.markdown-alert-important::before {
+    @apply text-purple-700 font-bold;
+    content: "❕ IMPORTANT!";
+}
+
+.markdown blockquote.markdown-alert-important {
+    @apply border-l-purple-700 border-solid border-l-3;
+}
+
+.markdown blockquote.markdown-alert-warning::before {
+    @apply text-orange-500 font-bold;
+    content: "⚠️ WARNING!";
+}
+
+.markdown blockquote.markdown-alert-warning {
+    @apply border-l-orange-500 border-solid border-l-3;
+}
+
+.markdown blockquote.markdown-alert-caution::before {
+    @apply text-red-500 font-bold;
+    content: "🛑͏ CAUTION!";
+}
+
+.markdown blockquote.markdown-alert-caution {
+    @apply border-l-red-500 border-solid border-l-4;
+}
+
+.markdown a {
+    @apply no-underline text-forgeblue-700;
+}
+
+.markdown a:hover {
+    @apply underline text-forgeblue-500;
+}
+
+.markdown a:active {
+    @apply underline text-forgeblue-400;
+}
+
+.markdown a:visited {
+    @apply text-forgebrown-800;
+}
+
+.markdown ul {
+    @apply list-disc;
+}
+
+.markdown ol {
+    @apply list-decimal;
+}
+
+.markdown :is(ul, ol) {
+    @apply ml-5 mb-6
+}
+
+.markdown pre {
+    @apply pl-1 rounded-xs border-dashed border mb-6;
+}
+
+.markdown table{
+    @apply table-auto mb-6;
+}
+
+.markdown table>thead>tr {
+    @apply border-solid border-forgeblue-700; 
+}
+
+.markdown table>thead>tr>th {
+    @apply py-2 px-2 bg-forgegray-300 border-solid border-forgeblue-500 border-l-1;
+}
+
+.markdown table>thead>tr>th:first-child {
+    @apply border-none;
+}
+
+.markdown table>tbody>tr {
+    @apply border-t-1 border-solid border-forgeblue-500;
+}
+
+.markdown table>tbody>tr:nth-child(even) {
+    @apply bg-forgegray-200;
+}
+
+.markdown table>tbody>tr>td {
+    @apply py-2 px-2 border-l-1 border-solid border-forgeblue-500;
+}
+
+.markdown table>tbody>tr>td:first-child {
+    @apply border-none;
+}
+
+
+/* Based on https://dylanatsmith.com/wrote/styling-the-kbd-element */
+.markdown kbd {
+  /* Set up custom properties for colours so we can switch them in dark mode */
+  --kbd-color-background: var(--color-white);
+  /* These interpolated variables reference a SCSS map of HSL-based greys */
+  --kbd-color-border:     var(--color-gray-800);
+  --kbd-color-text:       var(--color-gray-800);
+
+  /* In dark mode, a straight-up inversion doesn’t work for
+     the “physical” key look so they need to be adjusted */
+  /* @media (prefers-color-scheme: dark) {
+    --kbd-color-background: var(--color-gray-500);
+    --kbd-color-border:     var(--color-gray-200);
+    --kbd-color-text:       var(--color-gray-100);
+  } */
+
+  /* Match the page defaults in light mode but 
+     switch to a light-ish grey in dark mode */
+  background-color: var(--kbd-color-background);
+  color: var(--kbd-color-text);
+
+  /* Round off the corners like physical keys have */
+  border-radius: 0.25rem;
+
+  /* Add a simple border */
+  border: 1px solid var(--kbd-color-border);
+
+  /* A sharp shadow (with no blur) really gives
+     the old school keyboard look */
+  box-shadow: 0 2px 0 1px var(--kbd-color-border);
+
+  /* Remove the text cursor — totally optional
+     but I wanted it for my hover effect */
+  cursor: default;
+
+  /* By default, browsers style <kbd> with a monospace typeface */
+  font-family: var(--font-family-sans-serif);
+
+  /* If we do all this with the default font size
+     (mine is 18px on desktop) it’ll look massive
+     and bump into lines above and below */
+  font-size: 0.75em;
+
+  /* Remove any extra space so I can accurately tweak the padding */
+  line-height: 1;
+
+  /* Make narrow numbers and letters look less odd */
+  min-width: 0.75rem;
+  /* `min-width` doesn’t work on inline elements */
+  display: inline-block;
+  /* Keep the characters centred when narrower than the `max-width` */
+  text-align: center;
+
+  /* Seemed to look more key-like with more horizontal padding 🤷 */
+  padding: 2px 5px;
+
+  /* These two lines pull the whole element up now that they’re
+     bottom-heavy due to the `box-shadow`. This looks better
+     against the cap height of regular paragraph text. */
+  position: relative;
+  top: -1px;
+
+  /* This is my favourite part of the whole thing. The key gets
+     “pushed” down and the shadow gets reduced so it looks like
+     it might when typing on a physical keyboard. */
+  &:hover {
+    box-shadow: 0 1px 0 0.5px var(--kbd-color-border);
+    top: 1px;
+  }
+}

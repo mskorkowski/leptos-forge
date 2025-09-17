@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>leptos-forge - Build your own components with confidence</title>
+        <meta name="description" content="leptos-forge is windows buyer-seller communication platform">
+        <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, interactive-widget=overlays-content" />
+        <link data-trunk rel="copy-dir" href="target/resources" data-target-path="resources" />
+        <link data-trunk rel="tailwind-css" href="src/css/main/main.css" />
+        <link data-trunk rel="rust" data-initializer="src/js/loader/index.mjs" href="Cargo.toml"/>
+        <style>
+            .inline-body-style {
+                height: 100dvh; 
+                width: 100dvw;
+            }
+        </style>
+    </head>
+    <body class="inline-body-style print:h-auto print:w-aout print:overflow-visible">
+        <div
+            id="loader-container"
+            style="display: none; align-items: center; height: 100vh;"
+        >
+            <div 
+                id="loader" 
+                style="display: none; margin-left: auto; margin-right: auto; border: 3px solid hsl(var(--forgeblue-950)); height: 5%; min-height: 20px; width: 60%;"
+            >
+                <div id="loader-progress" style="background-color: hsl(var(--forgeblue-900)); width: 0%; height: 100%;"></div>
+            </div>
+            <div 
+                id="loader-error"
+                style="display: none; white-space: pre-wrap;"
+            >
+            </div>
+        </div>
+    </body>
+</html>

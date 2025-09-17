@@ -1,0 +1,32 @@
+[package]
+name = "leptos_forge_utils_leptos"
+version.workspace = true
+edition.workspace = true
+readme = "README.md"
+
+[lib]
+path = "src/rust/main/lib.rs"
+
+[dependencies]
+leptos.workspace = true
+leptos-use.workspace = true
+leptos-node-ref.workspace = true
+reactive_graph.workspace = true
+reactive_stores.workspace = true
+
+# cfg-if.workspace = true
+send_wrapper.workspace = true
+# thiserror.workspace = true
+web-sys.workspace = true
+
+# utils = { path = "../utils", package = "leptos_forge_utils" }
+
+[features]
+default = []
+hydrate = ["leptos/hydrate"]
+ssr = [
+    "leptos/ssr",
+]
+
+[lints]
+workspace = true

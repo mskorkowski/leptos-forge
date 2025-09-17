@@ -1,0 +1,13 @@
+@import "tailwindcss";
+
+@source inline("bg-left","bg-right");
+
+@source "../../../../libs/ui_layout";
+@source "../../../../libs/ui_components";
+@source "../../";
+
+
+@import "../../../../libs/ui_components/src/css/main/markdown.css";
+@import "../../../../libs/ui_components/src/css/main/typography.css";
+@import "./forge.css";
+ 
