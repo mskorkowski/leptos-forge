@@ -6,7 +6,8 @@ readme = "../README.md"
 build="src/rust/build/build.rs"
 include = [
     "src/css/forge.css",
-    "src/resources/generated/leptos-forge.css"
+    "src/resources/generated/leptos-forge.css",
+    "src/resources/logo/logo.svg"
 ]
 
 [lib]
@@ -54,14 +55,9 @@ ssr = [
 [lints]
 workspace = true
 
-[target.wasm32-unknown-unknown]
-rustflags = [
-   "--cfg",
-   "erase_components",
-]
-
 [package.metadata.cargo_resources]
 provides = [
     { crate_path = "src/resources/generated/leptos-forge.css", output_path="leptos_forge.css" },
-    { crate_path = "src/css/main/forge.css", output_path="leptos_forge/common.css"}
+    { crate_path = "src/css/main/forge.css", output_path="leptos_forge/common.css"},
+    { crate_path = "src/resources/logo/logo.svg", output_path="leptos_forge/logo/logo.svg" }
 ]

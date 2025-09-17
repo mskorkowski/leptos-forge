@@ -19,6 +19,7 @@ const TAILWIND_FAILURE: &str = r############"Failed to build css for leptos-forg
 /// Entry point for the build script.
 fn main() {
     println!("cargo::rerun-if-changed=src/css/main");
+    println!("cargo::rerun-if-changed=src/resources/logo");
 
     Command::new("tailwindcss")
         .args(vec![

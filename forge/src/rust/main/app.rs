@@ -18,7 +18,10 @@ use super::views::content::Content;
 #[component]
 pub fn App(
     /// The routing information for the Leptos Forge
-    routes: &'static [RouteDef]
+    routes: &'static [RouteDef],
+    /// Path to image to be used as a logo
+    #[prop(default=Option::<&'static str>::None,optional)]
+    logo: Option<&'static str>,
 ) -> impl IntoView {
 
     let menu_defs = || {
@@ -47,7 +50,14 @@ pub fn App(
         <Router>
             <Root>
                 <MainMenu>
-                    <Logo src="/resources/storybook-logo.png" alt="Leptos storybook logo" />
+                    { move || {
+                        if let Some(logo) = &logo {
+                            view!{ <Logo src={logo.to_string()} alt="Logo" /> }.into_any()
+                        }
+                        else {
+                            ().into_any()
+                        }
+                    }}
                     <Menu children=ToChildren::to_children(menu_defs) />
                 </MainMenu>
                 <Content>

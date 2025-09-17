@@ -3,7 +3,7 @@ name = "leptos-forge-site"
 version.workspace = true
 edition.workspace = true
 publish = false # we don't need this crate to be published to the crates.io 
-
+build="src/rust/build/build.rs"
 
 [[bin]]
 name = "site"
@@ -34,6 +34,10 @@ testing-library-dom.workspace = true
 thiserror.workspace = true
 uuid.workspace = true
 
+[build-dependencies]
+cargo_metadata.workspace = true
+cargo-resources.workspace = true
+
 [features]
 default = []
 hydrate = [
@@ -50,12 +54,6 @@ ssr = [
 
 [lints]
 workspace = true
-
-[target.wasm32-unknown-unknown]
-rustflags = [
-   "--cfg",
-   "erase_components",
-]
 
 [package.metadata.cargo_resources]
 resource_root = "target/resources"
