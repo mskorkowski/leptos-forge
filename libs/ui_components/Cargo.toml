@@ -13,22 +13,11 @@ path = "src/rust/main/lib.rs"
 
 [dependencies]
 leptos.workspace = true
-leptos_meta.workspace = true
 leptos_router.workspace = true
-leptos_axum = { workspace = true, optional = true }
-leptos-use.workspace = true
 leptos_icons.workspace = true
 leptos-node-ref.workspace = true
-floating-ui-leptos.workspace = true
-reactive_graph.workspace = true
-reactive_stores.workspace = true
-
-cfg-if.workspace = true
-http.workspace = true
 icondata.workspace = true
 pulldown-cmark.workspace = true
-send_wrapper.workspace = true
-thiserror.workspace = true
 uuid = { workspace = true, features = ["js", "v4"] }
 
 utils.workspace = true
@@ -36,17 +25,6 @@ utils_leptos.workspace = true
 
 [features]
 default = []
-hydrate = [
-    "leptos/hydrate",
-    "utils_leptos/hydrate"
-]
-ssr = [
-    "leptos/ssr", 
-    "leptos_meta/ssr", 
-    "leptos_router/ssr", 
-    "utils_leptos/ssr",
-    "dep:leptos_axum"
-]
 
 [lints]
 workspace = true

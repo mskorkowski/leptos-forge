@@ -8,33 +8,8 @@ path = "src/rust/main/lib.rs"
 
 [dependencies]
 leptos.workspace = true
-leptos_axum = { workspace = true, optional = true }
-leptos_macro.workspace = true
-leptos_meta.workspace = true
-leptos_router.workspace = true
-leptos-use.workspace = true
-
-
-cfg-if.workspace = true
-http.workspace = true
-thiserror.workspace = true
 
 utils_leptos.workspace = true
-ui_components.workspace = true
-
-[features]
-default = []
-hydrate = [
-    "leptos/hydrate",
-    "utils_leptos/hydrate"
-]
-ssr = [
-    "leptos/ssr", 
-    "leptos_meta/ssr", 
-    "leptos_router/ssr", 
-    "utils_leptos/ssr",
-    "dep:leptos_axum"
-]
 
 [lints]
 workspace = true
