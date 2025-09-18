@@ -129,7 +129,7 @@
 }
 
 .markdown pre {
-    @apply pl-1 rounded-xs border-dashed border mb-6;
+    @apply pl-1 rounded-xs border-dashed border mb-6 overflow-x-auto;
 }
 
 .markdown table{
