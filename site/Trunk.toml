@@ -17,3 +17,6 @@ watch = [
     "../forge",
     "../libs"
 ]
+
+[build]
+release = false
