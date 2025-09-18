@@ -61,7 +61,7 @@ pub fn App(
                     <Menu children=ToChildren::to_children(menu_defs) />
                 </MainMenu>
                 <Content>
-                    <Routes fallback=|| "Fallback" children=ToChildren::to_children(route_defs) />
+                    <Routes fallback=|| "404" children=ToChildren::to_children(route_defs) />
                 </Content>
             </Root>
         </Router>

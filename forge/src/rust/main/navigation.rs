@@ -141,9 +141,24 @@ pub struct RouteDef {
 }
 
 impl RouteDef{
+    /// Extends a prefix path while detecting a "root" path
+    /// 
+    /// Patch which only contains the `/` are considered as root paths
+    /// and they return the prefix directly.
+    /// 
+    /// You can use this to create a root path for your routes
+    fn extend(&self, prefix: PathSpec) -> PathSpec {
+        if self.path == "/" {
+            prefix
+        }
+        else {
+            prefix.extend(self.path)
+        }
+    }
+
     /// Converts the route to list of routes that can be used in `leptos_router`
     pub fn as_routes(&self, prefix: PathSpec) -> Vec<AnyNestedRoute> {
-        let my_path: PathSpec = prefix.extend(self.path);
+        let my_path: PathSpec = self.extend(prefix);
 
         let mut routes: Vec<AnyNestedRoute> = vec![
             my_path.as_route(
@@ -164,7 +179,7 @@ impl RouteDef{
 
     /// Builds menu items
     pub fn as_menu_items(&self, prefix: PathSpec) -> Vec<AnyView> {
-        let my_path: PathSpec = prefix.extend(self.path);
+        let my_path: PathSpec = self.extend(prefix);
 
         let mut views = vec![
             my_path.as_navigation_view(self.label)
