@@ -22,18 +22,13 @@ ui_components = { version = "0.1.0", path = "libs/ui_components", package = "lep
 ui_layout =     { version = "0.1.0", path = "libs/ui_layout", package = "leptos_forge_ui_layout" }
 
 # External dependencies
-cfg-if = "1"
 console_error_panic_hook = "0.1.7"
 console_log = "1.0.0"
 floating-ui-leptos = {version = "0.5.0" }
-http = "1"
 icondata = { version = "0.6", default-features = false, features = ["material-design-icons"] }
 js-sys = "0.3.77"
 leptos = { version = "0.8" }
-leptos_axum = { version = "0.8" }
 leptos_icons = { version = "0.7" }
-leptos_macro = { version = "0.8" }
-leptos_meta = { version = "0.8" }
 leptos-node-ref = "0.2.0"
 leptos_router = { version = "0.8" }
 leptos-use = { version = "0.16" }
@@ -47,7 +42,6 @@ testing-library-dom = { version = "0.0.1", git="https://github.com/RustForWeb/te
 proptest = "1.5.0"
 send_wrapper="0.6.0"
 serde = "1.0.215"
-thiserror = "2.0.11"
 uuid = { version = "1.11.1", features = ["serde", "v4", "fast-rng"] }
 web-sys = { version = "0.3.69" }
 

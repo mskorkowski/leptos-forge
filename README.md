@@ -2,6 +2,8 @@
 
 Leptos Forge is the library which helps with creating and testing user interfaces written in Rust and [Leptos](https://leptos.dev/).
 
+The most recent documentation is available at [leptos_forge site](https://mskorkowski.github.io).
+
 > **Warning**
 >
 > Leptos Forge is still at the early stages of development and is really bare-bone project. Many of the developer experience features
@@ -11,7 +13,7 @@ Leptos Forge is the library which helps with creating and testing user interface
 
 - **Trivial integration with Leptos** - You can use Leptos components directly in your Forge stories without any additional setup
 - **Customizable** - It's easy to add new feature and customize almost any aspect of the resulting application to fit your needs
-- **Descriptive** - Leptos Froge allows you to write your descriptions using Markdown
+- **Descriptive** - Leptos Forge allows you to write your descriptions using Markdown
 - **Rust API** - This project was created with programming Rust in mind to make it easy to write your stories
 
 ## Leptos Forge vs Storybook
@@ -26,7 +28,7 @@ inspiration for Leptos Forge. However, Leptos Forge has some unique features tha
 | Usage | It's a library around which you write your stories | It's an application that manages your stories |
 | Extending | Since you control the entire application, you can easily extend it to fit your needs | Storybook has a lot's of features and extensions to meet your needs but if you need something not on that list, it's not so easy to add it yourself |
 | Look | Ugly, let's be frank | It's clean and nice to look at |
-| Which should I use? | If you are using Rust and Leptos, you might want to consider Lepotos Forge. You must remember it's still a bleeding edge project. | If Storybook meets your needs, go there. It's mature, stable and supported by a lots of people |
+| Which should I use? | If you are using Rust and Leptos, you might want to consider Leptos Forge. You must remember it's still a bleeding edge project. | If Storybook meets your needs, go there. It's mature, stable and supported by a lots of people |
 
 
 ## Version numbers and how stable it is?

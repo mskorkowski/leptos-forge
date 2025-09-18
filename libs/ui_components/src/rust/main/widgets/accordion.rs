@@ -13,7 +13,7 @@ pub fn Accordion<'details>(
     items: &'details Vec<Box<dyn DetailsParts>>,
 ) -> impl IntoView {
     let details_list = items.
-        into_iter().
+        iter().
         map(|item| {
             view!{
                 <Details details=item />
