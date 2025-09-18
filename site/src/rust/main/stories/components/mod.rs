@@ -75,17 +75,6 @@ pub const ROUTES: &[RouteDef] = &[
 
 /// description of the [Components] section
 const COMPONENTS_DESCRIPTION: &str = r############"
-# Embedded components
-
-This part describes the components embedded in the `leptos_forge` itself. You can use them to create
-your control panels for your components.
-
-> [!WARNING]  
->
-> You should only use this components inside your control panels in the `leptos_forge` based application. 
-> They have been created so `leptos_forge` is not dependant on any specific UI library (except for `leptos`),
-> so you have a freedom of the choice
-
 # Embedded Control Panel Components
 
 Components in this section are part of the `leptos_forge` library and are specifically designed for use within 
@@ -93,43 +82,10 @@ Components in this section are part of the `leptos_forge` library and are specif
 to any particular UI framework beyond `leptos`, giving you flexibility to choose your preferred UI library 
 elsewhere in your application.
 
----
-
-### Important Guidelines
 > [!NOTE]
 > 
 > **Usage Restriction:** These components are **only intended for use in control panels** within 
-> `leptos_forge`-based applications. Using them outside control panels may lead to unexpected behavior or conflicts.
-
-> [!WARNING]
-> 
-> These components are tightly coupled with `leptos_forge`'s architecture. For your main application UI, we recommend
-> using your preferred framework (e.g., `leptos`, `dioxus`, etc.) to maintain separation of concerns and 
-> avoid dependency bloat.
-
----
-
-### Why Use These Components?
-- **Framework Agnosticism:** Ensures `leptos_forge` remains independent of specific UI libraries, keeping your core widget logic decoupled
-- **Consistent Experience:** Provides standardized controls that align with `leptos_forge`'s internal architecture
-- **Developer Freedom:** Lets you use any UI library (or multiple libraries) in the rest of your application
-
----
-
-### Quick Start Example
-```rust
-// In your control panel component
-use leptos_forge::controls::{InputNumber, ToggleSwitch};
-
-view! {
-  <div class="control-panel">
-    <InputNumber label="Size" min=0 max=100 />
-    <ToggleSwitch label="Enabled" />
-  </div>
-}
-```
-
-> Replace `dioxus`/`leptos` with your preferred framework for main application UI
+> `leptos_forge`-based applications.
 
 "############;
 

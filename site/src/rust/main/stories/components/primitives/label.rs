@@ -41,7 +41,18 @@ If filed is required then placeholder should be in red color (but only if value 
 > You must place a `<Label>` primitive and text input in the `relative` container. Otherwise it will not work as intended
 
 > [!IMPORTANT]
-> Your container must provide `pt-8` padding to make the label and input align properly.
+> Your container must provide tailwind `pt-8` (4em?) padding to make the label and input align properly.
+
+**Example:**
+
+```
+view!{
+    <div class="relative pt-8"> 
+        <TextInput id=INPUT_ID text=text />
+        <TextFieldLabel for_id=INPUT_ID text=label data_testid="label" />
+    </div>
+}
+```
 
 "############;
 
