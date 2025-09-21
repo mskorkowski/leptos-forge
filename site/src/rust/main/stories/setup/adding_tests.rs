@@ -38,10 +38,10 @@ Every `Story` can have one or more `plays`. Every `play` can have multiple `step
 >
 > In general your story should have one play only, since there should be only one way to read the story.
 
-> [!WARNING]
->
-> You are entering a bleeding edge territory. We are investigating the best way to write tests for your components.
-> If you have an idea about how to improve it [please add your comment](https://github.com/mskorkowski/leptos-forge/issues/6)
+> [!NOTE]
+> 
+> If you have an idea about how to improve testing API [please add your comment](https://github.com/mskorkowski/leptos-forge/issues/6)
+
 
 ## Adding plays
 
