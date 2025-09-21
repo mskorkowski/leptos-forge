@@ -1,13 +1,16 @@
 //! Describes the setup process to create a new `leptos_forge` project
+pub mod refine_story;
+pub mod adding_tests;
 
 use forge::Section;
 
 /// description of the [Components] section
-const MAIN_DESCRIPTION: &str = r############"
+const SETUP: &str = r############"
 # Setup
 # leptos_forge
 
-This section will guide you step by step how to create a new `leptos_forge` based project from 0 to your first tests.
+This section will guide you step by step how to create a new working `leptos_forge` based project. Following section will
+guid you through the rest of the workflow required to create and test your components.
 
 ## Assumptions
 
@@ -125,15 +128,31 @@ where the final `leptos_forge` based web application will be ready to be served.
 
 ```
 
-### Creating `Trunk.toml`
+### Build script
 
-In the root of the project we must create a `Trunk.toml` file. This file will contain a configuration for `trunk`.
+`leptos_forge` provides some `js`, `css` and images that can be used in your `leptos_forge` based application. To automate the process we use the
+`build.rs` script. This script will search for resources in the upstream projects and copy them into the `target/resources` directory.
 
-```toml
+`target/resources` directory has been set up in the last line of the `Cargo.toml` file. For more details about configuration options for the 
+`cargo-resources` crate, please refer to the [Cargo Resources documentation](https://github.com/PeteEvans/cargo-resources).
 
+The `build.rs` script should look like this:
+
+```rust
+use std::env::current_dir;
+use cargo_metadata::camino::Utf8PathBuf;
+use cargo_resources::collate_resources;
+
+fn main() {
+    let cwd = current_dir().unwrap();
+    let manifest_file = Utf8PathBuf::from_path_buf(cwd).unwrap().join("Cargo.toml");
+
+    // Collate resources from the crate's dependencies.
+    collate_resources(&manifest_file).expect("There was an error during building of the resources");
+}
 ```
 
-### Creating `index.html`
+### Creating `index.html` for the `trunk`
 
 `trunk` requires us to create an `index.html` file in the root of the project. This file will be used by `trunk` as the entrypoint to the
 application we are setting up.
@@ -145,7 +164,7 @@ Below is the basic `index.html` file you can use:
 <html lang="en">
     <head>
         <meta charset="UTF-8">
-        <title>leptos-forge - Build your own components with confidence</title>
+        <title>My leptos_forge site</title>
         <link data-trunk rel="copy-dir" href="target/resources" data-target-path="resources" />
         <link data-trunk rel="css" href="target/resources/leptos_forge.css" />
         <link data-trunk rel="rust" href="Cargo.toml"/>
@@ -222,13 +241,37 @@ Things which are noteworthy:
 
 ### Run it for a first time
 
-Go into your terminal and in the root of your `leptos_forge` based project directory run
+Go into your terminal and in the root of your `leptos_forge` based project directory. Now we need to run the build process to allow the `cargo-resources`
+to handle the assets.
+
+```bash
+cargo build
+```
+
+> [!NOTE]
+>
+> Any time you update your dependencies in the `Cargo.toml` which provide a resources, you will need to rebuild the project using `cargo build`
+
+Now we can finally start the server with our new `leptos_forge` based site.
 
 ```bash
 trunk serve
 ```
 
 This should start a webserver listening on the `localhost:8080` where you should be able to access the just created site.
+
+If everything went well you should see the view like this:
+
+![Initial view](/resources/leptos_forge_site/images/setup/first_run.png)
+
+On the right side under `leptos_forge` logo there is a `menu`. Currently only `Counter` is there.
+
+On the right side there is a documentation panel. At this moment you can find the **New Story** help. Any time you create a new element to show up
+in the app we will show you there what are your next steps to make it work.
+
+In the center the gray area is the place where your components will show up. In the next step we will add the `Counter` component there.
+
+Below the gray area is a control panel. Here you will find the controls to change your components.
 
 ### .gitignore
 
@@ -252,6 +295,6 @@ pub struct Setup;
 
 impl Section for Setup {
     fn description(&self) -> &'static str {
-        MAIN_DESCRIPTION
+        SETUP
     }
 }

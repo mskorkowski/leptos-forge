@@ -18,6 +18,11 @@ use crate::primitives::switch::Switch;
 
 use utils_leptos::signal::URwSignal;
 
+/// Function used to default when no default value was provided
+fn no_default_value() -> Option<String> {
+    None
+}
+
 /// TextField widget with label
 /// 
 /// 1. If field doesn't have any value then label will be displayed as the placeholder
@@ -25,7 +30,7 @@ use utils_leptos::signal::URwSignal;
 /// 3. If field has value then label will be displayed at the top left corner
 /// 4. If field value was removed and focus is lost the label will be animated back as the placeholder
 #[component]
-pub fn TextField<S: ToString>(
+pub fn TextField<S1: ToString>(
     /// Value of the text field
     #[prop(into)]
     text: URwSignal<String>,
@@ -33,19 +38,36 @@ pub fn TextField<S: ToString>(
     #[prop(into)]
     label: Signal<String>,
     /// Id of the text field
-    id: S,
+    id: S1,
+    /// Default value of the text field after clearing the field
+    #[prop(optional,default=no_default_value)]
+    default: fn() -> Option<String>,
 ) -> impl IntoView {
 
     let clear = URwSignal::new(false);
 
-    Effect::new(move ||{
-        if clear.get() && !text.get_untracked().is_empty() {
-            text.set(String::default());
+    Effect::new(
+        move ||{
+            if clear.get() && !text.get_untracked().is_empty() {
+                if let Some(default) = default() {
+                    text.set(default.to_string());
+                }
+                else {
+                    text.set(String::default());
+                }
+                clear.set(false);
+            }
         }
-    });
+    );
 
     let clear_button_visibility = Signal::derive(move || {
-        !text.get().is_empty()
+        let text = text.get();
+        if let Some(default) = default() {
+            default != text
+        }
+        else {
+            !text.is_empty()
+        }
     });
 
     view!{

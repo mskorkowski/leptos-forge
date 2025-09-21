@@ -3,6 +3,10 @@ mod components;
 mod setup;
 
 use components::Components;
+use setup::adding_tests::AddingTests;
+use setup::adding_tests::TestedCounterStory;
+use setup::refine_story::CounterStory;
+use setup::refine_story::RefineCounterStory;
 use setup::Setup;
 use forge::RouteDef;
 use forge::Section;
@@ -15,10 +19,23 @@ const MAIN_DESCRIPTION: &str = r############"
 
 The most recent documentation is available at [leptos_forge site](https://mskorkowski.github.io).
 
-> **Warning**
+> [!NOTE]
 >
-> Leptos Forge is still at the early stages of development and is really bare-bone project. Many of the developer experience features
-> are not yet implemented.
+> If possible, I would like to ask you to test the project, 
+> 
+> - by playing with a page
+> - going through the [setup guide](/setup) on the page and subsequent sections 
+>
+> and [creating the issues](https://github.com/mskorkowski/leptos-forge/issues) what you would like to see change and how.
+>
+> This project is my way of giving back to the Leptos community and I hope that you will enjoy using it.
+>
+> - Marek
+
+> [!WARNING]
+>
+> `leptos_forge` is still at the early stages of development and in many places you will find a sharp edges
+> hungry for a blood to be spilled. We are doing our best to improve the case but it takes time to get everything right.
 
 ## Features
 
@@ -41,6 +58,17 @@ inspiration for Leptos Forge. However, Leptos Forge has some unique features tha
 | Look | Ugly, let's be frank | It's clean and nice to look at |
 | Which should I use? | If you are using Rust and Leptos, you might want to consider Leptos Forge. You must remember it's still a bleeding edge project. | If Storybook meets your needs, go there. It's mature, stable and supported by a lots of people |
 
+## History of the project
+
+This project started as an internal project to help me build my web application. I knew JS, I knew React and I knew Storybook. JS/TS were not
+the best choice for me because I'm alone and I need to maintain a huge codebase for a single person (+400k lines of code, a bunch of services). 
+I decided to move towards Rust (which I'm familiar with). After checking bunch of technologies, I decided to use Leptos.
+
+As part of the rewrite, I've created what would be a proto `leptos_forge`. After using it for about half a year internally, I decided to make it public.
+I works for me, so maybe for others also.
+
+And here we are.
+
 "############;
 
 
@@ -57,6 +85,13 @@ impl Section for Main {
 /// Top level routes for the leptos_forge site
 pub const ROUTES: &[RouteDef] = &[
     RouteDef::section::<Main>("/", "Leptos Forge", &[]),
-    RouteDef::section::<Setup>("setup", "Setup", &[]),
+    RouteDef::section::<Setup>("setup", "Setup", &[
+        RouteDef::section::<RefineCounterStory>("first_story", "Implement first story", &[
+            RouteDef::page::<CounterStory>("counter_story", "Counter")
+        ]),
+        RouteDef::section::<AddingTests>("adding_tests", "Adding tests", &[
+            RouteDef::page::<TestedCounterStory>("tested_counter_story", "Counter with tests"),
+        ]),
+    ]),
     RouteDef::section::<Components>("components", "Control Panel Components", components::ROUTES),
 ];
