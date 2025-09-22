@@ -1,8 +1,14 @@
 //! Defines story interface and all of fancy stuff that goes with it
 //! 
 
-use leptos::prelude::*;
+mod tests;
+
+use leptos::prelude::AnyView;
+use leptos::prelude::IntoAny;
 use leptos::web_sys::HtmlElement;
+
+pub use tests::play;
+pub use tests::test_id;
 
 /// One step in the testing process
 /// 
@@ -26,16 +32,6 @@ pub trait Step {
     /// If the step fails, it should return an error message which can be displayed in the UI
     /// formatted in Markdown.
     fn run(&self, canvas: &HtmlElement, story: &mut Self::Story) -> Result<(), &'static str>;
-}
-
-/// Simple implementation of the step interface should be enough for most use cases
-pub struct SimpleStep<S: Story> {
-    /// Description of the step shown in the UI
-    description: &'static str,
-    /// Function to run when the step is played
-    play_fn: fn(&mut S) -> Result<(), String>,
-    /// Function to run when the result of playing the step is checked
-    check_fn: fn(&mut S) -> Result<(), String>,
 }
 
 /// A play for a story

@@ -1,3 +1,4 @@
+@source inline("bg-left","bg-right");
 
 @theme {
   --color-forgebrown-50:  hsl(36deg 100.00% 96.32%);
