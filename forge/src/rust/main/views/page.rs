@@ -44,14 +44,14 @@ pub fn Page<S: 'static + Story + Default + Copy + ThreadSafe>(
         <>
             <ComponentPanel>
                 <Canvas story=story node_ref=canvas />
-                <ControlPane story=story />
-            </ComponentPanel>
-            <div class="flex flex-col basis-1/3 first:basis-1/1 px-4 py-4 overflow-auto print:hidden print:basis-0 min-w-xs w-xs shrink-0 @md:shrink-1">
                 <TabPanel
                     id="side-panel"
                     tabs
                     selector
                 />
+            </ComponentPanel>
+            <div class="flex flex-col basis-1/3 first:basis-1/1 px-4 py-4 overflow-auto print:hidden print:basis-0 min-w-xs w-xs shrink-0 @md:shrink-1">
+                <ControlPane story=story />
             </div>
         </>
     }

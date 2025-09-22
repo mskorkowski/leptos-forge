@@ -89,7 +89,7 @@ impl Section for Main {
 pub const ROUTES: &[RouteDef] = &[
     RouteDef::section::<Main>("/", "Leptos Forge", &[]),
     RouteDef::section::<Setup>("setup", "Setup", &[
-        RouteDef::section::<RefineCounterStory>("first_story", "Implement first story", &[
+        RouteDef::section::<RefineCounterStory>("first_story", "Implement the first story", &[
             RouteDef::page::<CounterStory>("counter_story", "Counter")
         ]),
         RouteDef::section::<AddingTests>("adding_tests", "Adding tests", &[

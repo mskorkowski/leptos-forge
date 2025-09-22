@@ -75,7 +75,7 @@ where
         collect_view();
 
     view!{
-        <div id={tabpanel_id} class="leptos-forge-tab-panel">
+        <div id={tabpanel_id} class="leptos-forge-tab-panel overflow-auto">
             <div class="">
                 { buttons }
             </div>
