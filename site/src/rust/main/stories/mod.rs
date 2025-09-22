@@ -5,8 +5,11 @@ mod setup;
 use components::Components;
 use setup::adding_tests::AddingTests;
 use setup::adding_tests::TestedCounterStory;
+use setup::nix::Nix;
 use setup::refine_story::CounterStory;
 use setup::refine_story::RefineCounterStory;
+use setup::resources::Resources;
+use setup::resources::Tailwindcss;
 use setup::Setup;
 use forge::RouteDef;
 use forge::Section;
@@ -92,6 +95,9 @@ pub const ROUTES: &[RouteDef] = &[
         RouteDef::section::<AddingTests>("adding_tests", "Adding tests", &[
             RouteDef::page::<TestedCounterStory>("tested_counter_story", "Counter with tests"),
         ]),
+        RouteDef::section::<Resources>("resources", "Resources", &[]),
+        RouteDef::section::<Tailwindcss>("tailwindcss", "Tailwindcss", &[]),
+        RouteDef::section::<Nix>("nix", "Nix", &[]),
     ]),
     RouteDef::section::<Components>("components", "Control Panel Components", components::ROUTES),
 ];

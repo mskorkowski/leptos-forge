@@ -31,7 +31,7 @@ workspace = true
 
 [package.metadata.cargo_resources]
 provides = [
-    { crate_path = "src/resources/generated/leptos-forge.css", output_path="leptos_forge.css" },
+    { crate_path = "src/resources/generated/leptos-forge.css", output_path="leptos_forge/leptos_forge.css" },
     { crate_path = "src/css/main/forge.css", output_path="leptos_forge/common.css"},
     { crate_path = "src/resources/logo/logo.svg", output_path="leptos_forge/logo/logo.svg" }
 ]

@@ -1,6 +1,8 @@
 //! Describes the setup process to create a new `leptos_forge` project
-pub mod refine_story;
 pub mod adding_tests;
+pub mod nix;
+pub mod refine_story;
+pub mod resources;
 
 use forge::Section;
 
@@ -63,7 +65,6 @@ We start by creating a `Cargo.toml` file in the root of our new project
 name = "my-leptos-forge-project"
 edition = "2024"
 publish = false # In most cases you don't need this project to be published anywhere
-build="src/build.rs"
 
 [[bin]]
 name = "site"
@@ -117,11 +118,12 @@ where the final `leptos_forge` based web application will be ready to be served.
 /
 ├── src/
 │   ├── main.rs
-│   └── ...      # rest of our `leptos_forge` source code
+│   └── ...      # rest of source code
 ├── target/
 |   └── ...      # compiled code and all the resources required to run it
 ├── dist/
 |   └── ...      # here `trunk` will place the final `leptos_forge` based web application
+|── build.rs     # build script to copy resources from upstream projects
 ├── Cargo.toml   # our `Cargo.toml` file
 ├── Trunk.toml   # our `trunk` configuration
 └── index.html   # trunk requires you to have an index.html file in your project root
@@ -131,7 +133,8 @@ where the final `leptos_forge` based web application will be ready to be served.
 ### Build script
 
 `leptos_forge` provides some `js`, `css` and images that can be used in your `leptos_forge` based application. To automate the process we use the
-`build.rs` script. This script will search for resources in the upstream projects and copy them into the `target/resources` directory.
+`build.rs` script. This script will search for resources in the upstream projects and copy them into the `target/resources` directory. In depth 
+explanation about the resource management can be found in the [Resources](/setup/resources) section.
 
 `target/resources` directory has been set up in the last line of the `Cargo.toml` file. For more details about configuration options for the 
 `cargo-resources` crate, please refer to the [Cargo Resources documentation](https://github.com/PeteEvans/cargo-resources).
@@ -148,7 +151,7 @@ fn main() {
     let manifest_file = Utf8PathBuf::from_path_buf(cwd).unwrap().join("Cargo.toml");
 
     // Collate resources from the crate's dependencies.
-    collate_resources(&manifest_file).expect("There was an error during building of the resources");
+    collate_resources(&manifest_file).expect("There was an error during bundling of the resources");
 }
 ```
 
@@ -173,7 +176,7 @@ Below is the basic `index.html` file you can use:
 </html>
 ```
 
-The tailwind based configuration will be shown in the tailwind section later.
+Using `tailwindcss` in your `leptos_forge` application is described [Tailwindcss chapter](/setup/tailwindcss).
 
 ### Creating the application
 
@@ -242,7 +245,7 @@ Things which are noteworthy:
 ### Run it for a first time
 
 Go into your terminal and in the root of your `leptos_forge` based project directory. Now we need to run the build process to allow the `cargo-resources`
-to handle the assets.
+to handle the assets. In depth explanation can be found in the [Resources](/setup/resources) section.
 
 ```bash
 cargo build

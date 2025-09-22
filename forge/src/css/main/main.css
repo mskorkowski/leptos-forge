@@ -1,7 +1,5 @@
 @import "tailwindcss";
 
-@source inline("bg-left","bg-right");
-
 @source "../../../../libs/ui_layout";
 @source "../../../../libs/ui_components";
 @source "../../";
