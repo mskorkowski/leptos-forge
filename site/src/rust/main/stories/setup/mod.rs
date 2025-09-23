@@ -294,17 +294,17 @@ If everything went well you should see the view like this:
 
 ![Initial view](/resources/leptos_forge_site/images/setup/first_run.png)
 
-On the right side under the `leptos_forge` logo there is a `menu`. Currently, only the `Counter`
+On the left side under the `leptos_forge` logo there is a `menu`. Currently, only the `Counter`
 is there.
 
-On the right side there is a documentation panel. At this moment you can find the **New Story**
-help. Any time you create a new element to show up in the app we will show you there what are
-your next steps to make it work.
+On the right side, which is currently empty, is a control panel. Here you will find the controls to change your components.
 
 In the center, the gray area is the place where your components will show up. In the next step
 we will add the `Counter` component there.
 
-Below the gray area is a control panel. Here you will find the controls to change your components.
+Below the gray area there is a documentation panel. At this moment you can find the **New Story**
+help. Any time you create a new element to show up in the app we will show you there what are
+your next steps to make it work.
 
 ### .gitignore
 
