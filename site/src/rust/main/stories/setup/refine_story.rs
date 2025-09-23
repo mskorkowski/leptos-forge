@@ -344,7 +344,7 @@ impl Story for CounterStory {
 }
 ```
 
-Now on the right-hand side you should see
+Now on the bottom you should see
 
 ![Documentation of the counter](/resources/leptos_forge_site/images/setup/refine_story/05-counter_documentation.png)
 
