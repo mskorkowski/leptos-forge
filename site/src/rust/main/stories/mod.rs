@@ -9,7 +9,7 @@ use setup::nix::Nix;
 use setup::refine_story::CounterStory;
 use setup::refine_story::RefineCounterStory;
 use setup::resources::Resources;
-use setup::resources::Tailwindcss;
+use setup::resources::Tailwind;
 use setup::Setup;
 use forge::RouteDef;
 use forge::Section;
@@ -96,7 +96,7 @@ pub const ROUTES: &[RouteDef] = &[
             RouteDef::page::<TestedCounterStory>("tested_counter_story", "Counter with tests"),
         ]),
         RouteDef::section::<Resources>("resources", "Resources", &[]),
-        RouteDef::section::<Tailwindcss>("tailwindcss", "Tailwindcss", &[]),
+        RouteDef::section::<Tailwind>("tailwind", "Tailwind", &[]),
         RouteDef::section::<Nix>("nix", "Nix", &[]),
     ]),
     RouteDef::section::<Components>("components", "Control Panel Components", components::ROUTES),
