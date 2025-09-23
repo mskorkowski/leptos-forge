@@ -281,9 +281,9 @@ impl Story for CounterStory {
         (view!{
             <TextField id="counter_value" text=value label="Value" default=|| { Some(0.to_string()) } />
 
-            <TextField id="counter_threshold" text=threshold label="Value" default=|| { Some(10_000.to_string()) } /> // <- we've added the threshold control field
+            <TextField id="counter_threshold" text=threshold label="Threshold" default=|| { Some(10_000.to_string()) } /> // <- we've added the threshold control field
 
-            <TextField id="counter_message" text={self.message} label="Value" /> // <- we've added a message control field
+            <TextField id="counter_message" text={self.message} label="Message" /> // <- we've added a message control field
         }).into_any()
     }
 }
@@ -466,9 +466,9 @@ impl Story for CounterStory {
         (view!{
             <TextField id="counter_value" text=value label="Value" default=|| { Some(0.to_string()) } />
 
-            <TextField id="counter_threshold" text=threshold label="Value" default=|| { Some(10_000.to_string()) } /> // <- we've added the threshold control field
+            <TextField id="counter_threshold" text=threshold label="Threshold" default=|| { Some(10_000.to_string()) } /> // <- we've added the threshold control field
 
-            <TextField id="counter_message" text={self.message} label="Value" /> // <- we've added a message control field
+            <TextField id="counter_message" text={self.message} label="Message" /> // <- we've added a message control field
         }).into_any()
     }
 
