@@ -1,4 +1,4 @@
-//! This module describes how you can add resources to your crates and how to setup tailwindcss
+//! This module describes how you can add resources to your crates and how to setup Tailwind
 
 use forge::Section;
 
@@ -139,13 +139,13 @@ impl Section for Resources {
     }
 }
 
-/// description of the [Tailwindcss] section
-const TAILWINDCSS: &str = r############"
-# Tailwindcss
+/// description of the [Tailwind] section
+const TAILWIND: &str = r############"
+# Tailwind
 
-`leptos_forge` uses tailwindcss 4 to manage the css styles.
+`leptos_forge` uses Tailwind 4 to manage the css styles.
 
-To use the tailwindcss within the `leptos_forge` based application you need to adjust the tailwindcss `main.css` file to include the necessary files and
+To use the Tailwind within the `leptos_forge` based application you need to adjust the Tailwind `main.css` file to include the necessary files and
 do small changes to the `index.html` file used by the `trunk`.
 
 ## Setting up `cargo-resources`
@@ -158,16 +158,17 @@ rest of this chapter I will assume that in your `Cargo.toml` you have the follow
 resource_root = "target/resources"
 ```
 
-## Setting up tailwindcss
+## Setting up Tailwind
 
-I assume you have installed `tailwindcss` and have the `assets/css/main.css` file in your project as entry point for your `tailwindcss`.
+I assume you have installed Tailwind and have the `assets/css/main.css` file in your project as entry point for your Tailwind. If your `main.css`
+is somewhere else you will need to adjust the paths accordingly.
 
 `leptos_forge` provides two files in for you to include in the `main.css` file. 
 
 - **`leptos_forge.css`** - css file which has all the necessary styles to run the `leptos_forge`
 - **`common.css`** - tailwind css configuration and some animation related utilities.
 
-To integrate `leptos_forge` with your project's `tailwindcss` setup you need to import both of the files in your `main.css` file by adding
+To integrate `leptos_forge` with your project's Tailwind setup you need to import both of the files in your `main.css` file by adding
 
 ```css
 @import "../../target/resources/leptos_forge/common.css";
@@ -176,7 +177,7 @@ To integrate `leptos_forge` with your project's `tailwindcss` setup you need to 
 
 ## Setting up trunk
 
-Trunk has builtin integration with `tailwindcss`. Your `index.html` file needs to be slightly adjusted compared to the [setup](/setup)
+Trunk has builtin integration with Tailwind. Your `index.html` file needs to be slightly adjusted compared to the [setup](/setup)
 
 ```html
 <!doctype html>
@@ -196,12 +197,12 @@ Trunk has builtin integration with `tailwindcss`. Your `index.html` file needs t
 "############;
 
 
-/// Setup section
+/// How to setup tailwind
 #[derive(Debug, Default, Clone, Copy)]
-pub struct Tailwindcss;
+pub struct Tailwind;
 
-impl Section for Tailwindcss {
+impl Section for Tailwind {
     fn description(&self) -> &'static str {
-        TAILWINDCSS
+        TAILWIND
     }
 }
