@@ -19,191 +19,222 @@ use ui_components::widgets::field::TextField;
 const ADDING_TESTS: &str = r#############"
 # Adding tests
 
-This chapter continues from the [Implementing first story](setup/first_story) and is a third part of our
-journey to learn the `leptos_forge`.
+This chapter continues from the [Implementing first story](setup/first_story) 
+and is a third part of our journey to learn the `leptos_forge`.
 
-The last thing which we are missing for our `CounterStory` are tests. Like Storybook we call them `plays`.
-To write a tests we will use [`testing-library-dom`](https://github.com/RustForWeb/testing-library) a rewrite
-to Rust a [JS TestingLibrary](https://testing-library.com).
+The last thing we are missing for our `CounterStory` is tests. Like Storybook,
+we call them `plays`. To write tests, we will use 
+[`testing-library-dom`](https://github.com/RustForWeb/testing-library), 
+a rewrite in Rust of the [JS TestingLibrary](https://testing-library.com).
 
-TestingLibrary has excellent [documentation about writing maintainable tests](https://testing-library.com/docs/) 
-for your components. Even if you don't use the `leptos_forge`. 
+TestingLibrary has excellent [documentation about writing maintainable tests](https://testing-library.com/docs/)
+for your components, even if you don't use the `leptos_forge`.
 
-`leptos_forge` has a built in plays runner for your stories. You can run a test after entering a story. In this 
-section we will guide you on how to create your first test and how to run it.
+`leptos_forge` has a built-in plays runner for your stories. You can run
+a test after entering a story. In this section, we will guide you on how
+to create your first test and how to run it.
 
-Every `Story` can have one or more `plays`. Every `play` can have multiple `steps`. 
+Every `Story` can have one or more `plays`. Every `play` can have multiple
+`steps`.
 
 > [!TIP]
 >
-> In general your story should have one play only, since there should be only one way to read the story.
+> In general, your story should have one play only, since there should be 
+> only one way to read the story.
 
 > [!NOTE]
-> 
-> If you have an idea about how to improve testing API [please add your comment](https://github.com/mskorkowski/leptos-forge/issues/6)
+>
+> If you have an idea about how to improve the testing API, 
+> [please add your comment or create an issue](https://github.com/mskorkowski/leptos-forge/issues/6).
 
+## Adding Plays
 
-## Adding plays
+Our test will check if after crossing the threshold, a message is shown.  
 
-Our test will check if after crossing the threshold, a message is shown.
+First, let's create a list of steps for our test.  
 
-First let's create a list of steps for our test
+1. Set the well-known state to the Counter  
+2. Check that message is **not** shown yet  
+3. Increase the counter  
+4. Check that counter was increased and that message **is** shown  
+5. Set some sensible values to the Counter  
 
-1. Set the well known state to the Counter
-2. Check that message is **not** shown yet
-3. Increase the counter
-4. Check that counter was increased and that message **is** shown
-5. Set some sensible values to the Counter
-
-Now we need to prepare our `Counter` so we can test it. Since we will be checking the presence or lack of message we need to wrap
-the area which shows a message in an html `span` element and give it an id. Now our component looks like this
-
-```rust
-use forge::test_id; // <- we've added an import
-
-/// Test id of the increase button
-const COUNTER_INCREASE_BUTTON_TEST_ID: &str = "counter_increase_button";
-/// Test id of the message span
-const COUNTER_MESSAGE_TEST_ID: &str = "counter_message";
-
-#[component]
-fn Counter(
-    /// Value of the counter
-    value: URwSignal<i32>,
-    /// Message to be shown if threshold is exceeded
-    #[prop(into)]
-    message: Signal<String>,
-    /// Threshold for displaying the message
-    #[prop(into)]
-    threshold: Signal<i32>,
-) -> impl IntoView {
-    let button_style = || view!{
-        <{..} style="border: 1px solid black; padding: 1em 2em; border-radius: 3px; margin: 0px 2em; cursor: pointer;" />
-    };
-
-    view!{
-        <div>
-            <button 
-                on:click=move |_| { 
-                    value.set(
-                        value.get_untracked() - 1
-                    );
-                }
-                {..button_style()}
-            >-</button>
-            <span>{value}</span>
-            <button 
-                on:click=move |_| { 
-                    value.set(
-                        value.get_untracked() + 1
-                    );
-                }
-                {..button_style()}
-                {..test_id(Some(COUNTER_INCREASE_BUTTON_TEST_ID))}  // <- we've added a test id here
-            >+</button><br/>
-            <span {..test_id(Some(COUNTER_MESSAGE_TEST_ID))}>       // <- we've wrapped message in span tag with test id
-                {move || {
-                    if value.get() > threshold.get() {
-                        message.get()
-                    }
-                    else {
-                        "".to_string()
-                    }
-                }}
-            </span>
-        </div>
-    }
-}
-
-```
-
-Now we are going to add a test for our Counter. To do that we need to implement another function from `Story::plays`.
-This function should return a list of plays, where each play contains a number of steps. 
-
-
+Now we are going to add a test for our Counter. To do that, we need to 
+implement another function from `Story::plays`. This function should return
+a list of plays, where each play contains a number of steps.  
 
 ```rust
-use forge::play;
-use forge::Play;
+use forge::test_id; // <- we've added an import  
 
-impl Story for TestedCounterStory {
-    ...
+/// Test id of the increase button  
+const COUNTER_INCREASE_BUTTON_TEST_ID: &str = "counter_increase_button";  
+/// Test id of the message span  
+const COUNTER_MESSAGE_TEST_ID: &str = "counter_message";  
 
-    fn plays(&self) -> Vec<Box<dyn Play<Story=Self>>> {
-        vec![{
-            /// Message to set when running the play
-            const COUNTER_PLAY_MESSAGE: &str = "Value has crossed the threshold";
-            /// Threshold to set when running the play
-            const COUNTER_PLAY_THRESHOLD: i32 = 15_000;
+#[component]  
+fn Counter(  
+    /// Value of the counter  
+    value: URwSignal<i32>,  
+    /// Message to be shown if threshold is exceeded  
+    #[prop(into)]  
+    message: Signal<String>,  
+    /// Threshold for displaying the message  
+    #[prop(into)]  
+    threshold: Signal<i32>,  
+) -> impl IntoView {  
+    let button_style = || view!{  
+        <{..} style="border: 1px solid black; padding: 1em 2em; border-radius: 3px; margin: 0px 2em; cursor: pointer;" />  
+    };  
 
-            play::<Self>("When the counter value crosses the threshold, a message should be shown.").
-                next(
-                    "Set the well known state to the Counter", 
-                    |_canvas, story| { 
-                        story.message.set(COUNTER_PLAY_MESSAGE.to_string());
-                        story.threshold.set(COUNTER_PLAY_THRESHOLD);
-                        story.value.set(COUNTER_PLAY_THRESHOLD - 1);
-                        Ok(()) 
-                    }
-                ).
-                next(
-                    "Check that message is **not** shown yet",
-                    |canvas, _story| { 
-                        let Ok(message_span) = get_by_test_id(canvas, COUNTER_MESSAGE_TEST_ID, MatcherOptions::default()) else {
-                            return Err("Unable to get a message span");
-                        };
+    view!{  
+        <div>  
+            <button  
+                on:click=move |_| {  
+                    value.set(  
+                        value.get_untracked() - 1  
+                    );  
+                }  
+                {..button_style()}  
+            >-</button>  
+            <span>{value}</span>  
+            <button  
+                on:click=move |_| {  
+                    value.set(  
+                        value.get_untracked() + 1  
+                    );  
+                }  
+                {..button_style()}  
+                {..test_id(Some(COUNTER_INCREASE_BUTTON_TEST_ID))}  // <- we've added a test id here  
+            >+</button><br/>  
+            <span {..test_id(Some(COUNTER_MESSAGE_TEST_ID))}>       // <- we've wrapped message in span tag with test id  
+                {move || {  
+                    if value.get() > threshold.get() {  
+                        message.get()  
+                    } else {  
+                        "".to_string()  
+                    }  
+                }}  
+            </span>  
+        </div>  
+    }  
+}  
+```  
 
-                        let message = message_span.inner_text();
+Now we are going to add a test for our Counter. To do that, we need to implement
+another function from `Story::plays`. This function should return a list of plays,
+where each play contains a number of steps.  
 
-                        if !message.is_empty() {
-                            return Err("Showing message, while it should be empty")
-                        }
+```rust  
+use forge::play;  
+use forge::Play;  
 
-                        Ok(()) 
-                    }
-                ).
-                next(
-                    "Increase the counter",
-                    |_canvas, story| { 
-                        story.value.set(COUNTER_PLAY_THRESHOLD);
-                        Ok(()) 
-                    }
-                ).
-                next(
-                    "Check that counter was increased and that message **is** shown",
-                    |canvas, _story| { 
-                        let Ok(message_span) = get_by_test_id(canvas, COUNTER_MESSAGE_TEST_ID, MatcherOptions::default()) else {
-                            return Err("Unable to get a message span");
-                        };
+impl Story for TestedCounterStory {  
+    ...  
 
-                        let message = message_span.inner_text();
+    fn plays(&self) -> Vec<Box<dyn Play<Story=Self>>> {  
+        vec![{  
+            /// Message to set when running the play  
+            const COUNTER_PLAY_MESSAGE: &str = "Value has crossed the threshold";  
+            /// Threshold to set when running the play  
+            const COUNTER_PLAY_THRESHOLD: i32 = 15_000;  
 
-                        if message.is_empty() {
-                            return Err("Message is not visible")
-                        }
+            play::<Self>("When the counter value crosses the threshold, a message should be shown.")  
+                .next(  
+                    "Set the well-known state to the Counter",  
+                    |_canvas, story| {  
+                        story.message.set(COUNTER_PLAY_MESSAGE.to_string());  
+                        story.threshold.set(COUNTER_PLAY_THRESHOLD);  
+                        story.value.set(COUNTER_PLAY_THRESHOLD - 1);  
+                        Ok(())  
+                    }  
+                )  
+                .next(  
+                    "Check that message is **not** shown yet",  
+                    |canvas, _story| {  
+                        let Ok(message_span) = get_by_test_id(canvas, COUNTER_MESSAGE_TEST_ID, MatcherOptions::default()) else {  
+                            return Err("Unable to get a message span");  
+                        };  
 
-                        if message.as_str() != COUNTER_PLAY_MESSAGE {
-                            return Err("Displaying wrong message")
-                        }
+                        let message = message_span.inner_text();  
 
-                        Ok(())
-                    }
-                ).
-                next(
-                    "Set some sensible values to the Counter",
-                    |_canvas, story| { 
-                        story.message.set("You work hard!".to_string());
-                        story.threshold.set(10_000);
-                        story.value.set(0);
-                        Ok(()) 
-                    }
-                ).
-                into()
-        }]
-    }
-}
+                        if !message.is_empty() {  
+                            return Err("Showing message, while it should be empty");  
+                        }  
 
-```
+                        Ok(())  
+                    }  
+                )  
+                .next(  
+                    "Increase the counter",  
+                    |_canvas, story| {  
+                        story.value.set(COUNTER_PLAY_THRESHOLD);  
+                        Ok(())  
+                    }  
+                )  
+                .next(  
+                    "Check that counter was increased and that message **is** shown",  
+                    |canvas, _story| {  
+                        let Ok(message_span) = get_by_test_id(canvas, COUNTER_MESSAGE_TEST_ID, MatcherOptions::default()) else {  
+                            return Err("Unable to get a message span");  
+                        };  
+
+                        let message = message_span.inner_text();  
+
+                        if message.is_empty() {  
+                            return Err("Message is not visible");  
+                        }  
+
+                        if message.as_str() != COUNTER_PLAY_MESSAGE {  
+                            return Err("Displaying wrong message");  
+                        }  
+
+                        Ok(())  
+                    }  
+                )  
+                .next(  
+                    "Set some sensible values to the Counter",  
+                    |_canvas, story| {  
+                        story.message.set("You work hard!".to_string());  
+                        story.threshold.set(10_000);  
+                        story.value.set(0);  
+                        Ok(())  
+                    }  
+                )  
+                .into()  
+        }]  
+    }  
+}  
+``` 
+
+## Running the tests
+
+When you open the `Counter` story in the browser and take a look at the documentation 
+panel, the one at the bottom center, then you will find a tab named `tests`.
+
+![Location of the tests tab](/resources/leptos_forge_site/images/setup/adding_tests/01-tests_tab.png)
+
+If you click on it, you should see a view like
+
+![UI for running tests](/resources/leptos_forge_site/images/setup/adding_tests/02-test_runner_ui.png)
+
+On the gray bar you can see a header of a play. Below the play, there is 
+a list of steps in a play. Every line follows the same convention:  
+
+1. In a square bracket a status of a play or step  
+2. Followed by a name of a play or step.  
+
+At the far right of a play header there are two buttons  
+
+- `Play`: Runs every step of a play  
+- `Step`: Runs a single step of a play  
+
+If you press a `Step` button three times, then you should see  
+
+![State of the UI after playing first three steps](/resources/leptos_forge_site/images/setup/adding_tests/03-after_3rd_step.png)  
+
+After you press `Play`, the test will complete and you will see  
+
+![State of the UI after completing the test](/resources/leptos_forge_site/images/setup/adding_tests/04-completed.png)  
 
 "#############;
 

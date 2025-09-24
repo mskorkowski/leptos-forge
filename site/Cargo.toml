@@ -39,10 +39,17 @@ workspace = true
 [package.metadata.cargo_resources]
 resource_root = "target/resources"
 provides = [
+    # Setup
     { crate_path = "src/resources/images/setup/first_run.png", output_path="leptos_forge_site/images/setup/first_run.png", encoding="Bin" },
-    { crate_path = "src/resources/images/setup/refine_story/01-component_view.png", output_path="leptos_forge_site/images/setup/refine_story/01-component_view.png", encoding="Bin" },
-    { crate_path = "src/resources/images/setup/refine_story/02-counter_with_control.png", output_path="leptos_forge_site/images/setup/refine_story/02-counter_with_control.png", encoding="Bin" },
+    # Setup / adding the first story
+    { crate_path = "src/resources/images/setup/refine_story/01-component_view.png",                 output_path="leptos_forge_site/images/setup/refine_story/01-component_view.png", encoding="Bin" },
+    { crate_path = "src/resources/images/setup/refine_story/02-counter_with_control.png",           output_path="leptos_forge_site/images/setup/refine_story/02-counter_with_control.png", encoding="Bin" },
     { crate_path = "src/resources/images/setup/refine_story/03-counter_with_control-3rd_click.png", output_path="leptos_forge_site/images/setup/refine_story/03-counter_with_control-3rd_click.png", encoding="Bin" },
-    { crate_path = "src/resources/images/setup/refine_story/04-counter_with_control-3000.png", output_path="leptos_forge_site/images/setup/refine_story/04-counter_with_control-3000.png", encoding="Bin" },
-    { crate_path = "src/resources/images/setup/refine_story/05-counter_documentation.png", output_path="leptos_forge_site/images/setup/refine_story/05-counter_documentation.png", encoding="Bin" },
+    { crate_path = "src/resources/images/setup/refine_story/04-counter_with_control-3000.png",      output_path="leptos_forge_site/images/setup/refine_story/04-counter_with_control-3000.png", encoding="Bin" },
+    { crate_path = "src/resources/images/setup/refine_story/05-counter_documentation.png",          output_path="leptos_forge_site/images/setup/refine_story/05-counter_documentation.png", encoding="Bin" },
+    # Setup / adding tests
+    { crate_path = "src/resources/images/setup/adding_tests/01-tests_tab.png",      output_path="leptos_forge_site/images/setup/adding_tests/01-tests_tab.png", encoding="Bin" },
+    { crate_path = "src/resources/images/setup/adding_tests/02-test_runner_ui.png", output_path="leptos_forge_site/images/setup/adding_tests/02-test_runner_ui.png", encoding="Bin" },
+    { crate_path = "src/resources/images/setup/adding_tests/03-after_3rd_step.png", output_path="leptos_forge_site/images/setup/adding_tests/03-after_3rd_step.png", encoding="Bin" },
+    { crate_path = "src/resources/images/setup/adding_tests/04-completed.png", output_path="leptos_forge_site/images/setup/adding_tests/04-completed.png", encoding="Bin" },
 ]
