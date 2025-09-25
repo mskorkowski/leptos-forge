@@ -12,9 +12,9 @@ use forge::Story;
 const REFINE_COUNTER_STORY: &str = r#############"
 # Implementing the first story
 
-This section builds upon the code which was created during the [setup](/setup) part. 
+This section builds upon the code which was created during the [create project guide](/guides) part. 
 The expected result of this section can be checked by going to the 
-[`Counter story`](/setup/first_story/counter_story) subpage.
+[`Counter story`](/guides/first_story/counter_story) subpage.
 
 ## First things first, we need a component
 
@@ -100,7 +100,7 @@ area.
 Now when you open the `Button` story at the top left side of the gray area you
 will find the component. It should look like this:
 
-![Example counter component rendered in the canvas area](/resources/leptos_forge_site/images/setup/refine_story/01-component_view.png)
+![Example counter component rendered in the canvas area](/resources/leptos_forge_site/images/guides/refine_story/01-component_view.png)
 
 You can test our component by clicking on the `[-]` and `[+]` buttons.
 
@@ -168,18 +168,18 @@ arguments passed to this component are:
 
 Now if you go to the `Counter` story in your web browser, you will see:
 
-![Counter component and its control panel](/resources/leptos_forge_site/images/setup/refine_story/02-counter_with_control.png)
+![Counter component and its control panel](/resources/leptos_forge_site/images/guides/refine_story/02-counter_with_control.png)
 
 After three clicks on the `[+]` button you will see:
 
-![Counter component and its control panel after third click on the plus button](/resources/leptos_forge_site/images/setup/refine_story/03-counter_with_control-3rd_click.png)
+![Counter component and its control panel after third click on the plus button](/resources/leptos_forge_site/images/guides/refine_story/03-counter_with_control-3rd_click.png)
 
 If you would like to change the current value of the counter to `3000`, you can 
 just go to the control panel and add a few zeros **to** the input field.
 
 And you end up with:
 
-![Counter component and its control panel after writing 3000 in the input field](/resources/leptos_forge_site/images/setup/refine_story/04-counter_with_control-3000.png)
+![Counter component and its control panel after writing 3000 in the input field](/resources/leptos_forge_site/images/guides/refine_story/04-counter_with_control-3000.png)
 
 ## Let's spice it up
 
@@ -346,7 +346,7 @@ impl Story for CounterStory {
 
 Now on the bottom you should see
 
-![Documentation of the counter](/resources/leptos_forge_site/images/setup/refine_story/05-counter_documentation.png)
+![Documentation of the counter](/resources/leptos_forge_site/images/guides/refine_story/05-counter_documentation.png)
 
 ## Next steps
 

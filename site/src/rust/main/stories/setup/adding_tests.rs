@@ -211,11 +211,11 @@ impl Story for TestedCounterStory {
 When you open the `Counter` story in the browser and take a look at the documentation 
 panel, the one at the bottom center, then you will find a tab named `tests`.
 
-![Location of the tests tab](/resources/leptos_forge_site/images/setup/adding_tests/01-tests_tab.png)
+![Location of the tests tab](/resources/leptos_forge_site/images/guides/adding_tests/01-tests_tab.png)
 
 If you click on it, you should see a view like
 
-![UI for running tests](/resources/leptos_forge_site/images/setup/adding_tests/02-test_runner_ui.png)
+![UI for running tests](/resources/leptos_forge_site/images/guides/adding_tests/02-test_runner_ui.png)
 
 On the gray bar you can see a header of a play. Below the play, there is 
 a list of steps in a play. Every line follows the same convention:  
@@ -230,11 +230,11 @@ At the far right of a play header there are two buttons
 
 If you press a `Step` button three times, then you should see  
 
-![State of the UI after playing first three steps](/resources/leptos_forge_site/images/setup/adding_tests/03-after_3rd_step.png)  
+![State of the UI after playing first three steps](/resources/leptos_forge_site/images/guides/adding_tests/03-after_3rd_step.png)  
 
 After you press `Play`, the test will complete and you will see  
 
-![State of the UI after completing the test](/resources/leptos_forge_site/images/setup/adding_tests/04-completed.png)  
+![State of the UI after completing the test](/resources/leptos_forge_site/images/guides/adding_tests/04-completed.png)  
 
 "#############;
 
