@@ -1,0 +1,7 @@
+@layer components {
+
+    .forge-menu-highlight {
+        @apply bg-forgeblue-200 text-forgeblue-950;
+    }
+
+}

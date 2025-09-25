@@ -9,6 +9,9 @@ use leptos_router::any_nested_route::IntoAnyNestedRoute;
 use leptos_router::components::Route;
 use leptos_router::components::RouteProps;
 use leptos_router::StaticSegment;
+use reactive_stores::Store;
+use ui_components::menu::MenuHeader;
+use ui_components::menu::MenuState;
 use ui_components::menu::Navigate;
 use utils_leptos::signal::ThreadSafe;
 
@@ -109,109 +112,175 @@ impl PathSpec {
     }
 
     /// Creates a navigation element in the main menu
-    pub fn as_navigation_view(&self, label: &'static str) -> AnyView {
+    pub fn as_navigation_view(&self, label: &'static str, location: &str, store: Store<MenuState> ) -> AnyView {
         use PathSpec::*;
 
         match self {
-            Root => view!{ <Navigate to="/" label=label class="pl-0" /> }.into_any(),
-            Level1(seg1) => view!{ <Navigate to=seg1 label=label class="pl-3"/> }.into_any(),
-            Level2(seg1, seg2) => view!{ <Navigate to=format!("{seg1}/{seg2}") label=label class="pl-6"/> }.into_any(),
-            Level3(seg1, seg2, seg3) => view!{ <Navigate to=format!("{seg1}/{seg2}/{seg3}") label=label class="pl-9"/> }.into_any(),
-            Level4(seg1, seg2, seg3, seg4) => view!{ <Navigate to=format!("{seg1}/{seg2}/{seg3}/{seg4}") label=label class="pl-12"/> }.into_any(),
-            Level5(seg1, seg2, seg3, seg4, seg5) => view!{ <Navigate to=format!("{seg1}/{seg2}/{seg3}/{seg4}/{seg5}") label=label class="pl-15"/> }.into_any(),
-            Level6(seg1, seg2, seg3, seg4, seg5, seg6) => view!{ <Navigate to=format!("{seg1}/{seg2}/{seg3}/{seg4}/{seg5}/{seg6}") label=label class="pl-18"/> }.into_any(),
-            Level7(seg1, seg2, seg3, seg4, seg5, seg6, seg7) => view!{ <Navigate to=format!("{seg1}/{seg2}/{seg3}/{seg4}/{seg5}/{seg6}/{seg7}") label=label class="pl-21"/> }.into_any(),
-            Level8(seg1, seg2, seg3, seg4, seg5, seg6, seg7, seg8) => view!{ <Navigate to=format!("{seg1}/{seg2}/{seg3}/{seg4}/{seg5}/{seg6}/{seg7}/{seg8}") label=label class="pl-24"/> }.into_any(),
-            Level9(seg1, seg2, seg3, seg4, seg5, seg6, seg7, seg8, seg9) => view!{ <Navigate to=format!("{seg1}/{seg2}/{seg3}/{seg4}/{seg5}/{seg6}/{seg7}/{seg8}/{seg9}") label=label class="pl-27"/> }.into_any(),
+            Root => view!{ <Navigate to="/" label=label class="pl-0" location store/> }.into_any(),
+            Level1(seg1) => view!{ <Navigate to=format!("/{seg1}") label=label class="pl-3" location store/> }.into_any(),
+            Level2(seg1, seg2) => view!{ <Navigate to=format!("/{seg1}/{seg2}") label=label class="pl-6" location store/> }.into_any(),
+            Level3(seg1, seg2, seg3) => view!{ <Navigate to=format!("/{seg1}/{seg2}/{seg3}") label=label class="pl-9" location store/> }.into_any(),
+            Level4(seg1, seg2, seg3, seg4) => view!{ <Navigate to=format!("/{seg1}/{seg2}/{seg3}/{seg4}") label=label class="pl-12" location store/> }.into_any(),
+            Level5(seg1, seg2, seg3, seg4, seg5) => view!{ <Navigate to=format!("/{seg1}/{seg2}/{seg3}/{seg4}/{seg5}") label=label class="pl-15" location store/> }.into_any(),
+            Level6(seg1, seg2, seg3, seg4, seg5, seg6) => view!{ <Navigate to=format!("/{seg1}/{seg2}/{seg3}/{seg4}/{seg5}/{seg6}") label=label class="pl-18" location store/> }.into_any(),
+            Level7(seg1, seg2, seg3, seg4, seg5, seg6, seg7) => view!{ <Navigate to=format!("/{seg1}/{seg2}/{seg3}/{seg4}/{seg5}/{seg6}/{seg7}") label=label class="pl-21" location store/> }.into_any(),
+            Level8(seg1, seg2, seg3, seg4, seg5, seg6, seg7, seg8) => view!{ <Navigate to=format!("/{seg1}/{seg2}/{seg3}/{seg4}/{seg5}/{seg6}/{seg7}/{seg8}") label=label class="pl-24" location store/> }.into_any(),
+            Level9(seg1, seg2, seg3, seg4, seg5, seg6, seg7, seg8, seg9) => view!{ <Navigate to=format!("/{seg1}/{seg2}/{seg3}/{seg4}/{seg5}/{seg6}/{seg7}/{seg8}/{seg9}") label=label class="pl-27" location store/> }.into_any(),
         }
     }
 }
 
 /// Define routes in the application
 #[derive(Debug,Clone)]
-pub struct RouteDef {
-    /// path part in the url
-    pub path: &'static str,
-    /// Label in  the menu
-    pub label: &'static str,
-    /// component to render when the route is matched
-    pub component: fn() -> AnyView,
-    /// optional children for nested routes
-    pub subroutes: &'static [RouteDef],
+pub enum RouteDef {
+    /// Menu entry which can be navigated, a route to be taken by the user
+    Route{
+        /// path part in the url
+        path: &'static str,
+        /// Label in the menu
+        label: &'static str,
+        /// component to render when the route is matched
+        component: fn() -> AnyView,
+        /// optional children for nested routes
+        subroutes: &'static [RouteDef],
+    },
+    /// Grouping for a set of routes without any path to be taken
+    Header{
+        /// path part in the url
+        path: &'static str,
+        /// Header label in the menu
+        label: &'static str,
+        /// optional children for nested routes
+        subroutes: &'static [RouteDef],
+    }
 }
 
 impl RouteDef{
     /// Extends a prefix path while detecting a "root" path
     /// 
+    /// # For RouteDef::Route
+    /// 
     /// Patch which only contains the `/` are considered as root paths
     /// and they return the prefix directly.
     /// 
     /// You can use this to create a root path for your routes
+    /// 
+    /// # For RouteDef::Header
+    /// 
+    /// It just returns a `PathSpec` since headers do not contribute to
+    /// path
     fn extend(&self, prefix: PathSpec) -> PathSpec {
-        if self.path == "/" {
-            prefix
-        }
-        else {
-            prefix.extend(self.path)
+        use RouteDef::*;
+        match self {
+            Route{ path, ..} | Header{ path, .. }=> {
+                if *path == "/" {
+                    prefix
+                }
+                else {
+                    prefix.extend(path)
+                }
+            }
         }
     }
 
     /// Converts the route to list of routes that can be used in `leptos_router`
     pub fn as_routes(&self, prefix: PathSpec) -> Vec<AnyNestedRoute> {
-        let my_path: PathSpec = self.extend(prefix);
+        use RouteDef::*;
+        match self {
+            Route{ component, subroutes, ..} => {
+                let my_path: PathSpec = self.extend(prefix);
 
-        let mut routes: Vec<AnyNestedRoute> = vec![
-            my_path.as_route(
-                self.component
-            )
-        ];
+                let mut routes: Vec<AnyNestedRoute> = vec![
+                    my_path.as_route(
+                        *component
+                    )
+                ];
 
-        routes.extend(
-            self.subroutes.
-                iter().
-                flat_map(|r| {
-                    r.as_routes(my_path)
-                })
-        );
+                routes.extend(
+                    subroutes.
+                        iter().
+                        flat_map(|r| {
+                            r.as_routes(my_path)
+                        })
+                );
 
-        routes
+                routes
+            },
+            Header{ subroutes, ..} => {
+                let my_path: PathSpec = self.extend(prefix);
+                let mut routes: Vec<AnyNestedRoute> = vec![];
+
+                routes.extend(
+                    subroutes.
+                        iter().
+                        flat_map(|r| {
+                            r.as_routes(my_path)
+                        })
+                );
+
+                routes
+            }
+        }
     }
 
     /// Builds menu items
-    pub fn as_menu_items(&self, prefix: PathSpec) -> Vec<AnyView> {
-        let my_path: PathSpec = self.extend(prefix);
+    pub fn as_menu_items(&self, prefix: PathSpec, location: &str, store: Store<MenuState>) -> Vec<AnyView> {
+        use RouteDef::*;
+        match self {
+            Route{ label, subroutes, ..} => {
+                let my_path: PathSpec = self.extend(prefix);
 
-        let mut views = vec![
-            my_path.as_navigation_view(self.label)
-        ];
-        
+                let mut views = vec![
+                    my_path.as_navigation_view(label, location, store)
+                ];
+                
 
-        views.extend(
-            self.subroutes.
-                iter().
-                flat_map(|r| {
-                    r.as_menu_items(my_path)
-                })
-        );
+                views.extend(
+                    subroutes.
+                        iter().
+                        flat_map(|r| {
+                            r.as_menu_items(my_path, location, store)
+                        })
+                );
+                
+                views
+            },
+            Header { label, subroutes, .. } => {
+                let my_path: PathSpec = self.extend(prefix);
+
+                let mut views = vec![
+                    (view!{
+                        <MenuHeader label class="" />
+                    }).into_any()
+                ];
+                
+
+                views.extend(
+                    subroutes.
+                        iter().
+                        flat_map(|r| {
+                            r.as_menu_items(my_path, location, store)
+                        })
+                );
+                
+                views
+            }
+        }
         
-        views
     }
 
     /// Creates a new page route with a story
     /// 
     /// This story doesn't have any subseries defined
+    /// 
+    /// Alias for the `component` but without a subroutes argument
     pub const fn page<S: 'static + Story + Default + Copy + ThreadSafe>(path: &'static str, label: &'static str) -> RouteDef {
-        RouteDef{ 
-            path,
-            label,
-            component: || view!{ <Page<S> /> }.into_any(),
-            subroutes: &[]
-        }
+        RouteDef::component::<S>(path, label, &[])
     }
 
     /// Creates a new page route with a story and it's related sub-stories
     pub const fn component<S: 'static + Story + Default + Copy + ThreadSafe>(path: &'static str, label: &'static str, subroutes: &'static [RouteDef]) -> RouteDef {
-        RouteDef{ 
+        RouteDef::Route{ 
             path,
             label,
             component: || view!{ <Page<S> /> }.into_any(),
@@ -221,14 +290,29 @@ impl RouteDef{
 
     /// Creates a new section route
     /// 
-    /// Section creates a new Markdown only page, It's intended use is to group a bunch of related [pages][RouteDef::page] and [componens][RouteDef::component]
+    /// Section creates a new Markdown only page, It's intended use is 
+    /// to group a bunch of related [pages][RouteDef::page] 
+    /// and [componens][RouteDef::component]
     /// together
     pub const fn section<S: 'static + Section + Default + Copy + Send>(path: &'static str, label: &'static str, subroutes: &'static [RouteDef]) -> RouteDef {
-        RouteDef{
+        RouteDef::Route{
             path,
             label,
             component: || view!{ <section::Section<S> /> }.into_any(),
             subroutes,
+        }
+    }
+
+    /// Creates a header in the menu
+    /// 
+    /// Header doesn't contribute to the routing path but provides 
+    /// a visual named separator and header for parts of the group
+    /// of routes in the left hand side menu
+    pub const fn header(path: &'static str, label: &'static str, subroutes: &'static [RouteDef]) -> RouteDef {
+        RouteDef::Header{ 
+            path,
+            label, 
+            subroutes
         }
     }
 }
