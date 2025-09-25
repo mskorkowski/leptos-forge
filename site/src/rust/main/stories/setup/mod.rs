@@ -342,16 +342,14 @@ impl Section for Setup {
 
 /// Top level routes for the leptos_forge site
 pub const ROUTES: &[RouteDef] = &[
-   RouteDef::header("guides", "Guides", &[
-      RouteDef::section::<Setup>("create_project", "Create project", &[]),
-      RouteDef::section::<RefineCounterStory>("first_story", "Implement the first story", &[
-         RouteDef::page::<CounterStory>("counter_story", "Counter")
-      ]),
-      RouteDef::section::<AddingTests>("adding_tests", "Adding tests", &[
-         RouteDef::page::<TestedCounterStory>("tested_counter_story", "Counter with tests"),
-      ]),
-      RouteDef::section::<Resources>("resources", "Resources", &[]),
-      RouteDef::section::<Tailwind>("tailwind", "Tailwind", &[]),
-      RouteDef::section::<Nix>("nix", "Nix", &[]),
-   ])
+   RouteDef::section::<Setup>("create_project", "Create project", &[]),
+   RouteDef::section::<RefineCounterStory>("first_story", "Implement the first story", &[
+      RouteDef::page::<CounterStory>("counter_story", "Counter")
+   ]),
+   RouteDef::section::<AddingTests>("adding_tests", "Adding tests", &[
+      RouteDef::page::<TestedCounterStory>("tested_counter_story", "Counter with tests"),
+   ]),
+   RouteDef::section::<Resources>("resources", "Resources", &[]),
+   RouteDef::section::<Tailwind>("tailwind", "Tailwind", &[]),
+   RouteDef::section::<Nix>("nix", "Nix", &[]),
 ];

@@ -79,8 +79,9 @@ impl Section for Main {
 
 /// Top level routes for the leptos_forge site
 pub const ROUTES: &[RouteDef] = &[
-    RouteDef::section::<Main>("/", "Leptos Forge", setup::ROUTES),
-    RouteDef::header("/", "Leptos Forge development", &[
+    RouteDef::section::<Main>("/", "Leptos Forge", &[]),
+    RouteDef::header("guides", "Guides", setup::ROUTES),
+    RouteDef::header("development", "Leptos Forge development", &[
         RouteDef::section::<Components>("components", "Components", components::ROUTES)
     ])
 ];

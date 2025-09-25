@@ -116,16 +116,16 @@ impl PathSpec {
         use PathSpec::*;
 
         match self {
-            Root => view!{ <Navigate to="/" label=label class="pl-0" location store/> }.into_any(),
-            Level1(seg1) => view!{ <Navigate to=format!("/{seg1}") label=label class="pl-3" location store/> }.into_any(),
-            Level2(seg1, seg2) => view!{ <Navigate to=format!("/{seg1}/{seg2}") label=label class="pl-6" location store/> }.into_any(),
-            Level3(seg1, seg2, seg3) => view!{ <Navigate to=format!("/{seg1}/{seg2}/{seg3}") label=label class="pl-9" location store/> }.into_any(),
-            Level4(seg1, seg2, seg3, seg4) => view!{ <Navigate to=format!("/{seg1}/{seg2}/{seg3}/{seg4}") label=label class="pl-12" location store/> }.into_any(),
-            Level5(seg1, seg2, seg3, seg4, seg5) => view!{ <Navigate to=format!("/{seg1}/{seg2}/{seg3}/{seg4}/{seg5}") label=label class="pl-15" location store/> }.into_any(),
-            Level6(seg1, seg2, seg3, seg4, seg5, seg6) => view!{ <Navigate to=format!("/{seg1}/{seg2}/{seg3}/{seg4}/{seg5}/{seg6}") label=label class="pl-18" location store/> }.into_any(),
-            Level7(seg1, seg2, seg3, seg4, seg5, seg6, seg7) => view!{ <Navigate to=format!("/{seg1}/{seg2}/{seg3}/{seg4}/{seg5}/{seg6}/{seg7}") label=label class="pl-21" location store/> }.into_any(),
-            Level8(seg1, seg2, seg3, seg4, seg5, seg6, seg7, seg8) => view!{ <Navigate to=format!("/{seg1}/{seg2}/{seg3}/{seg4}/{seg5}/{seg6}/{seg7}/{seg8}") label=label class="pl-24" location store/> }.into_any(),
-            Level9(seg1, seg2, seg3, seg4, seg5, seg6, seg7, seg8, seg9) => view!{ <Navigate to=format!("/{seg1}/{seg2}/{seg3}/{seg4}/{seg5}/{seg6}/{seg7}/{seg8}/{seg9}") label=label class="pl-27" location store/> }.into_any(),
+            Root => view!{ <Navigate to="/" label=label class="ml-6 border-l-0" location store/> }.into_any(),
+            Level1(seg1) => view!{ <Navigate to=format!("/{seg1}") label=label class="ml-6" location store/> }.into_any(),
+            Level2(seg1, seg2) => view!{ <Navigate to=format!("/{seg1}/{seg2}") label=label class="ml-6 pl-6" location store/> }.into_any(),
+            Level3(seg1, seg2, seg3) => view!{ <Navigate to=format!("/{seg1}/{seg2}/{seg3}") label=label class="ml-6 pl-9" location store/> }.into_any(),
+            Level4(seg1, seg2, seg3, seg4) => view!{ <Navigate to=format!("/{seg1}/{seg2}/{seg3}/{seg4}") label=label class="ml-6 pl-12" location store/> }.into_any(),
+            Level5(seg1, seg2, seg3, seg4, seg5) => view!{ <Navigate to=format!("/{seg1}/{seg2}/{seg3}/{seg4}/{seg5}") label=label class="ml-6 pl-15" location store/> }.into_any(),
+            Level6(seg1, seg2, seg3, seg4, seg5, seg6) => view!{ <Navigate to=format!("/{seg1}/{seg2}/{seg3}/{seg4}/{seg5}/{seg6}") label=label class="ml-6 pl-18" location store/> }.into_any(),
+            Level7(seg1, seg2, seg3, seg4, seg5, seg6, seg7) => view!{ <Navigate to=format!("/{seg1}/{seg2}/{seg3}/{seg4}/{seg5}/{seg6}/{seg7}") label=label class="ml-6 pl-21" location store/> }.into_any(),
+            Level8(seg1, seg2, seg3, seg4, seg5, seg6, seg7, seg8) => view!{ <Navigate to=format!("/{seg1}/{seg2}/{seg3}/{seg4}/{seg5}/{seg6}/{seg7}/{seg8}") label=label class="ml-6 pl-24" location store/> }.into_any(),
+            Level9(seg1, seg2, seg3, seg4, seg5, seg6, seg7, seg8, seg9) => view!{ <Navigate to=format!("/{seg1}/{seg2}/{seg3}/{seg4}/{seg5}/{seg6}/{seg7}/{seg8}/{seg9}") label=label class="ml-6 pl-27" location store/> }.into_any(),
         }
     }
 }

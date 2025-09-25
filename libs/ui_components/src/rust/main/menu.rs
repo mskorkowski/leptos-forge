@@ -6,7 +6,6 @@ use std::mem::MaybeUninit;
 
 use leptos::prelude::*;
 use leptos::ev::MouseEvent;
-use leptos::leptos_dom::logging::console_log;
 use leptos_node_ref::AnyNodeRef;
 use leptos_router::components::A;
 use reactive_stores::Patch;
@@ -14,8 +13,7 @@ use reactive_stores::PatchField;
 use reactive_stores::Store;
 use reactive_stores::StorePath;
 use utils::prelude::ThreadSafe;
-use utils_leptos::css::use_add_class;
-use utils_leptos::css::use_remove_class;
+use utils_leptos::css::use_swap_class;
 use utils_leptos::stores::stored_ref::StoredRef;
 
 /// Menu component
@@ -57,6 +55,9 @@ pub fn Navigate<'a, S: ToString + ThreadSafe + Clone>(
     
     let div = AnyNodeRef::new();
 
+    let highlight = ("font-bold", "text-forgegray-50", "border-l-forgegray-50");
+    let normal = "border-l-forgegray-800";
+
     let class = {
         let to = to.clone();
         let to_string = to.to_string();
@@ -75,8 +76,12 @@ pub fn Navigate<'a, S: ToString + ThreadSafe + Clone>(
                 })
             );
 
-            // Safety: This should be hacky but safe way  since we are reading the `effect` variable
-            // only after moving it into the effect callback
+            // Safety: This should be hacky but safe way since we are reading the `effect` variable
+            // only after moving it into the effect callback, so it must become initialized before
+            // being read
+            //
+            // Our goal here is to drop the effect after first successful firing since it won't be
+            // needed later
             #[allow(unsafe_code)]
             let mut effect: Effect<LocalStorage> = unsafe{ *MaybeUninit::zeroed().assume_init_mut() };
 
@@ -84,16 +89,12 @@ pub fn Navigate<'a, S: ToString + ThreadSafe + Clone>(
                 Effect::watch(
                     move || div.get(), 
                     move |element, _, _| {
-                        console_log("Fire the effect!");
-
                         if element.is_some() {
-                            console_log("Element is set");
                             let last_selected_item = store.last_selected_item().get_untracked();
                             let to_string = to.to_string();
                             if let Some(last_selected_item) = last_selected_item &&
                                 last_selected_item.to == to_string 
                             {
-                                console_log("paths are matching!");
                                 store.last_selected_item().patch(
                                     Some(LastSelectedItem{
                                         to: to_string,
@@ -110,14 +111,14 @@ pub fn Navigate<'a, S: ToString + ThreadSafe + Clone>(
                 )
             };
 
-            format!("{class} forge-menu-highlight")
+            format!("{class} {} {} {}", highlight.0, highlight.1, highlight.2)
         }
         else {
             class.to_string()
         }
     };
 
-    let class = format!("{class} py-1");
+    let class = format!("{class} py-1 border-l-forgegray-800 border-l-3");
 
     let click = {
         let to = to.clone();
@@ -127,8 +128,8 @@ pub fn Navigate<'a, S: ToString + ThreadSafe + Clone>(
 
             if let Some(last_selected_item) = last_selected_item {
                 if last_selected_item.to != to {
-                    use_remove_class(last_selected_item.menu_item, "forge-menu-highlight");
-                    use_add_class(div, "forge-menu-highlight");
+                    use_swap_class(last_selected_item.menu_item, highlight, normal);
+                    use_swap_class(div, normal, highlight);
 
                     store.last_selected_item().patch(
                         Some(LastSelectedItem{
@@ -139,7 +140,7 @@ pub fn Navigate<'a, S: ToString + ThreadSafe + Clone>(
                 }
             }
             else {
-                use_add_class(div, "forge-menu-highlight");
+                use_swap_class(div, normal, highlight);
 
                 store.last_selected_item().patch(
                     Some(LastSelectedItem{
@@ -165,7 +166,7 @@ pub fn Navigate<'a, S: ToString + ThreadSafe + Clone>(
 /// The header in the menu
 #[component]
 pub fn MenuHeader(label: &'static str, class: &'static str) -> impl IntoView {
-    let class = format!("{class} pt-8 font-bold ");
+    let class = format!("{class} ml-6 pb-2 pt-8 font-bold");
 
     view!{
         <div class=class>{label}</div>
