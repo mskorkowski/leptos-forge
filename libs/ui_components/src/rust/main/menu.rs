@@ -117,6 +117,8 @@ pub fn Navigate<'a, S: ToString + ThreadSafe + Clone>(
         }
     };
 
+    let class = format!("{class} py-1");
+
     let click = {
         let to = to.clone();
         move |_: MouseEvent| {
@@ -149,9 +151,13 @@ pub fn Navigate<'a, S: ToString + ThreadSafe + Clone>(
         }
     };
 
+    let link_class = view!{
+        <{..} class="hover:text-forgeblue-300" />
+    };
+
     view! {
         <div class=class node_ref=div>
-            <A href={to.to_string()} on:click=click>{label}</A>
+            <A href={to.to_string()} on:click={click} {.. link_class}>{label}</A>
         </div>
     }
 }
@@ -159,7 +165,7 @@ pub fn Navigate<'a, S: ToString + ThreadSafe + Clone>(
 /// The header in the menu
 #[component]
 pub fn MenuHeader(label: &'static str, class: &'static str) -> impl IntoView {
-    let class = format!("{class} pt-4 font-bold");
+    let class = format!("{class} pt-8 font-bold ");
 
     view!{
         <div class=class>{label}</div>
