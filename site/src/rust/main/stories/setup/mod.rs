@@ -7,7 +7,15 @@ pub mod nix;
 pub mod refine_story;
 pub mod resources;
 
+use adding_tests::AddingTests;
+use adding_tests::TestedCounterStory;
+use forge::RouteDef;
 use forge::Section;
+use nix::Nix;
+use refine_story::CounterStory;
+use refine_story::RefineCounterStory;
+use resources::Resources;
+use resources::Tailwind;
 
 /// description of the [Components] section
 const SETUP: &str = r############"
@@ -33,7 +41,7 @@ dependencies are optional.
 - Trunk
 - Tailwind 4 (optional)
 
-Sample `nix` configuration can be found in the [`nix` section](/setup/nix).
+Sample `nix` configuration can be found in the [`nix` section](/guides/nix).
 
 ### Setting up Rust and Cargo
 
@@ -153,7 +161,7 @@ where the final `leptos_forge` based web application will be ready to be served.
 based application. To automate the process, we use the `build.rs` script. This script will
 search for resources in the upstream projects and copy them into the `target/resources` directory.
 In depth explanation about the resource management can be found in the 
-[Resources](/setup/resources) section.
+[Resources](/guides/resources) section.
 
 `target/resources` directory has been set up in the last line of the `Cargo.toml` file. For more
 details about configuration options for the `cargo-resources` crate, please refer to the 
@@ -197,7 +205,7 @@ Below is the basic `index.html` file you can use:
 </html>
 ```
 
-Using Tailwind in your `leptos_forge` application is described in [Tailwind chapter](/setup/tailwind).
+Using Tailwind in your `leptos_forge` application is described in [Tailwind chapter](/guides/tailwind).
 
 ### Creating the application
 
@@ -270,7 +278,7 @@ Things which are noteworthy:
 
 Go into your terminal, and in the root of your `leptos_forge` based project directory. Now we
 need to run the build process to allow the `cargo-resources` to handle the assets. In depth
-explanation can be found in the [Resources](/setup/resources) section.
+explanation can be found in the [Resources](/guides/resources) section.
 
 ```bash
 cargo build
@@ -292,19 +300,19 @@ access the just-created site.
 
 If everything went well you should see the view like this:
 
-![Initial view](/resources/leptos_forge_site/images/setup/first_run.png)
+![Initial view](/resources/leptos_forge_site/images/guides/first_run.png)
 
-On the right side under the `leptos_forge` logo there is a `menu`. Currently, only the `Counter`
+On the left side under the `leptos_forge` logo there is a `menu`. Currently, only the `Counter`
 is there.
 
-On the right side there is a documentation panel. At this moment you can find the **New Story**
-help. Any time you create a new element to show up in the app we will show you there what are
-your next steps to make it work.
+On the right side, which is currently empty, is a control panel. Here you will find the controls to change your components.
 
 In the center, the gray area is the place where your components will show up. In the next step
 we will add the `Counter` component there.
 
-Below the gray area is a control panel. Here you will find the controls to change your components.
+Below the gray area there is a documentation panel. At this moment you can find the **New Story**
+help. Any time you create a new element to show up in the app we will show you there what are
+your next steps to make it work.
 
 ### .gitignore
 
@@ -331,3 +339,17 @@ impl Section for Setup {
         SETUP
     }
 }
+
+/// Top level routes for the leptos_forge site
+pub const ROUTES: &[RouteDef] = &[
+   RouteDef::section::<Setup>("create_project", "Create project", &[]),
+   RouteDef::section::<RefineCounterStory>("first_story", "Implement the first story", &[
+      RouteDef::page::<CounterStory>("counter_story", "Counter")
+   ]),
+   RouteDef::section::<AddingTests>("adding_tests", "Adding tests", &[
+      RouteDef::page::<TestedCounterStory>("tested_counter_story", "Counter with tests"),
+   ]),
+   RouteDef::section::<Resources>("resources", "Resources", &[]),
+   RouteDef::section::<Tailwind>("tailwind", "Tailwind", &[]),
+   RouteDef::section::<Nix>("nix", "Nix", &[]),
+];

@@ -41,7 +41,8 @@ pub const ROUTES: &[RouteDef] = &[
             RouteDef::page::<MarkdownAdmonishStory>("admonishes", "Admonishes"),
             RouteDef::page::<MarkdownTableStory>("tables", "Tables"),
         ]),
-        RouteDef {
+        RouteDef::Route
+        {
             path: "menu",
             label: "Menu",
             component: || view!{"Menu"}.into_any(),
@@ -75,17 +76,20 @@ pub const ROUTES: &[RouteDef] = &[
 
 /// description of the [Components] section
 const COMPONENTS_DESCRIPTION: &str = r############"
-# Embedded Control Panel Components
+# Components
 
-Components in this section are part of the `leptos_forge` library and are specifically designed for use within 
-**control panels** of your widgets. They allow you to build control interfaces without tying `leptos_forge` 
-to any particular UI framework beyond `leptos`, giving you flexibility to choose your preferred UI library 
-elsewhere in your application.
+Components in this section are part of the `leptos_forge_ui_components` library and are specifically designed 
+for use within `leptos_forge` and **control panels** of your widgets. They allow you to build control 
+interfaces without tying `leptos_forge` to any particular UI framework beyond `leptos`, giving you flexibility 
+to choose your preferred UI library elsewhere in your application.
 
 > [!NOTE]
 > 
-> **Usage Restriction:** These components are **only intended for use in control panels** within 
-> `leptos_forge`-based applications.
+> **Usage Restriction:** These components are **only intended for use in `leptos_forge`-based applications`** 
+> especially the control panels for your components and `leptos_forge` itself.
+>
+> If you use these components outside of this scope, you bind yourself to a specific version of `leptos_forge`
+> 
 
 "############;
 

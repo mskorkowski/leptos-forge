@@ -1,9 +1,14 @@
 //! Base component of the application
 
+mod state;
+
 use leptos::prelude::*;
 use leptos::tachys::view::iterators::StaticVec;
 use leptos_router::components::Routes;
 use leptos_router::components::Router;
+use reactive_stores::Store;
+use state::State;
+use ui_components::menu::MenuState;
 
 use super::navigation::PathSpec;
 use super::navigation::RouteDef;
@@ -24,12 +29,20 @@ pub fn App(
     logo: Option<&'static str>,
 ) -> impl IntoView {
 
+    let _store = Store::new(State::new());
+    
     let menu_defs = || {
+        let menu = Store::new(MenuState::new());
+
+        let window = window();
+        let location = window.location();
+        let path = location.pathname().expect("We are running csr mode. Window should exist, location should exist and pathname should be there");
+
         StaticVec::from(
             routes.
                 iter().
-                flat_map(|route| {
-                    route.as_menu_items(PathSpec::Root)
+                flat_map(move |route| {
+                    route.as_menu_items(PathSpec::Root, &path, menu)
                 }).
                 collect::<Vec<_>>()
         )

@@ -8,23 +8,28 @@ const RESOURCES: &str = r############"
 
 ## Backstory
 
-Let's assume you have an image named `logo.png` in your project. Which you would like to show as the logo on top of the `leptos_forge` powered site. But this image
-will also be used in the application you are building. This means both applications should have an access to the image file. One obvious way is to copy the image 
-file to both locations. If it's a single image file, then why not. But there are also icons you are using, and css files, and ... and so on. Copying the files simply
-doesn't scale well.
+Let's assume you have an image named `logo.png` in your project that you would
+like to show as the logo on top of the `leptos_forge` powered site. But this 
+image will also be used in the application you are building. This means both
+applications should have access to the image file. One obvious way is to copy
+the image file to both locations. If it's a single image file, then why not? But
+there are also icons you are using, and CSS files, and ... and so on. Copying
+the files simply doesn't scale well.
 
 ## Solution
 
-To manage the resources in the project across the dependencies `leptos_forge` is using the [`cargo-resources`](https://github.com/PeteEvans/cargo-resources) crate.
+To manage resources in the project across dependencies, `leptos_forge` uses the 
+[`cargo-resources`](https://github.com/PeteEvans/cargo-resources) crate.
 
-There are two parts to the usage of `cargo-resources` crate. Providing the resources and using them in your project. 
+There are two parts to the usage of the `cargo-resources` crate: providing the
+resources and using them in your project.
 
-### Providing the resources
+### Providing the Resources
 
 Providing the resource has three steps.
 
 1. Place a file somewhere in your project. For example `assets/images/logo.png`.
-2. Add the file to the `package.include` list in your `Cargo.toml` file. 
+2. Add the file to the `package.include` list in your `Cargo.toml` file.
 
    ```toml
    [package]
@@ -36,10 +41,12 @@ Providing the resource has three steps.
    ]
    ```
 
-   The `package.include` contains a list of additional files which should be packaged in the cargo crate and are not part of rust code.
+   The `package.include` list contains additional files to be packaged in the 
+   Cargo crate and are not part of Rust code.
 
-3. Add the `package.metadata.cargo_resources.provides` to your `Cargo.toml` file. This section will tell `cargo-resources` how to package the resources when building
-   your application.
+3. Add the `package.metadata.cargo_resources.provides` section to your 
+   `Cargo.toml` file. This section tells `cargo-resources` how to package the 
+   resources when building your application.
 
    ```toml
    [package.metadata.cargo_resources]
@@ -83,7 +90,7 @@ Both options have their advantages and disadvantages. Comparison is presented in
 | nix                    | `cargo_resources` is both a lib and cli application. Unfortunate part is that it's not packaged for `nix`. | Since it's a build script, `cargo-resources` will be build as a lib and linked to the build script which makes it trivial to use. | The same issue as trunk has. |
 | Other build configurations | This works only for trunk. Any other build setup will fail | This works for any setup which runs a `cargo build` internally. | You must not forget to run it |
 
-If you followed the [setup](/setup) then you have a build script configured already.
+If you followed the [create project guide](/guides/create_project) then you have a build script configured already.
 
 #### Using `trunk` to bundle the resources
 
@@ -98,7 +105,7 @@ command_arguments = ["resources"]
 
 #### Using build script
 
-If you followed the [Setup](/setup) this is a configuration which was suggested to you.
+If you followed the [create project](/guides/create_project) this is a configuration which was suggested to you.
 
 To make the build script approach work you need to make following changes in the `Cargo.toml`
 
@@ -150,7 +157,7 @@ do small changes to the `index.html` file used by the `trunk`.
 
 ## Setting up `cargo-resources`
 
-I assume you have `cargo-resources` set and running. If not you can follow either [setup](/setup) or [resources](/setup/resources) chapter. For the
+I assume you have `cargo-resources` set and running. If not you can follow either [setup](/guides) or [resources](/guides/resources) chapter. For the
 rest of this chapter I will assume that in your `Cargo.toml` you have the following configuration
 
 ```toml
@@ -177,7 +184,7 @@ To integrate `leptos_forge` with your project's Tailwind setup you need to impor
 
 ## Setting up trunk
 
-Trunk has builtin integration with Tailwind. Your `index.html` file needs to be slightly adjusted compared to the [setup](/setup)
+Trunk has builtin integration with Tailwind. Your `index.html` file needs to be slightly adjusted compared to the [create project](/guides/create_project)
 
 ```html
 <!doctype html>

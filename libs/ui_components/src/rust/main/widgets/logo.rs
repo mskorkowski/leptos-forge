@@ -16,7 +16,7 @@ pub fn Logo(
   alt: Signal<String>,
 ) -> impl IntoView {
     view! {
-      <div class="--lf-w-80 --lf-h-12 --lf-bg-forgered-200">
+      <div>
         <img src=src alt=alt />
       </div>
     }

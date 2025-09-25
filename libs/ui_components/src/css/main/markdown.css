@@ -7,7 +7,7 @@
 }
 
 .markdown h1:first-child {
-    @apply text-5xl md:text-6xl lg:text-7xl xl:text-8xl 2xl:text-9xl font-bold;
+    @apply text-5xl md:text-6xl lg:text-7xl 2xl:text-8xl font-bold;
 }
 
 .markdown h1:first-child:has(+ h1) {

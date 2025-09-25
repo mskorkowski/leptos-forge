@@ -10,7 +10,7 @@ pub fn MainMenu(
 ) -> impl IntoView 
 {
   view! {
-    <div class="flex-none flex-none py-4 px-4 flex flex-col bg-forgeblue-950 text-forgegray-200 scrollbox w-80 basis-auto print:hidden">
+    <div class="flex-none flex-none py-4 px-4 flex flex-col bg-forgeblue-950 text-forgegray-200 scrollbox w-61 basis-auto print:hidden forge-text-standard">
       <div class="scrollable">
         { children() }
       </div>

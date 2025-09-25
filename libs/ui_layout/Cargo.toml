@@ -9,7 +9,5 @@ path = "src/rust/main/lib.rs"
 [dependencies]
 leptos.workspace = true
 
-utils_leptos.workspace = true
-
 [lints]
 workspace = true

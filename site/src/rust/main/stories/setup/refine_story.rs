@@ -12,13 +12,15 @@ use forge::Story;
 const REFINE_COUNTER_STORY: &str = r#############"
 # Implementing the first story
 
-This section builds upon the code which was created during the [setup](/setup) part. The expected result of
-this section can be checked by going to the [`Counter story`](/setup/first_story/counter_story) subpage.
+This section builds upon the code which was created during the [create project guide](/guides) part. 
+The expected result of this section can be checked by going to the 
+[`Counter story`](/guides/first_story/counter_story) subpage.
 
-## First thing first, we need component
+## First things first, we need a component
 
-We will start with creating a simple component. This component will have a single button. Every time we click `+` it
-it will increase a value of the counter by one. Every time we click `-` it will decrease a value of the counter by one.
+We will start with creating a simple component. This component will have a single 
+button. Every time we click `+`, it will increase a value of the counter by one.
+ Every time we click `-`, it will decrease a value of the counter by one.
 
 In the `src/stories.rs` file we will add the following leptos component:
 
@@ -60,14 +62,16 @@ fn Counter(
 }
 ```
 
-This component is a simple counter with two buttons. One to increase and other to decrease the counter's value. Only nonstandard
-feature is using the `URwSignal` type from `leptos_forge_utils_leptos` crate. `URwSignal` is a generic read-write signal with 
-a little bit of extra sauce.
+This component is a simple counter with two buttons. One to increase and the 
+other to decrease the counter's value. Only non-standard feature is using the 
+`URwSignal` type from the `utils_leptos` crate. `URwSignal` is a generic 
+read-write signal with a little bit of extra sauce.
 
 ## Updating the story
 
-Our `Counter` component takes a single `value: URwSignal<i32>` as a property. We need to add this value to our story. To do that
-we need to change the definition of the `CounterStory` struct to include a `value` field.
+Our `Counter` component takes a single `value: URwSignal<i32>` as a property. 
+We need to add this value to our story. To do that, we need to change the 
+definition of the `CounterStory` struct to include a `value` field.
 
 ```rust
 #[derive(Debug, Default, Clone, Copy)]
@@ -77,8 +81,8 @@ pub struct CounterStory {
 }
 ```
 
-Now we can show the component in our story, to do that we add an implementation of the `view` function to implementation of the
-`Story` trait for `CounterStory`. 
+Now we can show the component in our story. To do that, we add an implementation
+of the `view` function to the implementation of the `Story` trait for `CounterStory`.
 
 ```rust
 impl Story for CounterStory {
@@ -90,19 +94,24 @@ impl Story for CounterStory {
 }
 ```
 
-Whatever you return form `Story::view` function will be shown in the canvas area.
+Whatever you return **from** `Story::view` function will be shown in the canvas 
+area.
 
-Now when you open the `Button` story at the top left side of gray area you will find out component. It should look like this:
+Now when you open the `Button` story at the top left side of the gray area you
+will find the component. It should look like this:
 
-![Example counter component rendered in the canvas area](/resources/leptos_forge_site/images/setup/refine_story/01-component_view.png)
+![Example counter component rendered in the canvas area](/resources/leptos_forge_site/images/guides/refine_story/01-component_view.png)
 
-You can test our component by clicking on the `[-]` and `[+]` buttons. 
+You can test our component by clicking on the `[-]` and `[+]` buttons.
 
-Now our simple story needs a way to control our component, so we can set a given state for our counter. This makes easier to set
-a desired state. To do that we need to implement another function in our implementation of the `Story` for `CounterStory`.
+Now our simple story needs a way to control our component, so we can set a given
+state for our counter. This makes **it** easier to set a desired state. To do that,
+we need to implement another function in our implementation of the `Story` for
+`CounterStory`.
 
-```
-use ui_components::widgets::field::TextField; // <- We need to add this use statement so we can use TextField widget
+```rs
+use ui_components::widgets::field::TextField; // <- We need to add this use statement
+so we can use TextField widget
 
 impl Story for CounterStory {
     fn view(&self) -> AnyView {
@@ -126,51 +135,57 @@ impl Story for CounterStory {
 }
 ```
 
-The `Story::controls` function allows you to implement the control panel. Whatever you return from this function will be rendered as
-a control panel. 
+The `Story::controls` function allows you to implement the control panel. Whatever 
+you return from this function will be rendered as a control panel.
 
 > [!NOTE]
 > 
-> By design `leptos_forge` is giving you a full control over what is rendered as a control panel. This is one of the key features
-> of `leptos_forge`.
+> By design `leptos_forge` is giving you a full control over what is rendered as 
+> a control panel. This is one of the key features of `leptos_forge`.
 
-Let's deep dive into the code of a function we just created.
+Let's deep dive into the code of the function we just created.
 
-First thing we do we create a new variable `value`. This variable holds the current value of an input field we will use to update our state.
-To do that we use a `URwSignal::map` function. This function takes two arguments
+**First, we create** a new variable `value`. This variable holds the current value 
+of an input field we will use to update our state. To do that we use 
+a `URwSignal::map` function. This function takes two arguments:
 
-1. A function which takes a current value of the signal and returns a new value based on it.
-2. A function which takes a mutable reference `v` to current value and a new value to which the `value` signal was set and updates (or not) the
-   `v`.
+1. A function which takes the current value of the signal and returns a new value
+   based on it.
+2. A function which takes a mutable reference `v` to the current value and a new value
+   to which the `value` signal was set and updates (or not) the `v`.
 
 The `text` variable has `URwSignal<String>` type.
 
-Afterwards we use leptos `view!` to create our control panel. To do that we use a `TextField` component provided by the `leptos_forge_ui_components` crate.
-The arguments passed to this component are
+Afterwards we use leptos `view!` to create our control panel. To do that we use a 
+`TextField` component provided by the `leptos_forge_ui_components` crate. The 
+arguments passed to this component are:
 
 - `id`: The id of the input field
 - `text`: The `URwSignal<String>` which holds the value of the input field.
-- `label`: The str which will be shown as a label
-- `default`: The function which returns a String. This function will be called if you click on the `clear` input button.
+- `label`: The `str` which will be shown as a label
+- `default`: The function which returns a `String`. This function will be 
+   called if you click on the `clear` input button.
 
-Now if you go to the `Counter` story in your web browser, you will see
+Now if you go to the `Counter` story in your web browser, you will see:
 
-![Counter component and it's control panel](/resources/leptos_forge_site/images/setup/refine_story/02-counter_with_control.png)
+![Counter component and its control panel](/resources/leptos_forge_site/images/guides/refine_story/02-counter_with_control.png)
 
-After three clicks on the `[+]` button you will see
+After three clicks on the `[+]` button you will see:
 
-![Counter component and it's control panel after third click on the plus button](/resources/leptos_forge_site/images/setup/refine_story/03-counter_with_control-3rd_click.png)
+![Counter component and its control panel after third click on the plus button](/resources/leptos_forge_site/images/guides/refine_story/03-counter_with_control-3rd_click.png)
 
-If you would like to change the current value of the counter to `3000`, you can just go to the control panel and add a few zeros in the input field.
+If you would like to change the current value of the counter to `3000`, you can 
+just go to the control panel and add a few zeros **to** the input field.
 
-And you end up with 
+And you end up with:
 
-![Counter component and it's control panel after writing 3000 in the input field](/resources/leptos_forge_site/images/setup/refine_story/04-counter_with_control-3000.png)
+![Counter component and its control panel after writing 3000 in the input field](/resources/leptos_forge_site/images/guides/refine_story/04-counter_with_control-3000.png)
 
 ## Let's spice it up
 
-Until now our component was fairly simple and no huge gains were made by using the `leptos_forge`. Let's add a requirement for our counter. If counter has value greater then 10000,
-then we should display a message "You are working hard". 
+Until now our component was fairly simple and no huge gains were made by using
+the `leptos_forge`. Let's add a requirement for our counter. If the counter has
+a value greater than 10000, then we should display a message "You are working hard".
 
 Our new counter can be written as follows
 
@@ -222,7 +237,8 @@ fn Counter(
 }
 ```
 
-Now we need to update our `CounterStory` struct so we can provide the required signals to our `Counter` component.
+Now we need to update our `CounterStory` struct so we can provide the required
+signals to our `Counter` component.
 
 ```rust
 #[derive(Debug, Clone, Copy)]
@@ -246,8 +262,8 @@ impl Default for CounterStory {
 }
 ```
 
-Because the default state of our `Counter` component is no longer what Rust considers as a default we were forced to implement
-a `Default` trait by hand.
+Because the default state of our `Counter` component is no longer what Rust
+considers a default, we had to implement the `Default` trait manually.
 
 Now we will update the implementation of the `Story` for `CounterStory`.
 
@@ -266,10 +282,10 @@ impl Story for CounterStory {
                 if let Ok(new_value) = text.parse::<i32>() {
                     *v = new_value;
                 }
-            }, 
+            },
         );
 
-        let threshold = self.threshold.map( // <- we've added a `threshold` variable. The transformation is exactly the same as for value
+        let threshold = self.threshold.map( // <- we've added a `threshold` variable. The transformation is exactly the same as for the value
             |v| v.to_string(),
             |v, text| {
                 if let Ok(new_value) = text.parse::<i32>() {
@@ -289,19 +305,23 @@ impl Story for CounterStory {
 }
 ```
 
-Now if you need to check how the `Counter` component will behave in the various scenarios you can just go to the browser and adjust values within the control panel
-we've created. It's faster then clicking `[+]` button 10000 times.
+Now if you need to check how the `Counter` component will behave in various
+scenarios, you can just go to the browser and adjust values within the control
+panel we've created. It's faster than clicking `[+]` button 10000 times.
 
 ## Documentation
 
-Next step we can take is to write a documentation for our `Counter` which will be shown on the right hand side whenever you open the `Counter` story.
+The next step we can take is to write documentation for our `Counter` which
+will be shown on the right-hand side whenever you open the `Counter` story.
 
-To write a documentation we need to implement `Story::description` function. This function must return a `&'static str` which contain a markdown formatted text.
+To write documentation, we need to implement `Story::description` function.
+This function must return a `&'static str` which contains a markdown-formatted
+text.
 
-I find it easiest to write documentation by creating a constant value and then using it within the `description` function.
+I find it easiest to write documentation by creating a constant value and then
+using it within the `description` function.
 
 ```rust
-
 const COUNTER_STORY: &str = r############"
 # Counter
 
@@ -310,7 +330,7 @@ Counter component which allows you to increment or decrement a value.
 - When you press `[-]` button, the value will decrease by 1.
 - When you press `[+]` button, the value will increase by 1.
 
-If you exceed the threshold (by default 10000) the message will be shown.
+If you exceed the threshold (by default 10000), the message will be shown.
 The default message is "You are working hard".
 
 "############;
@@ -324,9 +344,9 @@ impl Story for CounterStory {
 }
 ```
 
-Now on the right hand side you should see
+Now on the bottom you should see
 
-![Documentation of the counter](/resources/leptos_forge_site/images/setup/refine_story/05-counter_documentation.png)
+![Documentation of the counter](/resources/leptos_forge_site/images/guides/refine_story/05-counter_documentation.png)
 
 ## Next steps
 

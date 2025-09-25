@@ -1,0 +1,7 @@
+@layer components {
+
+    .forge-menu-highlight {
+        @apply font-bold text-forgegray-50 border-l-forgegray-50;
+    }
+
+}
