@@ -12,16 +12,16 @@ include = [
 path = "src/rust/main/lib.rs"
 
 [dependencies]
+icondata.workspace = true
 leptos.workspace = true
 leptos_router.workspace = true
 leptos_icons.workspace = true
 leptos-node-ref.workspace = true
-icondata.workspace = true
 pulldown-cmark.workspace = true
-uuid = { workspace = true, features = ["js", "v4"] }
-
+reactive_stores.workspace =true
 utils.workspace = true
 utils_leptos.workspace = true
+uuid = { workspace = true, features = ["js", "v4"] }
 
 [features]
 default = []
