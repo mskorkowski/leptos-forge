@@ -32,7 +32,9 @@ The easiest way to implement it is by creating a `const &str`. For example this 
 const SECTION_DESC: &str = r############"
 # Section";
 
-Sections are intended to wrap a multiple stories in the book under single umbrella...
+Sections are intended to wrap a multiple stories in the book under single umbrella.
+
+...
 
 "############
 ```
@@ -58,7 +60,14 @@ impl Section for MySection {
 /// Section describing big chunk of the UI components
 /// 
 /// Sections contain only Markdown text.
-pub trait Section: Default {
+pub trait Section: Default { 
+    // 
+    //  Things to update when changing the API
+    //
+    //  - **`usage/section`** - document the usage of the Section on the site.
+    // 
+
+
     /// Function returns the text of the section
     fn description(&self) -> &'static str {
         SECTION_DESC
