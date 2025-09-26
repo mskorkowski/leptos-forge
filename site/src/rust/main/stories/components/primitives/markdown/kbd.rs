@@ -18,6 +18,11 @@ For example:
 
 <kbd>Shift</kbd>+<kbd>Enter</kbd> - will submit the form
 
+> [!NOTE]
+>
+> Markdown style is based on the css discussed in the blog entry written by 
+> [Dylan Smith](https://dylanatsmith.com/wrote/styling-the-kbd-element)
+
 "############;
 
 /// Story showcasing the `<kbd>` html tag behavior
