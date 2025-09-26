@@ -6,6 +6,7 @@ mod widgets;
 use forge::Section;
 use leptos::prelude::*;
 use primitives::button::BasicButtonStory;
+use primitives::markdown::KbdStory;
 use primitives::switch::BasicSwitchStory;
 use primitives::switch::ToggledOnSwitchStory;
 use primitives::label::BasicLabelStory;
@@ -40,6 +41,7 @@ pub const ROUTES: &[RouteDef] = &[
         RouteDef::story::<MarkdownBaseStory>("markdown", "Markdown", &[
             RouteDef::page::<MarkdownAdmonishStory>("admonishes", "Admonishes"),
             RouteDef::page::<MarkdownTableStory>("tables", "Tables"),
+            RouteDef::page::<KbdStory>("kbd", "Kbd tag"),
         ]),
         RouteDef::Route
         {
