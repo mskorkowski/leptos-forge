@@ -34,10 +34,10 @@ use forge::navigation::RouteDef;
 pub const ROUTES: &[RouteDef] = &[
     RouteDef::section::<Primitives>("primitives", "Primitives", &[
         RouteDef::page::<BasicButtonStory>("button", "Button"),
-        RouteDef::component::<BasicLabelStory>("label", "Label", &[
+        RouteDef::story::<BasicLabelStory>("label", "Label", &[
             RouteDef::page::<InlineLabelStory>("inline", "InlineLabel"),
         ]),
-        RouteDef::component::<MarkdownBaseStory>("markdown", "Markdown", &[
+        RouteDef::story::<MarkdownBaseStory>("markdown", "Markdown", &[
             RouteDef::page::<MarkdownAdmonishStory>("admonishes", "Admonishes"),
             RouteDef::page::<MarkdownTableStory>("tables", "Tables"),
         ]),
@@ -48,26 +48,26 @@ pub const ROUTES: &[RouteDef] = &[
             component: || view!{"Menu"}.into_any(),
             subroutes: &[],
         },
-        RouteDef::component::<BasicSwitchStory>("switch", "Switch", &[
+        RouteDef::story::<BasicSwitchStory>("switch", "Switch", &[
             RouteDef::page::<ToggledOnSwitchStory>("toggled-on", "Toggled on"),
         ]),
     ]),
     RouteDef::section::<Widgets>("widgets", "Widgets", &[
-        RouteDef::component::<BasicCodeareaStory>("codearea", "Codearea", &[
+        RouteDef::story::<BasicCodeareaStory>("codearea", "Codearea", &[
             RouteDef::page::<NonemptyCodeareaStory>("nonempty", "Nonempty"),
         ]),
         RouteDef::page::<BasicLogoStory>("logo", "Logo"),
-        RouteDef::component::<BasicTextFieldStory>("text_field", "TextField", &[
+        RouteDef::story::<BasicTextFieldStory>("text_field", "TextField", &[
             RouteDef::page::<NonemptyTextFieldStory>("nonempty", "Nonempty"),
         ]),
-        RouteDef::component::<BasicPasswordFieldStory>("password", "Password", &[
+        RouteDef::story::<BasicPasswordFieldStory>("password", "Password", &[
             RouteDef::page::<NonemptyPasswordFieldStory>("nonempty", "Nonempty"),
             RouteDef::page::<NonemptyVisiblePasswordFieldStory>("visible", "Visible"),
         ]),
-        RouteDef::component::<BasicTextareaStory>("textarea", "Textarea", &[
+        RouteDef::story::<BasicTextareaStory>("textarea", "Textarea", &[
             RouteDef::page::<NonemptyTextareaStory>("nonempty", "Nonempty"),
         ]),
-        // RouteDef::component::<BasicSingleSelectStory>("single_select", "SingleSelect", &[
+        // RouteDef::story::<BasicSingleSelectStory>("single_select", "SingleSelect", &[
         //     RouteDef::page::<ForceOpenSingleSelectStory>("force_open", "Force open"),
         //     RouteDef::page::<ComponentWithAStoreStory>("store_failure", "Store failure"),
         // ]),

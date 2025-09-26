@@ -275,11 +275,11 @@ impl RouteDef{
     /// 
     /// Alias for the `component` but without a subroutes argument
     pub const fn page<S: 'static + Story + Default + Copy + ThreadSafe>(path: &'static str, label: &'static str) -> RouteDef {
-        RouteDef::component::<S>(path, label, &[])
+        RouteDef::story::<S>(path, label, &[])
     }
 
     /// Creates a new page route with a story and it's related sub-stories
-    pub const fn component<S: 'static + Story + Default + Copy + ThreadSafe>(path: &'static str, label: &'static str, subroutes: &'static [RouteDef]) -> RouteDef {
+    pub const fn story<S: 'static + Story + Default + Copy + ThreadSafe>(path: &'static str, label: &'static str, subroutes: &'static [RouteDef]) -> RouteDef {
         RouteDef::Route{ 
             path,
             label,
@@ -292,7 +292,7 @@ impl RouteDef{
     /// 
     /// Section creates a new Markdown only page, It's intended use is 
     /// to group a bunch of related [pages][RouteDef::page] 
-    /// and [componens][RouteDef::component]
+    /// and [story][RouteDef::story]
     /// together
     pub const fn section<S: 'static + Section + Default + Copy + Send>(path: &'static str, label: &'static str, subroutes: &'static [RouteDef]) -> RouteDef {
         //
