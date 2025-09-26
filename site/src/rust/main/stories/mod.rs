@@ -1,6 +1,7 @@
 //! Main entrypoint to the `leptos_forge` site
 mod components;
 mod setup;
+mod usage;
 
 use components::Components;
 use forge::RouteDef;
@@ -80,8 +81,9 @@ impl Section for Main {
 /// Top level routes for the leptos_forge site
 pub const ROUTES: &[RouteDef] = &[
     RouteDef::section::<Main>("/", "Leptos Forge", &[]),
-    RouteDef::header("guides", "Guides", setup::ROUTES),
-    RouteDef::header("development", "Leptos Forge development", &[
+    RouteDef::header("guides", "GUIDES", setup::ROUTES),
+    RouteDef::header("documentation", "DOCUMENTATION", usage::ROUTES),
+    RouteDef::header("development", "DEVELOPMENT", &[
         RouteDef::section::<Components>("components", "Components", components::ROUTES)
     ])
 ];

@@ -166,7 +166,7 @@ pub fn Navigate<'a, S: ToString + ThreadSafe + Clone>(
 /// The header in the menu
 #[component]
 pub fn MenuHeader(label: &'static str, class: &'static str) -> impl IntoView {
-    let class = format!("{class} ml-6 pb-2 pt-8 font-bold");
+    let class = format!("{class} ml-6 pb-2 pt-8 font-bold text-forgegray-400");
 
     view!{
         <div class=class>{label}</div>

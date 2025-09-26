@@ -295,6 +295,13 @@ impl RouteDef{
     /// and [componens][RouteDef::component]
     /// together
     pub const fn section<S: 'static + Section + Default + Copy + Send>(path: &'static str, label: &'static str, subroutes: &'static [RouteDef]) -> RouteDef {
+        //
+        // Remember to update when changed
+        //
+        // - site `usage/sections` - it contains the documentation on calling this function as
+        //   as part of adding the section to your site.
+        //
+
         RouteDef::Route{
             path,
             label,
