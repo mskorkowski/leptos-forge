@@ -7,7 +7,7 @@ use forge::Section;
 const NIX: &str = r############"
 # Nix
 
-The sample nix flake configuration that can be used to develop the `leptos_forge` project looks like this
+The sample Nix flake configuration that can be used to develop the `leptos_forge` project looks like this
 
 ```nix
 {
@@ -62,7 +62,6 @@ targets = [
     "wasm32-unknown-unknown"
 ]
 ```
-
 
 "############;
 
