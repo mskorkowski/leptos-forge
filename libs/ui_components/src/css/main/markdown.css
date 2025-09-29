@@ -206,7 +206,7 @@
      (mine is 18px on desktop) it’ll look massive
      and bump into lines above and below */
   /* font-size: 0.75em; */
-  @apply forge-test-small ;
+  @apply forge-text-small ;
 
   /* Remove any extra space so I can accurately tweak the padding */
   line-height: 1;
