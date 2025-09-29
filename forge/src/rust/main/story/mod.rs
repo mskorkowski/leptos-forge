@@ -3,7 +3,6 @@
 
 mod tests;
 
-use leptos::prelude::IntoAny;
 use leptos::web_sys::HtmlElement;
 
 use leptos::IntoView;
