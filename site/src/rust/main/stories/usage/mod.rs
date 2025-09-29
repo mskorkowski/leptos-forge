@@ -1,10 +1,12 @@
 //! This module contains detailed descriptions on how to use `leptos_forge`
 
+pub mod routes;
 pub mod sections;
 pub mod stories;
 pub mod urwsignal;
 
 use forge::RouteDef;
+use routes::RoutesSection;
 use sections::SectionsSection;
 use stories::testing::TestingSection;
 use stories::StorySection;
@@ -17,5 +19,6 @@ pub const ROUTES: &[RouteDef] = &[
         RouteDef::section::<TestingSection>("testing", "Testing", &[]),
     ]),
     RouteDef::section::<SectionsSection>("section", "Section", &[]),
+    RouteDef::section::<RoutesSection>("routes", "Routing", &[]),
     RouteDef::section::<URwSignalSection>("urwsignal", "URwSignal", &[]),
 ];
