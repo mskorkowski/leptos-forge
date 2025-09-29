@@ -6,7 +6,7 @@
 /// When you add section into your `leptos_forge` application it will show up in the UI
 /// as the description.
 const SECTION_DESC: &str = r#############"
-# Section";
+# Section
 
 Sections are intended to wrap a multiple stories in the book under single umbrella
 
