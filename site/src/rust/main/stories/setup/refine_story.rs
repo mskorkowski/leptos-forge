@@ -28,7 +28,6 @@ In the `src/stories.rs` file we will add the following leptos component:
 use leptos::prelude::*;
 use utils_leptos::signal::URwSignal;
 
-/// Counter component described in [RefineCounterStory] section of the site
 #[component]
 fn Counter(
     /// Value of the counter
@@ -111,7 +110,7 @@ we need to implement another function in our implementation of the `Story` for
 
 ```rs
 use ui_components::widgets::field::TextField; // <- We need to add this use statement
-so we can use TextField widget
+                                              //    so we can use TextField widget
 
 impl Story for CounterStory {
     fn view(&self) -> impl IntoView {
