@@ -53,23 +53,23 @@ impl Default for BasicTextFieldStory {
 }
 
 impl Story for BasicTextFieldStory {
-    fn view(&self) -> AnyView {
+    fn view(&self) -> impl IntoView {
         let label: Signal<String> = self.label.into();
         let text: URwSignal<String> = self.text;
 
         view! {
             <TextField id="basic-input" text=text label=label />
-        }.into_any()
+        }
     }
 
-    fn controls(&self) -> AnyView {
+    fn controls(&self) -> impl IntoView {
         let label: URwSignal<String> = self.label;
         let text: URwSignal<String> = self.text;
 
         view! {
             <TextField id="leptos-forge-1-label-text-input" text=label label={"Label".to_string()} />
             <TextField id="leptos-forge-1-label-text-input" text=text label={"Text".to_string()} />
-        }.into_any()
+        }
     }
 
     fn description(&self) -> &'static str {
@@ -122,23 +122,23 @@ impl Default for NonemptyTextFieldStory {
 }
 
 impl Story for NonemptyTextFieldStory {
-    fn view(&self) -> AnyView {
+    fn view(&self) -> impl IntoView {
         let label: Signal<String> = self.label.into();
         let text: URwSignal<String> = self.text;
 
         view! {
             <TextField id="leptos-forge-1-label-text-input" text=text label=label />
-        }.into_any()
+        }
     }
 
-    fn controls(&self) -> AnyView {
+    fn controls(&self) -> impl IntoView {
         let label: URwSignal<String> = self.label;
         let text: URwSignal<String> = self.text;
 
         view! {
             <TextField id="leptos-forge-1-label-text-input" text=label label={"Label".to_string()} />
             <TextField id="leptos-forge-1-label-text-input" text=text label={"Text".to_string()} />
-        }.into_any()
+        }
     }
 
     fn description(&self) -> &'static str {

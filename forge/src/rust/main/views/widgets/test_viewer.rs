@@ -19,6 +19,14 @@ use crate::story::Play;
 use crate::story::Step;
 use crate::Story;
 
+//
+// If you make changes in the components of the test viewer and runner, please remember to update also
+//
+// - **site `guides/adding tests`** - guides the user to add a first test to the story
+// - **site `documentation/stories`** and its sub-pages - stories and tests are tightly coupled together.
+//    We also describe adding tests in greater detail there.
+//
+
 /// Controls how the execution of the test will be handled
 #[derive(Debug, Clone, Copy, Default, PartialEq, Eq)]
 enum ExecutionMode{
@@ -314,7 +322,7 @@ fn play_steps<S: 'static + Story>(
 
 
 impl<S: 'static + Story> DetailsParts for TestView<S> {
-    fn summary(&self) -> leptos::prelude::AnyView {
+    fn summary(&self) -> AnyView {
         let TestView {
             mut story,
             play,
@@ -356,7 +364,7 @@ impl<S: 'static + Story> DetailsParts for TestView<S> {
         }).into_any()
     }
 
-    fn details(&self) -> leptos::prelude::AnyView {
+    fn details(&self) -> AnyView {
         let play = self.play;
         let story = self.story;
         let store = self.state;

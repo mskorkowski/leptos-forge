@@ -80,7 +80,7 @@ impl Default for BasicLabelStory {
 }
 
 impl Story for BasicLabelStory {
-    fn view(&self) -> AnyView {
+    fn view(&self) -> impl IntoView {
         let label: Signal<String> = self.label.into();
         let text: URwSignal<String> = self.text;
 
@@ -89,17 +89,17 @@ impl Story for BasicLabelStory {
                 <TextInput id=INPUT_ID text=text />
                 <TextFieldLabel for_id=INPUT_ID text=label data_testid="label" />
             </div>
-        }.into_any()
+        }
     }
 
-    fn controls(&self) -> AnyView {
+    fn controls(&self) -> impl IntoView {
         let label: URwSignal<String> = self.label;
         let text: URwSignal<String> = self.text;
 
         view! {
             <TextField id="leptos-forge-1-label-text-input" text=label label={"Label".to_string()} />
             <TextField id="leptos-forge-1-text-text-input" text=text label={"Text".to_string()} />
-        }.into_any()
+        }
     }
 
     fn description(&self) -> &'static str {
@@ -292,7 +292,7 @@ impl Default for InlineLabelStory {
 }
 
 impl Story for InlineLabelStory {
-    fn view(&self) -> AnyView {
+    fn view(&self) -> impl IntoView {
         let label: Signal<String> = self.label.into();
 
         view! {
@@ -302,15 +302,15 @@ impl Story for InlineLabelStory {
                 <InlineFieldLabel for_id=INLINE_INPUT_ID_3 text=label/> <input type="radio" class="forge-text-standard border-1 border-solid border-gray-800 ml-1" id=INLINE_INPUT_ID_2 />
                 <InlineFieldLabel for_id=INLINE_INPUT_ID_4 text=label/> <TextInput id=INLINE_INPUT_ID_4 text=("sample text".to_string(),) />
             </div>
-        }.into_any()
+        }
     }
 
-    fn controls(&self) -> AnyView {
+    fn controls(&self) -> impl IntoView {
         let label: URwSignal<String> = self.label;
 
         view! {
             <TextField id="leptos-forge-1-label-text-input" text=label label={"Label".to_string()} />
-        }.into_any()
+        }
     }
 
     fn description(&self) -> &'static str {

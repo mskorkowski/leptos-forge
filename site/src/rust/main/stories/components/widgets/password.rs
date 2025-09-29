@@ -57,17 +57,17 @@ impl Default for BasicPasswordFieldStory {
 }
 
 impl Story for BasicPasswordFieldStory {
-    fn view(&self) -> AnyView {
+    fn view(&self) -> impl IntoView {
         let label: Signal<String> = self.label.into();
         let text: URwSignal<Password> = self.text;
 
         view! {
             <PasswordField id="basic-input" password=text label=label />
-        }.into_any()
+        }
     }
 
     #[allow(unsafe_code)]
-    fn controls(&self) -> AnyView {
+    fn controls(&self) -> impl IntoView {
         let label: URwSignal<String> = self.label;
         let text: URwSignal<String> = self.text.map(
             |password| {
@@ -87,7 +87,7 @@ impl Story for BasicPasswordFieldStory {
         view! {
             <TextField id="leptos-forge-1-label-text-input" text=label label={"Label".to_string()} />
             <TextField id="leptos-forge-1-label-text-input" text=text label={"Text".to_string()} />
-        }.into_any()
+        }
     }
 
     fn description(&self) -> &'static str {
@@ -142,17 +142,17 @@ impl Default for NonemptyPasswordFieldStory {
 }
 
 impl Story for NonemptyPasswordFieldStory {
-    fn view(&self) -> AnyView {
+    fn view(&self) -> impl IntoView {
         let label: Signal<String> = self.label.into();
         let text: URwSignal<Password> = self.text;
 
         view! {
             <PasswordField id="basic-input" password=text label=label />
-        }.into_any()
+        }
     }
 
     #[allow(unsafe_code)]
-    fn controls(&self) -> AnyView {
+    fn controls(&self) -> impl IntoView {
         let label: URwSignal<String> = self.label;
         let text: URwSignal<String> = self.text.map(
             |password| {
@@ -172,7 +172,7 @@ impl Story for NonemptyPasswordFieldStory {
         view! {
             <TextField id="leptos-forge-1-label-text-input" text=label label={"Label".to_string()} />
             <TextField id="leptos-forge-1-label-text-input" text=text label={"Text".to_string()} />
-        }.into_any()
+        }
     }
 
     fn description(&self) -> &'static str {
@@ -227,17 +227,17 @@ impl Default for NonemptyVisiblePasswordFieldStory {
 }
 
 impl Story for NonemptyVisiblePasswordFieldStory {
-    fn view(&self) -> AnyView {
+    fn view(&self) -> impl IntoView {
         let label: Signal<String> = self.label.into();
         let text: URwSignal<Password> = self.text;
 
         view! {
             <PasswordField id="basic-input" password=text label=label state={(PasswordButtonStates::Visible,)}/>
-        }.into_any()
+        }
     }
 
     #[allow(unsafe_code)]
-    fn controls(&self) -> AnyView {
+    fn controls(&self) -> impl IntoView {
         let label: URwSignal<String> = self.label;
         let text: URwSignal<String> = self.text.map(
             |password| {
@@ -257,7 +257,7 @@ impl Story for NonemptyVisiblePasswordFieldStory {
         view! {
             <TextField id="leptos-forge-1-label-text-input" text=label label={"Label".to_string()} />
             <TextField id="leptos-forge-1-label-text-input" text=text label={"Text".to_string()} />
-        }.into_any()
+        }
     }
 
     fn description(&self) -> &'static str {

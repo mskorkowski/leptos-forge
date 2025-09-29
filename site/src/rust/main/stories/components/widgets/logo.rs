@@ -39,7 +39,7 @@ impl Default for BasicLogoStory {
 }
 
 impl Story for BasicLogoStory {
-    fn view(&self) -> AnyView {
+    fn view(&self) -> impl IntoView {
         let label: Signal<String> = self.label.into();
         let file: Signal<String> = self.file.into();
 
@@ -47,17 +47,17 @@ impl Story for BasicLogoStory {
             <div class="relative">
                 <Logo src=file alt=label />
             </div>
-        }.into_any()
+        }
     }
 
-    fn controls(&self) -> AnyView {
+    fn controls(&self) -> impl IntoView {
         let label: URwSignal<String> = self.label;
         let file: URwSignal<String> = self.file;
 
         view! {
             <BlobFile id="leptos-forge-1-image-upload" label="Select an image" file=file/>
             <TextField text=label label="Alternative text" id="leptos-forge-2-alt-text"/> 
-        }.into_any()
+        }
     }
 
     fn description(&self) -> &'static str {

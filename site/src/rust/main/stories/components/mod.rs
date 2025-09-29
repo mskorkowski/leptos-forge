@@ -6,6 +6,7 @@ mod widgets;
 use forge::Section;
 use leptos::prelude::*;
 use primitives::button::BasicButtonStory;
+use primitives::markdown::KbdStory;
 use primitives::switch::BasicSwitchStory;
 use primitives::switch::ToggledOnSwitchStory;
 use primitives::label::BasicLabelStory;
@@ -34,12 +35,13 @@ use forge::navigation::RouteDef;
 pub const ROUTES: &[RouteDef] = &[
     RouteDef::section::<Primitives>("primitives", "Primitives", &[
         RouteDef::page::<BasicButtonStory>("button", "Button"),
-        RouteDef::component::<BasicLabelStory>("label", "Label", &[
+        RouteDef::story::<BasicLabelStory>("label", "Label", &[
             RouteDef::page::<InlineLabelStory>("inline", "InlineLabel"),
         ]),
-        RouteDef::component::<MarkdownBaseStory>("markdown", "Markdown", &[
+        RouteDef::story::<MarkdownBaseStory>("markdown", "Markdown", &[
             RouteDef::page::<MarkdownAdmonishStory>("admonishes", "Admonishes"),
             RouteDef::page::<MarkdownTableStory>("tables", "Tables"),
+            RouteDef::page::<KbdStory>("kbd", "Kbd tag"),
         ]),
         RouteDef::Route
         {
@@ -48,26 +50,26 @@ pub const ROUTES: &[RouteDef] = &[
             component: || view!{"Menu"}.into_any(),
             subroutes: &[],
         },
-        RouteDef::component::<BasicSwitchStory>("switch", "Switch", &[
+        RouteDef::story::<BasicSwitchStory>("switch", "Switch", &[
             RouteDef::page::<ToggledOnSwitchStory>("toggled-on", "Toggled on"),
         ]),
     ]),
     RouteDef::section::<Widgets>("widgets", "Widgets", &[
-        RouteDef::component::<BasicCodeareaStory>("codearea", "Codearea", &[
+        RouteDef::story::<BasicCodeareaStory>("codearea", "Codearea", &[
             RouteDef::page::<NonemptyCodeareaStory>("nonempty", "Nonempty"),
         ]),
         RouteDef::page::<BasicLogoStory>("logo", "Logo"),
-        RouteDef::component::<BasicTextFieldStory>("text_field", "TextField", &[
+        RouteDef::story::<BasicTextFieldStory>("text_field", "TextField", &[
             RouteDef::page::<NonemptyTextFieldStory>("nonempty", "Nonempty"),
         ]),
-        RouteDef::component::<BasicPasswordFieldStory>("password", "Password", &[
+        RouteDef::story::<BasicPasswordFieldStory>("password", "Password", &[
             RouteDef::page::<NonemptyPasswordFieldStory>("nonempty", "Nonempty"),
             RouteDef::page::<NonemptyVisiblePasswordFieldStory>("visible", "Visible"),
         ]),
-        RouteDef::component::<BasicTextareaStory>("textarea", "Textarea", &[
+        RouteDef::story::<BasicTextareaStory>("textarea", "Textarea", &[
             RouteDef::page::<NonemptyTextareaStory>("nonempty", "Nonempty"),
         ]),
-        // RouteDef::component::<BasicSingleSelectStory>("single_select", "SingleSelect", &[
+        // RouteDef::story::<BasicSingleSelectStory>("single_select", "SingleSelect", &[
         //     RouteDef::page::<ForceOpenSingleSelectStory>("force_open", "Force open"),
         //     RouteDef::page::<ComponentWithAStoreStory>("store_failure", "Store failure"),
         // ]),
@@ -83,13 +85,24 @@ for use within `leptos_forge` and **control panels** of your widgets. They allow
 interfaces without tying `leptos_forge` to any particular UI framework beyond `leptos`, giving you flexibility 
 to choose your preferred UI library elsewhere in your application.
 
+> [!IMPORTANT]
+> 
+> Please don't treat the documentation of components in this section and it's subpages as remotely "good".
+> We are planning to make this documentation presentable but it takes time to get here, since documentation
+> for basic concepts is still under development. 
+>
+> After finishing these GH tickets we will take a serious effort to revamp this corner of documentation:
+>
+> - [Core documentation](https://github.com/mskorkowski/leptos-forge/issues/3)
+> - [Better UX/UI](https://github.com/mskorkowski/leptos-forge/issues/9)
+> - [Better DX](https://github.com/mskorkowski/leptos-forge/issues/23)
+
 > [!NOTE]
 > 
 > **Usage Restriction:** These components are **only intended for use in `leptos_forge`-based applications`** 
 > especially the control panels for your components and `leptos_forge` itself.
 >
 > If you use these components outside of this scope, you bind yourself to a specific version of `leptos_forge`
-> 
 
 "############;
 

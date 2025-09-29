@@ -69,7 +69,7 @@ impl Story for BasicButtonStory {
         BUTTON_DESC
     }
 
-    fn controls(&self) -> AnyView {
+    fn controls(&self) -> impl IntoView {
         let click = self.click;
         let state = Signal::derive(move || {
             let state = click.get();
@@ -81,11 +81,11 @@ impl Story for BasicButtonStory {
                 <TextField id="button-text" text={self.text} label="Button label" />
                 <ReadonlyField id="button-state" value={state} label="State" />
             </>
-        }.into_any()
+        }
     }
 
-    fn view(&self) -> AnyView {
-        let text = self.text;
+    fn view(&self) -> impl IntoView {
+        let text: URwSignal<String> = self.text;
 
         view!{
             <Button
@@ -95,6 +95,6 @@ impl Story for BasicButtonStory {
             >
                {text}
             </Button>
-        }.into_any()
+        }
     }
 }
