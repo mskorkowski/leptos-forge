@@ -103,6 +103,7 @@ pub fn Navigate<'a, S: ToString + ThreadSafe + Clone>(
                                 );
 
                                 effect.stop();
+                                effect.dispose();
                             }
 
                         }

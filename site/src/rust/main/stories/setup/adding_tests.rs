@@ -348,13 +348,13 @@ impl Default for TestedCounterStory {
 }
 
 impl Story for TestedCounterStory {
-    fn view(&self) -> AnyView {
+    fn view(&self) -> impl IntoView {
         (view!{
             <Counter value={self.value} message={self.message} threshold={self.threshold} />  // <- added missing properties
         }).into_any()
     }
 
-    fn controls(&self) -> AnyView {
+    fn controls(&self) -> impl IntoView {
         let value = self.value.map(
             |v| v.to_string(),
             |v, text| {

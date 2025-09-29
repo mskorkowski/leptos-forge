@@ -3,10 +3,10 @@
 
 mod tests;
 
-use leptos::prelude::AnyView;
 use leptos::prelude::IntoAny;
 use leptos::web_sys::HtmlElement;
 
+use leptos::IntoView;
 pub use tests::play;
 pub use tests::test_id;
 
@@ -113,12 +113,12 @@ While creating a description you should try to explain
 /// Story should only by it's nature hold only the data like [Signal][leptos::prelude::Signal] required to manipulate the component via the control panel.
 pub trait Story: Default + Copy {
     /// Returns a view of the story
-    fn view(&self) -> AnyView {
+    fn view(&self) -> impl IntoView {
         ().into_any()
     }
 
     /// List of controls for the story
-    fn controls(&self) -> AnyView {
+    fn controls(&self) -> impl IntoView {
         ().into_any()
     }
 

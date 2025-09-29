@@ -33,7 +33,7 @@ impl Story for BasicSwitchStory {
         SWITCH_DESC
     }
 
-    fn controls(&self) -> AnyView {
+    fn controls(&self) -> impl IntoView {
         view!{ 
             <SwitchField
                 id="switch-control-item-1"
@@ -43,14 +43,14 @@ impl Story for BasicSwitchStory {
         }.into_any()
     }
 
-    fn view(&self) -> AnyView {
+    fn view(&self) -> impl IntoView {
         
         view!{
             <Switch 
                 id="switch-basic"
                 value={self.value}
             />
-        }.into_any()
+        }
     }
 }
 
@@ -81,7 +81,7 @@ impl Story for ToggledOnSwitchStory {
         SWITCH_DESC_TOGGLE_ON
     }
 
-    fn controls(&self) -> AnyView {
+    fn controls(&self) -> impl IntoView {
         view!{ 
             <SwitchField
                 id="switch-control-item-1"
@@ -91,7 +91,7 @@ impl Story for ToggledOnSwitchStory {
         }.into_any()    
     }
 
-    fn view(&self) -> AnyView {
+    fn view(&self) -> impl IntoView {
         
         view!{
             <Switch 

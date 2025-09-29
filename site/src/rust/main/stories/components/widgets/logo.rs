@@ -39,7 +39,7 @@ impl Default for BasicLogoStory {
 }
 
 impl Story for BasicLogoStory {
-    fn view(&self) -> AnyView {
+    fn view(&self) -> impl IntoView {
         let label: Signal<String> = self.label.into();
         let file: Signal<String> = self.file.into();
 
@@ -50,7 +50,7 @@ impl Story for BasicLogoStory {
         }.into_any()
     }
 
-    fn controls(&self) -> AnyView {
+    fn controls(&self) -> impl IntoView {
         let label: URwSignal<String> = self.label;
         let file: URwSignal<String> = self.file;
 

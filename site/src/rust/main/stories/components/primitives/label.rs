@@ -80,7 +80,7 @@ impl Default for BasicLabelStory {
 }
 
 impl Story for BasicLabelStory {
-    fn view(&self) -> AnyView {
+    fn view(&self) -> impl IntoView {
         let label: Signal<String> = self.label.into();
         let text: URwSignal<String> = self.text;
 
@@ -92,7 +92,7 @@ impl Story for BasicLabelStory {
         }.into_any()
     }
 
-    fn controls(&self) -> AnyView {
+    fn controls(&self) -> impl IntoView {
         let label: URwSignal<String> = self.label;
         let text: URwSignal<String> = self.text;
 
@@ -292,7 +292,7 @@ impl Default for InlineLabelStory {
 }
 
 impl Story for InlineLabelStory {
-    fn view(&self) -> AnyView {
+    fn view(&self) -> impl IntoView {
         let label: Signal<String> = self.label.into();
 
         view! {
@@ -305,7 +305,7 @@ impl Story for InlineLabelStory {
         }.into_any()
     }
 
-    fn controls(&self) -> AnyView {
+    fn controls(&self) -> impl IntoView {
         let label: URwSignal<String> = self.label;
 
         view! {

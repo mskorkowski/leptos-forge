@@ -12,10 +12,12 @@ pub fn ControlPane<UiStory>(
 where
     UiStory: 'static + Story + Copy,
 {
+    let view = story.controls().into_any();
+
     view! { 
         <div class="leptos-forge-control-pane-box basis-1/3 flex-none scrollbox print:hidden">
             <div class="leptos-forge-control-pane p-4 scrollable">
-                { story.controls() }
+                { view }
             </div>
         </div>
     }

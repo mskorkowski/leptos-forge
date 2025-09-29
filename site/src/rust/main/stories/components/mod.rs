@@ -85,13 +85,24 @@ for use within `leptos_forge` and **control panels** of your widgets. They allow
 interfaces without tying `leptos_forge` to any particular UI framework beyond `leptos`, giving you flexibility 
 to choose your preferred UI library elsewhere in your application.
 
+> [!IMPORTANT]
+> 
+> Please don't treat the documentation of components in this section and it's subpages as remotely "good".
+> We are planning to make this documentation presentable but it takes time to get here, since documentation
+> for basic concepts is still under development. 
+>
+> After finishing these GH tickets we will take a serious effort to revamp this corner of documentation:
+>
+> - [Core documentation](https://github.com/mskorkowski/leptos-forge/issues/3)
+> - [Better UX/UI](https://github.com/mskorkowski/leptos-forge/issues/9)
+> - [Better DX](https://github.com/mskorkowski/leptos-forge/issues/23)
+
 > [!NOTE]
 > 
 > **Usage Restriction:** These components are **only intended for use in `leptos_forge`-based applications`** 
 > especially the control panels for your components and `leptos_forge` itself.
 >
 > If you use these components outside of this scope, you bind yourself to a specific version of `leptos_forge`
-> 
 
 "############;
 

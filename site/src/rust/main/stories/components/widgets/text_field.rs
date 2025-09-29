@@ -53,7 +53,7 @@ impl Default for BasicTextFieldStory {
 }
 
 impl Story for BasicTextFieldStory {
-    fn view(&self) -> AnyView {
+    fn view(&self) -> impl IntoView {
         let label: Signal<String> = self.label.into();
         let text: URwSignal<String> = self.text;
 
@@ -62,7 +62,7 @@ impl Story for BasicTextFieldStory {
         }.into_any()
     }
 
-    fn controls(&self) -> AnyView {
+    fn controls(&self) -> impl IntoView {
         let label: URwSignal<String> = self.label;
         let text: URwSignal<String> = self.text;
 
@@ -122,7 +122,7 @@ impl Default for NonemptyTextFieldStory {
 }
 
 impl Story for NonemptyTextFieldStory {
-    fn view(&self) -> AnyView {
+    fn view(&self) -> impl IntoView {
         let label: Signal<String> = self.label.into();
         let text: URwSignal<String> = self.text;
 
@@ -131,7 +131,7 @@ impl Story for NonemptyTextFieldStory {
         }.into_any()
     }
 
-    fn controls(&self) -> AnyView {
+    fn controls(&self) -> impl IntoView {
         let label: URwSignal<String> = self.label;
         let text: URwSignal<String> = self.text;
 

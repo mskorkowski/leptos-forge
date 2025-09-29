@@ -43,7 +43,7 @@ impl Default for KbdStory {
 }
 
 impl Story for KbdStory {
-    fn controls(&self) -> leptos::prelude::AnyView {
+    fn controls(&self) -> impl IntoView {
         view!{
             <Codearea id="leptos-forge-markdown-demo-textarea" text=self.markdown label={"Markdown document".to_string()} />
         }.into_any()
@@ -53,9 +53,9 @@ impl Story for KbdStory {
        KBD   
     }
 
-    fn view(&self) -> AnyView {
+    fn view(&self) -> impl IntoView {
         view! {
             <Markdown src=self.markdown/>
-        }.into_any()
+        }
     }
 }

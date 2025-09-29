@@ -57,7 +57,7 @@ impl Default for BasicPasswordFieldStory {
 }
 
 impl Story for BasicPasswordFieldStory {
-    fn view(&self) -> AnyView {
+    fn view(&self) -> impl IntoView {
         let label: Signal<String> = self.label.into();
         let text: URwSignal<Password> = self.text;
 
@@ -67,7 +67,7 @@ impl Story for BasicPasswordFieldStory {
     }
 
     #[allow(unsafe_code)]
-    fn controls(&self) -> AnyView {
+    fn controls(&self) -> impl IntoView {
         let label: URwSignal<String> = self.label;
         let text: URwSignal<String> = self.text.map(
             |password| {
@@ -142,7 +142,7 @@ impl Default for NonemptyPasswordFieldStory {
 }
 
 impl Story for NonemptyPasswordFieldStory {
-    fn view(&self) -> AnyView {
+    fn view(&self) -> impl IntoView {
         let label: Signal<String> = self.label.into();
         let text: URwSignal<Password> = self.text;
 
@@ -152,7 +152,7 @@ impl Story for NonemptyPasswordFieldStory {
     }
 
     #[allow(unsafe_code)]
-    fn controls(&self) -> AnyView {
+    fn controls(&self) -> impl IntoView {
         let label: URwSignal<String> = self.label;
         let text: URwSignal<String> = self.text.map(
             |password| {
@@ -227,7 +227,7 @@ impl Default for NonemptyVisiblePasswordFieldStory {
 }
 
 impl Story for NonemptyVisiblePasswordFieldStory {
-    fn view(&self) -> AnyView {
+    fn view(&self) -> impl IntoView {
         let label: Signal<String> = self.label.into();
         let text: URwSignal<Password> = self.text;
 
@@ -237,7 +237,7 @@ impl Story for NonemptyVisiblePasswordFieldStory {
     }
 
     #[allow(unsafe_code)]
-    fn controls(&self) -> AnyView {
+    fn controls(&self) -> impl IntoView {
         let label: URwSignal<String> = self.label;
         let text: URwSignal<String> = self.text.map(
             |password| {

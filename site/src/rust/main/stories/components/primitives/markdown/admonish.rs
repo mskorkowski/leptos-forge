@@ -101,13 +101,13 @@ impl Default for MarkdownAdmonishStory {
 }
 
 impl Story for MarkdownAdmonishStory {
-    fn view(&self) -> AnyView {
+    fn view(&self) -> impl IntoView {
         view! {
             <Markdown src=self.text/>
-        }.into_any()
+        }
     }
 
-    fn controls(&self) -> AnyView {
+    fn controls(&self) -> impl IntoView {
         view!{
             <Codearea id="leptos-forge-markdown-demo-textarea" text=self.text label={"Markdown document".to_string()} />
         }.into_any()
