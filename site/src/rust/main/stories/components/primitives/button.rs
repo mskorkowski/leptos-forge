@@ -81,7 +81,7 @@ impl Story for BasicButtonStory {
                 <TextField id="button-text" text={self.text} label="Button label" />
                 <ReadonlyField id="button-state" value={state} label="State" />
             </>
-        }.into_any()
+        }
     }
 
     fn view(&self) -> impl IntoView {
@@ -95,6 +95,6 @@ impl Story for BasicButtonStory {
             >
                {text}
             </Button>
-        }.into_any()
+        }
     }
 }

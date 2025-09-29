@@ -40,7 +40,7 @@ impl Story for BasicSwitchStory {
                 label={"Value".to_string()}
                 value={self.value}            
             />
-        }.into_any()
+        }
     }
 
     fn view(&self) -> impl IntoView {
@@ -88,7 +88,7 @@ impl Story for ToggledOnSwitchStory {
                 label={"Value".to_string()}
                 value={self.value}            
             />
-        }.into_any()    
+        }
     }
 
     fn view(&self) -> impl IntoView {
@@ -98,6 +98,6 @@ impl Story for ToggledOnSwitchStory {
                 id="switch-on"
                 value={self.value}
             />
-        }.into_any()
+        }
     }
 }

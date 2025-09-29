@@ -58,7 +58,7 @@ impl Story for BasicTextareaStory {
 
         view! {
             <Textarea id="basic-input" text=text label=label />
-        }.into_any()
+        }
     }
 
     fn controls(&self) -> impl IntoView {
@@ -68,7 +68,7 @@ impl Story for BasicTextareaStory {
         view! {
             <TextField id="leptos-forge-1-label-text-input" text=label label={"Label".to_string()} />
             <TextField id="leptos-forge-1-label-text-input" text=text label={"Text".to_string()} />
-        }.into_any()
+        }
     }
 
     fn description(&self) -> &'static str {
@@ -127,7 +127,7 @@ impl Story for NonemptyTextareaStory {
 
         view! {
             <Textarea id="leptos-forge-1-label-text-input" text=text label=label />
-        }.into_any()
+        }
     }
 
     fn controls(&self) -> impl IntoView {
@@ -137,7 +137,7 @@ impl Story for NonemptyTextareaStory {
         view! {
             <TextField id="leptos-forge-1-label-text-input" text=label label={"Label".to_string()} />
             <TextField id="leptos-forge-1-label-text-input" text=text label={"Text".to_string()} />
-        }.into_any()
+        }
     }
 
     fn description(&self) -> &'static str {

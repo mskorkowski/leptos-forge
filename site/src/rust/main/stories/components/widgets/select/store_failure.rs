@@ -230,13 +230,13 @@ impl Story for ComponentWithAStoreStory {
         WIDGET_DESC
     }   
 
-    fn controls(&self) -> AnyView {
-        ().into_any()
+    fn controls(&self) -> impl IntoView {
+        ()
     }
 
-    fn view(&self) -> AnyView {
+    fn view(&self) -> impl IntoView {
         view!{
             <ComponentWithAStore/>
-        }.into_any()
+        }
     }
 }

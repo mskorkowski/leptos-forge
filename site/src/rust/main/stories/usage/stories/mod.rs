@@ -41,8 +41,8 @@ Now you need to expand the implementation of your story using one of the followi
 
 | Method signature                                     | Description                                                                     | Default behavior|
 |:-----------------------------------------------------|:--------------------------------------------------------------------------------|:--------------------------------------------------------|
-| `fn view(&self) -> AnyView`                          | Returns the component related to the story to be added to the canvas.           | Returns empty view                                      |
-| `fn controls(&self) -> AnyView`                      | Returns the control panel component for your story                              | Returns empty view                                      | 
+| `fn view(&self) -> impl IntoView`                    | Returns the component related to the story to be added to the canvas.           | Returns empty view                                      |
+| `fn controls(&self) -> impl IntoView`                | Returns the control panel component for your story                              | Returns empty view                                      | 
 | `fn description(&self) -> &'static str`              | Returns the story you would like to tell about the component                    | Returns a description with how to start writing a story |
 | `fn plays(&self) -> Vec<Box<dyn Play<Story=Self>>> ` | Returns the list of [tests](/http://localhost:8000/documentation/story/testing) | Returns an empty list of tests                          |
 
@@ -87,10 +87,10 @@ impl Default {
 
 impl Story for MyStory {
 
-  fn view(&self) -> AnyView {
-      (view!{
+  fn view(&self) -> impl IntoView {
+      view!{
           <div>{self.text}</div>
-      }).into_any()
+      }
   }
 
 }
@@ -98,10 +98,6 @@ impl Story for MyStory {
 
 This will show the `Hello, World!` text on canvas. As you can see you can add
 any signals your component requires into your story.
-
-> [!NOTE]
->
-> `Story::view` returns `AnyView` instead of `impl IntoView` because 
 
 ## Description of the story
 

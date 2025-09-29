@@ -68,7 +68,7 @@ impl Story for BasicCodeareaStory {
         view! {
             <TextField id="leptos-forge-1-label-text-input" text=label label={"Label".to_string()} />
             <TextField id="leptos-forge-1-label-text-input" text=text label={"Text".to_string()} />
-        }.into_any()
+        }
     }
 
     fn description(&self) -> &'static str {
@@ -137,7 +137,7 @@ impl Story for NonemptyCodeareaStory {
         view! {
             <TextField id="leptos-forge-1-label-text-input" text=label label={"Label".to_string()} />
             <TextField id="leptos-forge-1-label-text-input" text=text label={"Text".to_string()} />
-        }.into_any()
+        }
     }
 
     fn description(&self) -> &'static str {

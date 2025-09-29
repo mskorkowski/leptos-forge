@@ -104,7 +104,7 @@ impl Default for BasicSingleSelectStory {
 
 
 impl Story for BasicSingleSelectStory {
-    fn view(&self) -> AnyView {
+    fn view(&self) -> impl IntoView {
         view! {
             <div class="relative">
                 <SingleSelect
@@ -116,15 +116,15 @@ impl Story for BasicSingleSelectStory {
                     }
                 />
             </div>
-        }.into_any()
+        }
     }
 
-    fn controls(&self) -> AnyView {
+    fn controls(&self) -> impl IntoView {
         let label: URwSignal<String> = self.label;
 
         view! {
             <TextField text=label label="Alternative text" id="leptos-forge-2-alt-text"/> 
-        }.into_any()
+        }
     }
 
     fn description(&self) -> &'static str {
@@ -154,7 +154,7 @@ impl Default for ForceOpenSingleSelectStory {
 
 
 impl Story for ForceOpenSingleSelectStory {
-    fn view(&self) -> AnyView {
+    fn view(&self) -> impl IntoView {
         view! {
             <div class="relative">
                 <SingleSelect
@@ -166,15 +166,15 @@ impl Story for ForceOpenSingleSelectStory {
                     }
                 />
             </div>
-        }.into_any()
+        }
     }
 
-    fn controls(&self) -> AnyView {
+    fn controls(&self) -> impl IntoView {
         let label: URwSignal<String> = self.label;
 
         view! {
             <TextField text=label label="Alternative text" id="leptos-forge-2-alt-text"/> 
-        }.into_any()
+        }
     }
 
     fn description(&self) -> &'static str {

@@ -145,13 +145,13 @@ impl Story for MarkdownTableStory {
     fn view(&self) -> impl IntoView {
         view! {
             <Markdown src=self.text/>
-        }.into_any()
+        }
     }
 
     fn controls(&self) -> impl IntoView {
         view!{
             <Codearea id="leptos-forge-markdown-demo-textarea" text=self.text label={"Markdown document".to_string()} />
-        }.into_any()
+        }
     }
 
     fn description(&self) -> &'static str {

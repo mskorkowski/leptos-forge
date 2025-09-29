@@ -86,10 +86,10 @@ of the `view` function to the implementation of the `Story` trait for `CounterSt
 
 ```rust
 impl Story for CounterStory {
-    fn view(&self) -> AnyView {
-        (view!{
+    fn view(&self) -> impl IntoView {
+        view!{
             <Counter value={self.value} />
-        }).into_any()
+        }
     }
 }
 ```
@@ -114,11 +114,11 @@ use ui_components::widgets::field::TextField; // <- We need to add this use stat
 so we can use TextField widget
 
 impl Story for CounterStory {
-    fn view(&self) -> AnyView {
+    fn view(&self) -> impl IntoView {
        ...
     }
 
-    fn controls(&self) -> AnyView {
+    fn controls(&self) -> impl IntoView {
         let value = self.value.map(
             |v| v.to_string(),
             |v, text| {
@@ -128,9 +128,9 @@ impl Story for CounterStory {
             }, 
         );
 
-        (view!{
+        view!{
             <TextField id="counter_value" text=value label="Value" default=|| { Some(0.to_string()) } />
-        }).into_any()
+        }
     }
 }
 ```
@@ -269,13 +269,13 @@ Now we will update the implementation of the `Story` for `CounterStory`.
 
 ```rust
 impl Story for CounterStory {
-    fn view(&self) -> AnyView {
-        (view!{
+    fn view(&self) -> impl IntoView {
+        view!{
             <Counter value={self.value} message={self.message} threshold={self.threshold} />  // <- added missing properties
-        }).into_any()
+        }
     }
 
-    fn controls(&self) -> AnyView {
+    fn controls(&self) -> impl IntoView {
         let value = self.value.map(
             |v| v.to_string(),
             |v, text| {
@@ -294,13 +294,13 @@ impl Story for CounterStory {
             },
         );
 
-        (view!{
+        view!{
             <TextField id="counter_value" text=value label="Value" default=|| { Some(0.to_string()) } />
 
             <TextField id="counter_threshold" text=threshold label="Threshold" default=|| { Some(10_000.to_string()) } /> // <- we've added the threshold control field
 
             <TextField id="counter_message" text={self.message} label="Message" /> // <- we've added a message control field
-        }).into_any()
+        }
     }
 }
 ```
@@ -459,9 +459,9 @@ impl Default for CounterStory {
 
 impl Story for CounterStory {
     fn view(&self) -> impl IntoView {
-        (view!{
+        view!{
             <Counter value={self.value} message={self.message} threshold={self.threshold} />  // <- added missing properties
-        }).into_any()
+        }
     }
 
     fn controls(&self) -> impl IntoView {
@@ -483,13 +483,13 @@ impl Story for CounterStory {
             },
         );
 
-        (view!{
+        view!{
             <TextField id="counter_value" text=value label="Value" default=|| { Some(0.to_string()) } />
 
             <TextField id="counter_threshold" text=threshold label="Threshold" default=|| { Some(10_000.to_string()) } /> // <- we've added the threshold control field
 
             <TextField id="counter_message" text={self.message} label="Message" /> // <- we've added a message control field
-        }).into_any()
+        }
     }
 
     fn description(&self) -> &'static str {

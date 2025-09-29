@@ -63,7 +63,7 @@ impl Story for BasicPasswordFieldStory {
 
         view! {
             <PasswordField id="basic-input" password=text label=label />
-        }.into_any()
+        }
     }
 
     #[allow(unsafe_code)]
@@ -87,7 +87,7 @@ impl Story for BasicPasswordFieldStory {
         view! {
             <TextField id="leptos-forge-1-label-text-input" text=label label={"Label".to_string()} />
             <TextField id="leptos-forge-1-label-text-input" text=text label={"Text".to_string()} />
-        }.into_any()
+        }
     }
 
     fn description(&self) -> &'static str {
@@ -148,7 +148,7 @@ impl Story for NonemptyPasswordFieldStory {
 
         view! {
             <PasswordField id="basic-input" password=text label=label />
-        }.into_any()
+        }
     }
 
     #[allow(unsafe_code)]
@@ -172,7 +172,7 @@ impl Story for NonemptyPasswordFieldStory {
         view! {
             <TextField id="leptos-forge-1-label-text-input" text=label label={"Label".to_string()} />
             <TextField id="leptos-forge-1-label-text-input" text=text label={"Text".to_string()} />
-        }.into_any()
+        }
     }
 
     fn description(&self) -> &'static str {
@@ -233,7 +233,7 @@ impl Story for NonemptyVisiblePasswordFieldStory {
 
         view! {
             <PasswordField id="basic-input" password=text label=label state={(PasswordButtonStates::Visible,)}/>
-        }.into_any()
+        }
     }
 
     #[allow(unsafe_code)]
@@ -257,7 +257,7 @@ impl Story for NonemptyVisiblePasswordFieldStory {
         view! {
             <TextField id="leptos-forge-1-label-text-input" text=label label={"Label".to_string()} />
             <TextField id="leptos-forge-1-label-text-input" text=text label={"Text".to_string()} />
-        }.into_any()
+        }
     }
 
     fn description(&self) -> &'static str {

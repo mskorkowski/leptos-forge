@@ -952,7 +952,7 @@ impl Story for MarkdownBaseStory {
     fn controls(&self) -> impl IntoView {
         view!{
             <Codearea id="leptos-forge-markdown-demo-textarea" text=self.text label={"Markdown document".to_string()} />
-        }.into_any()
+        }
     }
 
     fn description(&self) -> &'static str {

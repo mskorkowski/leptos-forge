@@ -322,7 +322,7 @@ fn play_steps<S: 'static + Story>(
 
 
 impl<S: 'static + Story> DetailsParts for TestView<S> {
-    fn summary(&self) -> leptos::prelude::AnyView {
+    fn summary(&self) -> AnyView {
         let TestView {
             mut story,
             play,
@@ -364,7 +364,7 @@ impl<S: 'static + Story> DetailsParts for TestView<S> {
         }).into_any()
     }
 
-    fn details(&self) -> leptos::prelude::AnyView {
+    fn details(&self) -> AnyView {
         let play = self.play;
         let story = self.story;
         let store = self.state;

@@ -64,26 +64,26 @@ const STORY_DESC: &str = r############"
 
 You've just created a new story. There are a few steps to get it working
 
-1. Implement `fn view(&self) -> AnyView` so `leptos_forge` can showcase your component
-2. Implement `fn controls(&self) -> AnyView` so you can control your component and easily test it's behavior in `leptos_forge`
+1. Implement `fn view(&self) -> impl IntoView` so `leptos_forge` can showcase your component
+2. Implement `fn controls(&self) -> impl IntoView` so you can control your component and easily test it's behavior in `leptos_forge`
 3. Implement `fn description(&self) -> &'static str` where you describe what your component does
 
-## Implementing `fn view(&self) -> AnyView`
+## Implementing `fn view(&self) -> impl IntoView`
 
 In here you define how your component should show up in canvas area (grey one at the center) in `leptos_forge`. In most of a cases 
 your implementation will be something like this:
 
 ```rust
 ...
-    fn view(&self) -> AnyView {
+    fn view(&self) -> impl IntoView {
         view!{
             <YourComponent prop:my_prop1={self.my_prop1} prop:my_prop2={self.my_prop2} ... />
-        }.into_any()
+        }
     }
 ...
 ```
 
-## Implementing `fn controls(&self) -> AnyView`
+## Implementing `fn controls(&self) -> impl IntoView`
 
 In this section you define a set of controls that you can use to change the state of your component. Ready to use components can be
 found in the `ui_components::widgets` module.
@@ -113,14 +113,10 @@ While creating a description you should try to explain
 /// Story should only by it's nature hold only the data like [Signal][leptos::prelude::Signal] required to manipulate the component via the control panel.
 pub trait Story: Default + Copy {
     /// Returns a view of the story
-    fn view(&self) -> impl IntoView {
-        ().into_any()
-    }
+    fn view(&self) -> impl IntoView {}
 
     /// List of controls for the story
-    fn controls(&self) -> impl IntoView {
-        ().into_any()
-    }
+    fn controls(&self) -> impl IntoView {}
 
     /// Description of the story
     fn description(&self) -> &'static str {
