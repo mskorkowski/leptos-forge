@@ -125,8 +125,8 @@ another function from `Story::plays`. This function should return a list of play
 where each play contains a number of steps.  
 
 ```rust  
-use forge::play;  
-use forge::Play;  
+use forge::{Play, play};  
+use testing_library_dom::{get_by_test_id, MatcherOptions};
 
 impl Story for TestedCounterStory {  
     ...  
