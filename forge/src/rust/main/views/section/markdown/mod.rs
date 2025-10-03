@@ -488,21 +488,6 @@ fn story<'source>(source: &'source str) -> Option<MarkdownToken<'source>> {
                 story, 
                 len: end+2, 
             });
-            // if let Some(of) = find_of_attribute(tag) {
-            //     println!("We found atrribute '{of}'");
-            //     return Some(MarkdownToken::Story{
-            //         story: Some(of), 
-            //         len: end + 2 
-            //     });
-            // }
-            // else {
-            //     println!("No attribute of");
-            //     return Some(MarkdownToken::Story{ 
-            //         story: None,  // we didn't found a `of` attribute. Let's report it to 
-            //                       // the user
-            //         len: end + 2
-            //     });
-            // }
         }
         else {
             return None; // This is not a `<Story />` tag since it's unclosed
