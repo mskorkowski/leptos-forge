@@ -1,6 +1,8 @@
 //! Implements a view for the [app::Section]
 //! 
 
+mod markdown;
+
 use std::marker::PhantomData;
 
 use leptos::prelude::*;
@@ -17,6 +19,8 @@ pub fn Section<S: 'static + Section + Default + Copy + Send>(
     _section: PhantomData<S>
 ) -> impl IntoView {
     let description = S::default().description();
+
+    
 
     view! {
         <Description text=description />

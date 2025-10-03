@@ -22,7 +22,7 @@ use super::Section;
 
 /// Allows specifying paths of various length (up to 9) and convert it into
 /// a [Route] from static iterable tree of [RouteDef]
-#[derive(Debug, Clone, Copy)]
+#[derive(Debug, Clone, Copy, PartialEq)]
 pub enum PathSpec {
     /// Just a root of the path, aka "/"
     Root,
@@ -84,11 +84,12 @@ impl PathSpec {
     /// 
     /// ```rust
     /// 
-    /// # use leptos_forge::app::navigation::PathSpec;
+    /// # use leptos_forge::navigation::PathSpec;
     /// 
     /// let root = PathSpec::Root; // root = `/` path in URL
     /// let components = root.extend("components"); // components = `/components` path in URL
     /// 
+    /// assert_eq!(components, PathSpec::Level1("components"))
     /// ```
     /// 
     /// # Panics
