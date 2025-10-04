@@ -3,11 +3,11 @@
 }
 
 .markdown h2,h3,h4,h5,h6 {
-    @apply pt-2 mb-6 font-bold;
+    @apply pt-2 mb-6 font-bold text-forgeblue-950;
 }
 
 .markdown h1:first-child {
-    @apply text-5xl md:text-6xl lg:text-7xl 2xl:text-8xl font-bold;
+    @apply text-5xl md:text-6xl lg:text-7xl 2xl:text-8xl font-bold text-forgeblue-950;
 }
 
 .markdown h1:first-child:has(+ h1) {
