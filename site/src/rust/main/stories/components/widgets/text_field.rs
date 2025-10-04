@@ -2,6 +2,7 @@
 //! 
 
 
+use forge::RouteDef;
 use leptos::prelude::*;
 
 use ui_components::widgets::field::TextField;
@@ -74,6 +75,12 @@ impl Story for BasicTextFieldStory {
 
     fn description(&self) -> &'static str {
         TEXT_FIELD_EMPTY_DESC
+    }
+
+    fn subroutes(&self) -> Vec<RouteDef> {
+        vec![
+            RouteDef::page::<NonemptyTextFieldStory>("nonempty", "Nonempty"),
+        ]
     }
 }
 

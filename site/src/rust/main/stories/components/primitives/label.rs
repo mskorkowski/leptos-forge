@@ -1,5 +1,6 @@
 //! Stories related to label
 
+use forge::RouteDef;
 use leptos::prelude::*;
 use leptos::web_sys::HtmlElement;
 
@@ -109,6 +110,12 @@ impl Story for BasicLabelStory {
     fn plays(&self) -> Vec<Box<dyn forge::Play<Story=Self>>> {
         vec![
             Box::new(BasicLabelStoryPlayUpdateFromEmpty),
+        ]
+    }
+
+    fn subroutes(&self) -> Vec<RouteDef> {
+        vec![
+            RouteDef::page::<InlineLabelStory>("inline", "InlineLabel"),
         ]
     }
 }

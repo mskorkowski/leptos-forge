@@ -3,7 +3,9 @@
 
 pub mod testing;
 
+use forge::RouteDef;
 use forge::Section;
+use testing::TestingSection;
 
 /// Description of the [StorySection]
 const STORY: &str = r############"
@@ -246,6 +248,12 @@ pub struct StorySection;
 impl Section for StorySection {
     fn description(&self) -> &'static str {
         STORY
+    }
+
+    fn subroutes(&self) -> Vec<RouteDef> {
+        vec![
+            RouteDef::section::<TestingSection>("testing", "Testing"),
+        ]
     }
 }
 

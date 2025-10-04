@@ -1,5 +1,6 @@
 //! Stories for switch primitive
 
+use forge::RouteDef;
 use leptos::prelude::*;
 use ui_components::primitives::switch::Switch;
 use ui_components::widgets::field::SwitchField;
@@ -51,6 +52,12 @@ impl Story for BasicSwitchStory {
                 value={self.value}
             />
         }
+    }
+
+    fn subroutes(&self) -> Vec<RouteDef> {
+        vec![
+            RouteDef::page::<ToggledOnSwitchStory>("toggled-on", "Toggled on"),
+        ]
     }
 }
 

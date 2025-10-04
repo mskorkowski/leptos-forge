@@ -7,7 +7,15 @@ pub mod markdown;
 pub mod menu;
 pub mod switch;
 
+use leptos::prelude::*;
+
+use button::BasicButtonStory;
+use forge::RouteDef;
 use forge::Section;
+use label::BasicLabelStory;
+use markdown::MarkdownBaseStory;
+use switch::BasicSwitchStory;
+
 
 /// description of the primitives
 const PRIMITIVES_DESC: &str = r############"
@@ -28,5 +36,22 @@ pub struct Primitives;
 impl Section for Primitives {
     fn description(&self) -> &'static str {
         PRIMITIVES_DESC
+    }
+
+    fn subroutes(&self) -> Vec<RouteDef> {
+         vec![
+            RouteDef::page::<BasicButtonStory>("button", "Button"),
+            RouteDef::story::<BasicLabelStory>("label", "Label"),
+            RouteDef::story::<MarkdownBaseStory>("markdown", "Markdown"),
+            RouteDef::Route
+            {
+                path: "menu",
+                label: "Menu",
+                component: || view!{"Menu"}.into_any(),
+                embedded: |_,_,_| view!{"Embedded menu"}.into_any(),
+                subroutes: vec![],
+            },
+            RouteDef::story::<BasicSwitchStory>("switch", "Switch"),
+        ]
     }
 }

@@ -1,5 +1,6 @@
 //! Textarea stories
 
+use forge::RouteDef;
 use leptos::prelude::*;
 
 use ui_components::widgets::field::TextField;
@@ -73,6 +74,12 @@ impl Story for BasicTextareaStory {
 
     fn description(&self) -> &'static str {
         TEXTAREA_EMPTY_DESC
+    }
+
+    fn subroutes(&self) -> Vec<RouteDef> {
+        vec![
+            RouteDef::page::<NonemptyTextareaStory>("nonempty", "Nonempty"),
+        ]
     }
 }
 

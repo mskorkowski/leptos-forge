@@ -1,5 +1,6 @@
 //! Stories related to markdown primitive
 
+use forge::RouteDef;
 use leptos::prelude::*;
 
 use ui_components::primitives::markdown::Markdown;
@@ -7,6 +8,10 @@ use ui_components::widgets::field::Codearea;
 use utils_leptos::signal::URwSignal;
 
 use forge::Story;
+
+use crate::stories::components::primitives::markdown::KbdStory;
+use crate::stories::components::primitives::markdown::MarkdownAdmonishStory;
+use crate::stories::components::primitives::markdown::MarkdownTableStory;
 
 /// Description of the label primitive
 const MARKDOWN_DESC: &str = r############"
@@ -957,5 +962,13 @@ impl Story for MarkdownBaseStory {
 
     fn description(&self) -> &'static str {
         MARKDOWN_DESC
+    }
+
+    fn subroutes(&self) -> Vec<forge::RouteDef> {
+        vec![
+            RouteDef::page::<MarkdownAdmonishStory>("admonishes", "Admonishes"),
+            RouteDef::page::<MarkdownTableStory>("tables", "Tables"),
+            RouteDef::page::<KbdStory>("kbd", "Kbd tag"),
+        ]
     }
 }

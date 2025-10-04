@@ -3,11 +3,15 @@
 
 mod tests;
 
+use leptos::prelude::AnyView;
+use leptos::prelude::IntoAny;
 use leptos::web_sys::HtmlElement;
 
 use leptos::IntoView;
 pub use tests::play;
 pub use tests::test_id;
+
+use crate::RouteDef;
 
 /// One step in the testing process
 /// 
@@ -126,5 +130,70 @@ pub trait Story: Default + Copy {
     fn plays(&self) -> Vec<Box<dyn Play<Story=Self>>> {
         Vec::new()
     }
+
+    /// Returns the list of subroutes for the story
+    fn subroutes(&self) -> Vec<RouteDef> {
+        vec![]
+    }
 }
 
+
+
+/// Type erased [Story]
+/// 
+/// # Limitations
+/// 
+/// AnyStory doesn't support running tests
+pub struct AnyStory{
+    /// returns a view of the story
+    view: Box<dyn Fn() -> AnyView>,
+    /// returns the controls of the story
+    controls: Box<dyn Fn() -> AnyView>,
+    /// returns the description of the story
+    description: Box<dyn Fn() -> &'static str>,
+}
+
+impl AnyStory {
+    /// Returns a view of the story
+    pub fn view(&self) -> AnyView {
+        (self.view)()
+    }
+
+    /// List of controls for the story
+    pub fn controls(&self) -> AnyView {
+        (self.controls)()
+    }
+
+    /// Description of the story
+    pub fn description(&self) -> &'static str {
+        (self.description)()
+    }
+
+    /// Create new instance of the `AnyStory`
+    pub fn new<S: Story + 'static>(story: S) -> Self {
+
+        let view = move || -> AnyView {
+            story.view().into_any()
+        };
+
+        let controls = move || -> AnyView {
+            story.controls().into_any()
+        };
+
+        let description = move || -> &'static str {
+            story.description()
+        };
+
+        Self {
+            view: Box::new(view),
+            controls: Box::new(controls),
+            description: Box::new(description),
+        }
+    }
+}
+
+impl<S: Story + 'static> From<S> for AnyStory {
+    fn from(value: S) -> Self {
+        Self::new(value)
+    }
+}

@@ -1,5 +1,6 @@
 //! This module contains a section where we will refine the `ButtonStory` created in the setup part
 
+use forge::RouteDef;
 use leptos::prelude::*;
 
 use ui_components::widgets::field::TextField;
@@ -361,6 +362,12 @@ pub struct RefineCounterStory;
 impl Section for RefineCounterStory {
     fn description(&self) -> &'static str {
         REFINE_COUNTER_STORY
+    }
+
+    fn subroutes(&self) -> Vec<RouteDef> {
+        vec![
+            RouteDef::page::<CounterStory>("counter_story", "Counter")
+        ]
     }
 }
 

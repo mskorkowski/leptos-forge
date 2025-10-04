@@ -1,9 +1,8 @@
 //! Main entrypoint to the `leptos_forge` site
-mod components;
-mod setup;
-mod usage;
+pub mod components;
+pub mod setup;
+pub mod usage;
 
-use components::Components;
 use forge::RouteDef;
 use forge::Section;
 
@@ -89,12 +88,16 @@ Some examples:
 
 ## History of the project
 
-This project started as an internal project to help me build my web application. I knew JS, I knew React and I knew Storybook. JS/TS were not
-the best choice for me because I'm alone and I need to maintain a huge codebase for a single person (+400k lines of code, a bunch of services). 
-I decided to move towards Rust (which I'm familiar with). After checking bunch of technologies, I decided to use Leptos.
+This project started as an internal project to help me build my web application. 
+I knew JS, I knew React and I knew Storybook. JS/TS were not the best choice for
+me because I'm alone and I need to maintain a huge codebase for a single person
+(+400k lines of code, a bunch of services). I decided to move towards Rust
+(which I'm familiar with). After checking bunch of technologies, I decided to
+use Leptos.
 
-As part of the rewrite, I've created what would be a proto `leptos_forge`. After using it for about half a year internally, I decided to make it public.
-I works for me, so maybe for others also.
+As part of the rewrite, I've created what would be a proto `leptos_forge`. After
+using it for about half a year internally, I decided to make it public. I works
+for me, so maybe for others also.
 
 And here we are.
 
@@ -103,20 +106,14 @@ And here we are.
 
 /// Main page for the leptos_forge site
 #[derive(Debug, Default, Clone, Copy)]
-struct Main;
+pub struct Main;
 
 impl Section for Main {
     fn description(&self) -> &'static str {
         MAIN_DESCRIPTION
     }
-}
 
-/// Top level routes for the leptos_forge site
-pub const ROUTES: &[RouteDef] = &[
-    RouteDef::section::<Main>("/", "Leptos Forge", &[]),
-    RouteDef::header("guides", "GUIDES", setup::ROUTES),
-    RouteDef::header("documentation", "DOCUMENTATION", usage::ROUTES),
-    RouteDef::header("development", "DEVELOPMENT", &[
-        RouteDef::section::<Components>("components", "Components", components::ROUTES)
-    ])
-];
+    fn subroutes(&self) -> Vec<RouteDef> {
+        vec![]
+    }
+}

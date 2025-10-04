@@ -1,5 +1,6 @@
 //! Stories related to the password field
 
+use forge::RouteDef;
 use leptos::prelude::*;
 
 use ui_components::model::Password;
@@ -92,6 +93,13 @@ impl Story for BasicPasswordFieldStory {
 
     fn description(&self) -> &'static str {
         PASSWORD_FIELD_EMPTY_DESC
+    }
+
+    fn subroutes(&self) -> Vec<RouteDef> {
+        vec![
+            RouteDef::page::<NonemptyPasswordFieldStory>("nonempty", "Nonempty"),
+            RouteDef::page::<NonemptyVisiblePasswordFieldStory>("visible", "Visible"),
+        ]
     }
 }
 

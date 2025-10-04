@@ -87,7 +87,7 @@ const MAX_TAG_SEQUENCE_SIZE_HEADER: usize = 8;
 ///    2. Output can be almost correct - just a bit of code fence at the start and end
 ///       of the code block
 ///    3. Anything in between - part of the page goes bonkers
-struct MarkdownParser{
+pub struct MarkdownParser{
     /// List of matchers used to parse the markdown code
     matchers: Vec<Matcher>,
 }
@@ -263,10 +263,10 @@ fn sink(source: &'_ str) -> Option<MarkdownToken<'_>> {
                     len: current,
                 });
             }
+
         }
-        else {
-            current+=1;
-        }
+
+        current+=1;
 
     }
 
