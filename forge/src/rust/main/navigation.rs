@@ -16,8 +16,10 @@ use ui_components::menu::Navigate;
 use ui_components::primitives::markdown::Markdown;
 use utils_leptos::signal::ThreadSafe;
 
+use crate::views::story::EmbeddedStory;
+
 use super::story::Story;
-use super::views::page::Page;
+use super::views::story::Story;
 use super::views::section;
 use super::Section;
 
@@ -336,8 +338,10 @@ impl RouteDef{
         RouteDef::Route{ 
             path,
             label,
-            component: || view!{ <Page<S> /> }.into_any(),
-            embedded: |_view, _controls, _description| { view!{<div>Showing story {S::default().description()}</div>}.into_any() },
+            component: || view!{ <Story<S> /> }.into_any(),
+            embedded: |view, controls, description| { view!{ 
+                <EmbeddedStory<S> view  controls description />
+            }.into_any() },
             subroutes: S::default().subroutes()
         }
     }

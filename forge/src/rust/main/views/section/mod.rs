@@ -43,7 +43,7 @@ pub fn Section<S: 'static + Section + Default + Copy + Send>(
     console_log("rendering <Section>");
 
     view! {
-        <div class="leptos-forge-section-container scrollbox w-full">
+        <div class="leptos-forge-section-container scrollbox w-full flex flex-col">
             <div class="leptos-forge-section markdown scrollable">
                 { views }
             </div>

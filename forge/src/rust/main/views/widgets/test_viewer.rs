@@ -29,6 +29,7 @@ use crate::Story;
 
 /// Controls how the execution of the test will be handled
 #[derive(Debug, Clone, Copy, Default, PartialEq, Eq)]
+#[allow(dead_code)]
 enum ExecutionMode{
     /// Run a single step at a time
     Step,

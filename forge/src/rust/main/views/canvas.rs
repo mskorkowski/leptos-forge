@@ -26,3 +26,23 @@ where
         </div>
     }
 }
+
+/// Canvas showing a component used for embedded context
+#[component]
+pub fn EmbeddedCanvas<UiStory>(
+    /// story to be drawn
+    story: UiStory,
+    /// reference to canvas
+    node_ref: NodeRef<Div>,
+) -> impl IntoView 
+where
+    UiStory: 'static + Story + Copy,
+{
+    let view = story.view().into_any();
+
+    view!{
+        <div class="leptos-forge-canvas relscrollable-100 m-4 bg-forgegray-100 min-h-25 h-max print:bg-white print:overflow-visible print:w-auto print:h-auto print:relative" node_ref=node_ref>
+            { view }
+        </div>
+    }
+}

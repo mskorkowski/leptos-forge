@@ -102,6 +102,8 @@ will find the component. It should look like this:
 
 ![Example counter component rendered in the canvas area](/resources/leptos_forge_site/images/guides/refine_story/01-component_view.png)
 
+<Story of="counter_story" />
+
 You can test our component by clicking on the `[-]` and `[+]` buttons.
 
 Now our simple story needs a way to control our component, so we can set a given

@@ -17,7 +17,12 @@ use crate::stories::components::primitives::markdown::MarkdownTableStory;
 const MARKDOWN_DESC: &str = r############"
 # Markdown
  
-The `Markdown` component is used to display markdown formatted block of text. 
+The `Markdown` component is used to display markdown formatted block of text
+rendered to html. The `Markdown` primitive component wraps the content in 
+`<div />` tag but the wrapping element doesn't provide any styling.
+
+If you use the `Markdown` primitive you can also use the `markdown` css class
+to have it styled.
 
 ## Features
 
