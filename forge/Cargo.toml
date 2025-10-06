@@ -23,6 +23,9 @@ utils_leptos.workspace = true
 ui_components.workspace = true
 ui_layout.workspace = true
 
+[build-dependencies]
+build-print.workspace = true
+
 [features]
 default = []
 

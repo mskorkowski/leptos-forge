@@ -45,8 +45,10 @@ serde = "1.0.215"
 uuid = { version = "1.11.1", features = ["serde", "v4", "fast-rng"] }
 web-sys = { version = "0.3.69" }
 
+# Build dependencies
 cargo_metadata="0.22.0"
 cargo-resources="1.1.6"
+build-print="1.0.1"
 
 [workspace.lints.rustdoc]
 private_intra_doc_links = { level = "allow" }
