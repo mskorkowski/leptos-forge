@@ -329,6 +329,7 @@ impl RouteDef{
     /// This story doesn't have any subseries defined
     /// 
     /// Alias for the `component` but without a subroutes argument
+    #[deprecated]
     pub fn page<S: 'static + Story + Default + Copy + ThreadSafe>(path: &'static str, label: &'static str) -> RouteDef {
         RouteDef::story::<S>(path, label)
     }

@@ -78,7 +78,7 @@ impl Story for BasicCodeareaStory {
 
     fn subroutes(&self) -> Vec<RouteDef> {
         vec![
-            RouteDef::page::<NonemptyCodeareaStory>("nonempty", "Nonempty"),
+            RouteDef::story::<NonemptyCodeareaStory>("nonempty", "Nonempty"),
         ]
     }
 }

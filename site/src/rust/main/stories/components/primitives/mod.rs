@@ -40,7 +40,7 @@ impl Section for Primitives {
 
     fn subroutes(&self) -> Vec<RouteDef> {
          vec![
-            RouteDef::page::<BasicButtonStory>("button", "Button"),
+            RouteDef::story::<BasicButtonStory>("button", "Button"),
             RouteDef::story::<BasicLabelStory>("label", "Label"),
             RouteDef::story::<MarkdownBaseStory>("markdown", "Markdown"),
             RouteDef::Route

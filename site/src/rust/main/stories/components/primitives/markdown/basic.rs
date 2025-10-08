@@ -971,9 +971,9 @@ impl Story for MarkdownBaseStory {
 
     fn subroutes(&self) -> Vec<forge::RouteDef> {
         vec![
-            RouteDef::page::<MarkdownAdmonishStory>("admonishes", "Admonishes"),
-            RouteDef::page::<MarkdownTableStory>("tables", "Tables"),
-            RouteDef::page::<KbdStory>("kbd", "Kbd tag"),
+            RouteDef::story::<MarkdownAdmonishStory>("admonishes", "Admonishes"),
+            RouteDef::story::<MarkdownTableStory>("tables", "Tables"),
+            RouteDef::story::<KbdStory>("kbd", "Kbd tag"),
         ]
     }
 }

@@ -78,7 +78,7 @@ impl Story for BasicTextareaStory {
 
     fn subroutes(&self) -> Vec<RouteDef> {
         vec![
-            RouteDef::page::<NonemptyTextareaStory>("nonempty", "Nonempty"),
+            RouteDef::story::<NonemptyTextareaStory>("nonempty", "Nonempty"),
         ]
     }
 }

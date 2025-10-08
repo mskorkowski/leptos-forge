@@ -368,7 +368,7 @@ impl Section for RefineCounterStory {
 
     fn subroutes(&self) -> Vec<RouteDef> {
         vec![
-            RouteDef::page::<CounterStory>("counter_story", "Counter")
+            RouteDef::story::<CounterStory>("counter_story", "Counter")
         ]
     }
 }
