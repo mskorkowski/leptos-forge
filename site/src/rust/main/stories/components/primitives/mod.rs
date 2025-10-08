@@ -50,6 +50,7 @@ impl Section for Primitives {
                 component: || view!{"Menu"}.into_any(),
                 embedded: |_,_,_| view!{"Embedded menu"}.into_any(),
                 subroutes: vec![],
+                private: false,
             },
             RouteDef::story::<BasicSwitchStory>("switch", "Switch"),
         ]

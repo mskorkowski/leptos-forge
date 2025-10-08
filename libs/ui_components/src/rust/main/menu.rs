@@ -112,14 +112,14 @@ pub fn Navigate<'a, S: ToString + ThreadSafe + Clone>(
                 )
             };
 
-            format!("{class} {} {} {}", highlight.0, highlight.1, highlight.2)
+            format!("{} {} {} {class}", highlight.0, highlight.1, highlight.2)
         }
         else {
             class.to_string()
         }
     };
 
-    let class = format!("{class} py-1 border-l-forgegray-800 border-l-3");
+    let class = format!("py-1 border-l-forgegray-800 border-l-3 {class}");
 
     let click = {
         let to = to.clone();
