@@ -4,77 +4,9 @@ mod primitives;
 mod widgets;
 
 use forge::Section;
-use leptos::prelude::*;
-use primitives::button::BasicButtonStory;
-use primitives::markdown::KbdStory;
-use primitives::switch::BasicSwitchStory;
-use primitives::switch::ToggledOnSwitchStory;
-use primitives::label::BasicLabelStory;
-use primitives::label::InlineLabelStory;
-use primitives::markdown::MarkdownAdmonishStory;
-use primitives::markdown::MarkdownBaseStory;
-use primitives::markdown::MarkdownTableStory;
 use primitives::Primitives;
-use widgets::codearea::BasicCodeareaStory;
-use widgets::codearea::NonemptyCodeareaStory;
-use widgets::logo::BasicLogoStory;
-use widgets::password::BasicPasswordFieldStory;
-use widgets::password::NonemptyPasswordFieldStory;
-use widgets::password::NonemptyVisiblePasswordFieldStory;
-// use widgets::select::store_failure::ComponentWithAStoreStory;
-// use widgets::select::BasicSingleSelectStory;
-// use widgets::select::ForceOpenSingleSelectStory;
-use widgets::text_field::BasicTextFieldStory;
-use widgets::text_field::NonemptyTextFieldStory;
-use widgets::textarea::BasicTextareaStory;
-use widgets::textarea::NonemptyTextareaStory;
 use widgets::Widgets;
 use forge::navigation::RouteDef;
-
-/// main menu routes
-pub const ROUTES: &[RouteDef] = &[
-    RouteDef::section::<Primitives>("primitives", "Primitives", &[
-        RouteDef::page::<BasicButtonStory>("button", "Button"),
-        RouteDef::story::<BasicLabelStory>("label", "Label", &[
-            RouteDef::page::<InlineLabelStory>("inline", "InlineLabel"),
-        ]),
-        RouteDef::story::<MarkdownBaseStory>("markdown", "Markdown", &[
-            RouteDef::page::<MarkdownAdmonishStory>("admonishes", "Admonishes"),
-            RouteDef::page::<MarkdownTableStory>("tables", "Tables"),
-            RouteDef::page::<KbdStory>("kbd", "Kbd tag"),
-        ]),
-        RouteDef::Route
-        {
-            path: "menu",
-            label: "Menu",
-            component: || view!{"Menu"}.into_any(),
-            subroutes: &[],
-        },
-        RouteDef::story::<BasicSwitchStory>("switch", "Switch", &[
-            RouteDef::page::<ToggledOnSwitchStory>("toggled-on", "Toggled on"),
-        ]),
-    ]),
-    RouteDef::section::<Widgets>("widgets", "Widgets", &[
-        RouteDef::story::<BasicCodeareaStory>("codearea", "Codearea", &[
-            RouteDef::page::<NonemptyCodeareaStory>("nonempty", "Nonempty"),
-        ]),
-        RouteDef::page::<BasicLogoStory>("logo", "Logo"),
-        RouteDef::story::<BasicTextFieldStory>("text_field", "TextField", &[
-            RouteDef::page::<NonemptyTextFieldStory>("nonempty", "Nonempty"),
-        ]),
-        RouteDef::story::<BasicPasswordFieldStory>("password", "Password", &[
-            RouteDef::page::<NonemptyPasswordFieldStory>("nonempty", "Nonempty"),
-            RouteDef::page::<NonemptyVisiblePasswordFieldStory>("visible", "Visible"),
-        ]),
-        RouteDef::story::<BasicTextareaStory>("textarea", "Textarea", &[
-            RouteDef::page::<NonemptyTextareaStory>("nonempty", "Nonempty"),
-        ]),
-        // RouteDef::story::<BasicSingleSelectStory>("single_select", "SingleSelect", &[
-        //     RouteDef::page::<ForceOpenSingleSelectStory>("force_open", "Force open"),
-        //     RouteDef::page::<ComponentWithAStoreStory>("store_failure", "Store failure"),
-        // ]),
-    ]),
-];
 
 /// description of the [Components] section
 const COMPONENTS_DESCRIPTION: &str = r############"
@@ -115,5 +47,12 @@ pub struct Components;
 impl Section for Components {
     fn description(&self) -> &'static str {
         COMPONENTS_DESCRIPTION
+    }
+
+    fn subroutes(&self) -> Vec<RouteDef> {
+        vec![
+            RouteDef::section::<Primitives>("primitives", "Primitives"),
+            RouteDef::section::<Widgets>("widgets", "Widgets"),
+        ]
     }
 }

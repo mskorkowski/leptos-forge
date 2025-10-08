@@ -32,6 +32,6 @@ pub fn Markdown(
     };
 
     view!{
-        <div class="markdown" inner_html=inner_html />
+        <div inner_html=inner_html />
     }
 }

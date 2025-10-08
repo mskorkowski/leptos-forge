@@ -1,5 +1,6 @@
 //! Stories related to markdown primitive
 
+use forge::RouteDef;
 use leptos::prelude::*;
 
 use ui_components::primitives::markdown::Markdown;
@@ -8,11 +9,20 @@ use utils_leptos::signal::URwSignal;
 
 use forge::Story;
 
+use crate::stories::components::primitives::markdown::KbdStory;
+use crate::stories::components::primitives::markdown::MarkdownAdmonishStory;
+use crate::stories::components::primitives::markdown::MarkdownTableStory;
+
 /// Description of the label primitive
 const MARKDOWN_DESC: &str = r############"
 # Markdown
  
-The `Markdown` component is used to display markdown formatted block of text. 
+The `Markdown` component is used to display markdown formatted block of text
+rendered to html. The `Markdown` primitive component wraps the content in 
+`<div />` tag but the wrapping element doesn't provide any styling.
+
+If you use the `Markdown` primitive you can also use the `markdown` css class
+to have it styled.
 
 ## Features
 
@@ -957,5 +967,13 @@ impl Story for MarkdownBaseStory {
 
     fn description(&self) -> &'static str {
         MARKDOWN_DESC
+    }
+
+    fn subroutes(&self) -> Vec<forge::RouteDef> {
+        vec![
+            RouteDef::page::<MarkdownAdmonishStory>("admonishes", "Admonishes"),
+            RouteDef::page::<MarkdownTableStory>("tables", "Tables"),
+            RouteDef::page::<KbdStory>("kbd", "Kbd tag"),
+        ]
     }
 }

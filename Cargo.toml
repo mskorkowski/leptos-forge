@@ -7,7 +7,7 @@ members = [
 ]
 
 [workspace.package]
-version = "0.3.1"
+version = "0.5.0"
 edition = "2024"
 rust-version = "1.88"
 license = "MIT"
@@ -15,11 +15,11 @@ license = "MIT"
 [workspace.dependencies]
 # Internal dependencies
 
-forge =         { version = "0.3.1", path = "forge", package = "leptos_forge" }
-utils =         { version = "0.3.1", path = "libs/utils",  package = "leptos_forge_utils" }
-utils_leptos =  { version = "0.3.1", path = "libs/utils_leptos", package = "leptos_forge_utils_leptos" }
-ui_components = { version = "0.3.1", path = "libs/ui_components", package = "leptos_forge_ui_components" }
-ui_layout =     { version = "0.3.1", path = "libs/ui_layout", package = "leptos_forge_ui_layout" }
+forge =         { version = "0.5.0", path = "forge", package = "leptos_forge" }
+utils =         { version = "0.5.0", path = "libs/utils",  package = "leptos_forge_utils" }
+utils_leptos =  { version = "0.5.0", path = "libs/utils_leptos", package = "leptos_forge_utils_leptos" }
+ui_components = { version = "0.5.0", path = "libs/ui_components", package = "leptos_forge_ui_components" }
+ui_layout =     { version = "0.5.0", path = "libs/ui_layout", package = "leptos_forge_ui_layout" }
 
 # External dependencies
 console_error_panic_hook = "0.1.7"
@@ -45,8 +45,10 @@ serde = "1.0.215"
 uuid = { version = "1.11.1", features = ["serde", "v4", "fast-rng"] }
 web-sys = { version = "0.3.69" }
 
+# Build dependencies
 cargo_metadata="0.22.0"
 cargo-resources="1.1.6"
+build-print="1.0.1"
 
 [workspace.lints.rustdoc]
 private_intra_doc_links = { level = "allow" }

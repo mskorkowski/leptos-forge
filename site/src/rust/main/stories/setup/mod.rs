@@ -7,15 +7,8 @@ pub mod nix;
 pub mod refine_story;
 pub mod resources;
 
-use adding_tests::AddingTests;
-use adding_tests::TestedCounterStory;
 use forge::RouteDef;
 use forge::Section;
-use nix::Nix;
-use refine_story::CounterStory;
-use refine_story::RefineCounterStory;
-use resources::Resources;
-use resources::Tailwind;
 
 /// description of the [Components] section
 const SETUP: &str = r############"
@@ -338,18 +331,8 @@ impl Section for Setup {
     fn description(&self) -> &'static str {
         SETUP
     }
-}
 
-/// Top level routes for the leptos_forge site
-pub const ROUTES: &[RouteDef] = &[
-   RouteDef::section::<Setup>("create_project", "Create project", &[]),
-   RouteDef::section::<RefineCounterStory>("first_story", "Implement the first story", &[
-      RouteDef::page::<CounterStory>("counter_story", "Counter")
-   ]),
-   RouteDef::section::<AddingTests>("adding_tests", "Adding tests", &[
-      RouteDef::page::<TestedCounterStory>("tested_counter_story", "Counter with tests"),
-   ]),
-   RouteDef::section::<Resources>("resources", "Resources", &[]),
-   RouteDef::section::<Tailwind>("tailwind", "Tailwind", &[]),
-   RouteDef::section::<Nix>("nix", "Nix", &[]),
-];
+    fn subroutes(&self) -> Vec<RouteDef> {
+        vec![]
+   }
+}

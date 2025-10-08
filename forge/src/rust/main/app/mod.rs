@@ -2,6 +2,7 @@
 
 mod state;
 
+use leptos::leptos_dom::logging::console_log;
 use leptos::prelude::*;
 use leptos::tachys::view::iterators::StaticVec;
 use leptos_router::components::Routes;
@@ -23,7 +24,7 @@ use super::views::content::Content;
 #[component]
 pub fn App(
     /// The routing information for the Leptos Forge
-    routes: &'static [RouteDef],
+    routes: Vec<RouteDef>,
     /// Path to image to be used as a logo
     #[prop(default=Option::<&'static str>::None,optional)]
     logo: Option<&'static str>,
@@ -31,33 +32,40 @@ pub fn App(
 
     let _store = Store::new(State::new());
     
-    let menu_defs = || {
-        let menu = Store::new(MenuState::new());
+    let menu_defs = {
+        let routes = routes.clone();
+        move || {
+            let menu = Store::new(MenuState::new());
 
-        let window = window();
-        let location = window.location();
-        let path = location.pathname().expect("We are running csr mode. Window should exist, location should exist and pathname should be there");
+            let window = window();
+            let location = window.location();
+            let path = location.pathname().expect("We are running csr mode. Window should exist, location should exist and pathname should be there");
 
-        StaticVec::from(
-            routes.
-                iter().
-                flat_map(move |route| {
-                    route.as_menu_items(PathSpec::Root, &path, menu)
-                }).
-                collect::<Vec<_>>()
-        )
+            StaticVec::from(
+                routes.
+                    iter().
+                    flat_map(move |route| {
+                        route.as_menu_items(PathSpec::Root, &path, menu)
+                    }).
+                    collect::<Vec<_>>()
+            )
+        }
     };    
 
-    let route_defs = || {
-        StaticVec::from( 
-            routes
-                .iter()
-                .flat_map(|route| {
-                    route.as_routes(PathSpec::Root).into_iter()
-                })
-                .collect::<Vec<_>>()
-        )
+    let route_defs = { 
+        move || {
+            StaticVec::from( 
+                routes
+                    .iter()
+                    .flat_map(|route| {
+                        route.as_routes(PathSpec::Root).into_iter()
+                    })
+                    .collect::<Vec<_>>()
+            )
+        }
     };
+
+    console_log("Rendering <App>");
 
     view! {
         <Router>

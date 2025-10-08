@@ -1,5 +1,6 @@
 //! Codearea stories
 
+use forge::RouteDef;
 use leptos::prelude::*;
 
 use ui_components::widgets::field::TextField;
@@ -73,6 +74,12 @@ impl Story for BasicCodeareaStory {
 
     fn description(&self) -> &'static str {
         CODEAREA_EMPTY_DESC
+    }
+
+    fn subroutes(&self) -> Vec<RouteDef> {
+        vec![
+            RouteDef::page::<NonemptyCodeareaStory>("nonempty", "Nonempty"),
+        ]
     }
 }
 

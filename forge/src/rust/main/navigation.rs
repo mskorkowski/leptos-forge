@@ -13,16 +13,19 @@ use reactive_stores::Store;
 use ui_components::menu::MenuHeader;
 use ui_components::menu::MenuState;
 use ui_components::menu::Navigate;
+use ui_components::primitives::markdown::Markdown;
 use utils_leptos::signal::ThreadSafe;
 
+use crate::views::story::EmbeddedStory;
+
 use super::story::Story;
-use super::views::page::Page;
+use super::views::story::Story;
 use super::views::section;
 use super::Section;
 
 /// Allows specifying paths of various length (up to 9) and convert it into
 /// a [Route] from static iterable tree of [RouteDef]
-#[derive(Debug, Clone, Copy)]
+#[derive(Debug, Clone, Copy, PartialEq)]
 pub enum PathSpec {
     /// Just a root of the path, aka "/"
     Root,
@@ -61,11 +64,14 @@ impl PathSpec {
     /// 
     /// Returns a route with given path and view
     /// 
-    pub fn as_route(&self, view: fn() -> AnyView) -> AnyNestedRoute {
+    pub fn as_route<F>(&self, view: F) -> AnyNestedRoute 
+    where 
+        F: Fn() -> AnyView + ThreadSafe + Clone
+    {
         use PathSpec::*;
 
         match self {
-            Root => Route(RouteProps::builder().view(view).path(StaticSegment("/")).build()).into_any_nested_route(),
+            Root => {Route(RouteProps::builder().view(view).path(StaticSegment("/")).build()).into_any_nested_route()},
             Level1(seg1,) => Route(RouteProps::builder().view(view).path(StaticSegment(*seg1)).build()).into_any_nested_route(),
             Level2(seg1, seg2 ) => Route(RouteProps::builder().view(view).path((StaticSegment(*seg1), StaticSegment(*seg2))).build()).into_any_nested_route(),
             Level3(seg1, seg2, seg3 ) => Route(RouteProps::builder().view(view).path((StaticSegment(*seg1), StaticSegment(*seg2), StaticSegment(*seg3))).build()).into_any_nested_route(),
@@ -84,11 +90,12 @@ impl PathSpec {
     /// 
     /// ```rust
     /// 
-    /// # use leptos_forge::app::navigation::PathSpec;
+    /// # use leptos_forge::navigation::PathSpec;
     /// 
     /// let root = PathSpec::Root; // root = `/` path in URL
     /// let components = root.extend("components"); // components = `/components` path in URL
     /// 
+    /// assert_eq!(components, PathSpec::Level1("components"))
     /// ```
     /// 
     /// # Panics
@@ -142,7 +149,35 @@ pub enum RouteDef {
         /// component to render when the route is matched
         component: fn() -> AnyView,
         /// optional children for nested routes
-        subroutes: &'static [RouteDef],
+        subroutes: Vec<RouteDef>,
+        /// Returns the view embedded in the section
+        /// 
+        /// # Arguments
+        /// 
+        /// - **view** - wherever we should show the canvas.
+        ///   
+        ///   Currently it probably doesn't make any sense to set this value to
+        ///   `false` to disable rendering of the component, but you can.
+        /// - **controls** - wherever we should show controls
+        /// - **description** - wherever we should show description of the story
+        /// 
+        /// # Embedding in the section
+        /// 
+        /// Inside the Markdown returned from [Section::description] method
+        /// you can add the `<Story />` tag. It has the following boolean attributes
+        /// 
+        /// - **view**
+        /// - **controls**
+        /// - **description**
+        /// 
+        /// The code below will enable all of the before mentioned attributes
+        /// 
+        /// ```markdown
+        /// 
+        /// <Story of="path/to/the/substory" view controls description />
+        /// 
+        /// ```
+        embedded: fn(view: bool, controls: bool, description: bool) -> AnyView,
     },
     /// Grouping for a set of routes without any path to be taken
     Header{
@@ -151,11 +186,29 @@ pub enum RouteDef {
         /// Header label in the menu
         label: &'static str,
         /// optional children for nested routes
-        subroutes: &'static [RouteDef],
+        subroutes: Vec<RouteDef>,
     }
 }
 
 impl RouteDef{
+    /// Returns the path of the route
+    pub fn path(&self) -> &'static str {
+        use RouteDef::*;
+        match self {
+            Route{ path, .. } |
+              Header{ path, .. } => path,
+        }
+    }
+
+    /// Returns a list of subroutes for this route
+    pub fn subroutes(&self) -> &Vec<RouteDef> {
+        use RouteDef::*;
+        match self {
+            Route{ subroutes, .. } |
+            Header{ subroutes, .. } => subroutes,
+        }
+    }
+
     /// Extends a prefix path while detecting a "root" path
     /// 
     /// # For RouteDef::Route
@@ -189,6 +242,8 @@ impl RouteDef{
         match self {
             Route{ component, subroutes, ..} => {
                 let my_path: PathSpec = self.extend(prefix);
+
+
 
                 let mut routes: Vec<AnyNestedRoute> = vec![
                     my_path.as_route(
@@ -274,17 +329,20 @@ impl RouteDef{
     /// This story doesn't have any subseries defined
     /// 
     /// Alias for the `component` but without a subroutes argument
-    pub const fn page<S: 'static + Story + Default + Copy + ThreadSafe>(path: &'static str, label: &'static str) -> RouteDef {
-        RouteDef::story::<S>(path, label, &[])
+    pub fn page<S: 'static + Story + Default + Copy + ThreadSafe>(path: &'static str, label: &'static str) -> RouteDef {
+        RouteDef::story::<S>(path, label)
     }
 
     /// Creates a new page route with a story and it's related sub-stories
-    pub const fn story<S: 'static + Story + Default + Copy + ThreadSafe>(path: &'static str, label: &'static str, subroutes: &'static [RouteDef]) -> RouteDef {
+    pub fn story<S: 'static + Story + Default + Copy + ThreadSafe>(path: &'static str, label: &'static str) -> RouteDef {
         RouteDef::Route{ 
             path,
             label,
-            component: || view!{ <Page<S> /> }.into_any(),
-            subroutes
+            component: || view!{ <Story<S> /> }.into_any(),
+            embedded: |view, controls, description| { view!{ 
+                <EmbeddedStory<S> view  controls description />
+            }.into_any() },
+            subroutes: S::default().subroutes()
         }
     }
 
@@ -294,7 +352,7 @@ impl RouteDef{
     /// to group a bunch of related [pages][RouteDef::page] 
     /// and [story][RouteDef::story]
     /// together
-    pub const fn section<S: 'static + Section + Default + Copy + Send>(path: &'static str, label: &'static str, subroutes: &'static [RouteDef]) -> RouteDef {
+    pub fn section<S: 'static + Section + Default + Copy + Send>(path: &'static str, label: &'static str) -> RouteDef {
         //
         // Remember to update when changed
         //
@@ -305,8 +363,9 @@ impl RouteDef{
         RouteDef::Route{
             path,
             label,
-            component: || view!{ <section::Section<S> /> }.into_any(),
-            subroutes,
+            component: || { view!{ <section::Section<S> /> }.into_any() },
+            embedded: |_, _, _| view!{ <Markdown src="> Embedding sections is not allowed"  /> }.into_any(),
+            subroutes: S::default().subroutes(),
         }
     }
 
@@ -315,7 +374,7 @@ impl RouteDef{
     /// Header doesn't contribute to the routing path but provides 
     /// a visual named separator and header for parts of the group
     /// of routes in the left hand side menu
-    pub const fn header(path: &'static str, label: &'static str, subroutes: &'static [RouteDef]) -> RouteDef {
+    pub fn header(path: &'static str, label: &'static str, subroutes: Vec<RouteDef>) -> RouteDef {
         RouteDef::Header{ 
             path,
             label, 

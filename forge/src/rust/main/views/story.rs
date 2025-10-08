@@ -12,6 +12,8 @@ use utils_leptos::signal::ThreadSafe;
 use utils_leptos::signal::URwSignal;
 
 
+use crate::views::canvas::EmbeddedCanvas;
+use crate::views::control_pane::EmbeddedControlPane;
 use crate::views::tab_panel::Tab;
 use crate::views::tab_panel::TabPanel;
 use crate::views::widgets::test_viewer::TestView;
@@ -25,7 +27,7 @@ use super::tab_panel::TabName;
 
 /// Page is the view for the single story about a component
 #[component]
-pub fn Page<S: 'static + Story + Default + Copy + ThreadSafe>(
+pub fn Story<S: 'static + Story + Default + Copy + ThreadSafe>(
     /// Phantom data of the story
     #[prop(optional)]
     _story: PhantomData<S>
@@ -158,5 +160,49 @@ where
                 </div>
             }).into_any()
         }
+    }
+}
+
+#[component]
+pub fn EmbeddedStory<S: 'static + Story + Default + Copy + ThreadSafe>(
+    /// If set to `true` embedded story will show the canvas with component
+    view: bool, 
+    /// If set to `true` embedded story will show the control panel
+    controls: bool, 
+    /// If set to `true` embedded story will show the description of the story
+    /// 
+    /// Currently we don't support showing description
+    #[prop(default=false)]
+    #[allow(unused_variables)]
+    description: bool,
+    /// If set to `true` embedded story will allow you tu run the tests on itself
+    /// 
+    /// Currently we don't support this part
+    #[prop(default=false)]
+    _tests: bool,
+     /// Phantom data of the story
+    #[prop(optional)]
+    _story: PhantomData<S>
+) -> impl IntoView {
+    let canvas_ref = NodeRef::new();
+    let story = S::default();
+    let canvas = if view {
+        // let v = story.view().into_any();
+        Some(view!{
+            <EmbeddedCanvas story node_ref=canvas_ref />
+        })
+    } else { None };
+
+    let control_pane = if controls {Some(
+        view!{
+            <EmbeddedControlPane story />
+        }
+    )} else { None };
+
+    view!{
+        <div class="flex flex-col">
+            {canvas}
+            {control_pane}
+        </div>
     }
 }

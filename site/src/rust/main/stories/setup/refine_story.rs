@@ -1,5 +1,6 @@
 //! This module contains a section where we will refine the `ButtonStory` created in the setup part
 
+use forge::RouteDef;
 use leptos::prelude::*;
 
 use ui_components::widgets::field::TextField;
@@ -100,6 +101,8 @@ Now when you open the `Button` story at the top left side of the gray area you
 will find the component. It should look like this:
 
 ![Example counter component rendered in the canvas area](/resources/leptos_forge_site/images/guides/refine_story/01-component_view.png)
+
+<Story of="counter_story" />
 
 You can test our component by clicking on the `[-]` and `[+]` buttons.
 
@@ -361,6 +364,12 @@ pub struct RefineCounterStory;
 impl Section for RefineCounterStory {
     fn description(&self) -> &'static str {
         REFINE_COUNTER_STORY
+    }
+
+    fn subroutes(&self) -> Vec<RouteDef> {
+        vec![
+            RouteDef::page::<CounterStory>("counter_story", "Counter")
+        ]
     }
 }
 

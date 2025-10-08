@@ -2,6 +2,7 @@
 //! [setup process][super::SETUP] and it's later refinement [`CounterStory`][super::refine_story::CounterStory] 
 //! 
 
+use forge::RouteDef;
 use leptos::prelude::*;
 
 use forge::play;
@@ -246,6 +247,12 @@ pub struct AddingTests;
 impl Section for AddingTests {
     fn description(&self) -> &'static str {
         ADDING_TESTS
+    }
+
+    fn subroutes(&self) -> Vec<RouteDef> {
+        vec![
+            RouteDef::page::<TestedCounterStory>("tested_counter_story", "Counter with tests"),
+        ]
     }
 }
 

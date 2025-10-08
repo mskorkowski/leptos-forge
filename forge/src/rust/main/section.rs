@@ -1,6 +1,8 @@
 //! Trait for grouping the [stories][Story] together
 //! 
 
+use crate::RouteDef;
+
 /// Description of the [Section] shown when you don't implement a description
 /// 
 /// When you add section into your `leptos_forge` application it will show up in the UI
@@ -71,5 +73,10 @@ pub trait Section: Default {
     /// Function returns the text of the section
     fn description(&self) -> &'static str {
         SECTION_DESC
+    }
+
+    /// Returns a list of subroutes for the Section
+    fn subroutes(&self) -> Vec<RouteDef> {
+        vec![]
     }
 }

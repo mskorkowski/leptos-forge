@@ -1,9 +1,8 @@
 //! Main entrypoint to the `leptos_forge` site
-mod components;
-mod setup;
-mod usage;
+pub mod components;
+pub mod setup;
+pub mod usage;
 
-use components::Components;
 use forge::RouteDef;
 use forge::Section;
 
@@ -11,7 +10,8 @@ use forge::Section;
 const MAIN_DESCRIPTION: &str = r############"
 # Leptos_forge
 
-`leptos_forge` is a library that is meant to help you create awesome and reliable components in Rust and Leptos. 
+`leptos_forge` is a library that is meant to help you create awesome and reliable
+components in Rust and Leptos. 
 
 The most recent documentation is available at [leptos_forge site](https://mskorkowski.github.io).
 
@@ -20,30 +20,39 @@ The most recent documentation is available at [leptos_forge site](https://mskork
 > If possible, I would like to ask you to test the project, 
 > 
 > - by playing with a page
-> - going through the [create project guide](/guides/create_project) on the page and subsequent sections 
+> - going through the [create project guide](/guides/create_project) on the page
+>   and subsequent sections 
 >
-> and [creating the issues](https://github.com/mskorkowski/leptos-forge/issues) what you would like to see change and how.
+> and [creating the issues](https://github.com/mskorkowski/leptos-forge/issues)
+> what you would like to see change and how.
 >
-> This project is my way of giving back to the Leptos community and I hope that you will enjoy using it.
+> This project is my way of giving back to the Leptos community and I hope that
+> you will enjoy using it.
 >
 > - Marek
 
 > [!WARNING]
 >
-> `leptos_forge` is still at the early stages of development and in many places you will find a sharp edges
-> hungry for a blood to be spilled. We are doing our best to improve the case but it takes time to get everything right.
+> `leptos_forge` is still at the early stages of development and in many places
+>  you will find a sharp edges > hungry for a blood to be spilled. We are doing
+> our best to improve the case but it takes time to get everything right.
 
 ## Features
 
-- **Trivial integration with Leptos** - You can use Leptos components directly in your Forge stories without any additional setup
-- **Customizable** - It's easy to add new feature and customize almost any aspect of the resulting application to fit your needs
-- **Descriptive** - Leptos Forge allows you to write your descriptions using Markdown
-- **Rust API** - This project was created with programming Rust in mind to make it easy to write your stories
+- **Trivial integration with Leptos** - You can use Leptos components directly
+  in your Forge stories without any additional setup
+- **Customizable** - It's easy to add new feature and customize almost any aspect
+  of the resulting application to fit your needs
+- **Descriptive** - Leptos Forge allows you to write your descriptions using
+  Markdown
+- **Rust API** - This project was created with programming Rust in mind to make
+  it easy to write your stories
 
 ## Leptos Forge vs Storybook
 
-[Storybook](https://storybook.js.org/) is a popular tool used to create frontend components in isolation and test them and was a big 
-inspiration for Leptos Forge. However, Leptos Forge has some unique features that make it different from Storybook:
+[Storybook](https://storybook.js.org/) is a popular tool used to create frontend
+components in isolation and test them and was a big inspiration for Leptos Forge.
+However, Leptos Forge has some unique features that make it different from Storybook:
 
 | Feature | Leptos Forge | Storybook |
 |:--------|:------------:|:---------:|
@@ -54,14 +63,41 @@ inspiration for Leptos Forge. However, Leptos Forge has some unique features tha
 | Look | Ugly, let's be frank | It's clean and nice to look at |
 | Which should I use? | If you are using Rust and Leptos, you might want to consider Leptos Forge. You must remember it's still a bleeding edge project. | If Storybook meets your needs, go there. It's mature, stable and supported by a lots of people |
 
+### Why are there so many differences between Storybook and `leptos_forge`?
+
+Storybook is a JavaScript/TypeScript-oriented framework. If you use Storybook 
+with React, it works awesome. If you use it with other JS/TS frameworks, it works
+great. If you try to use it with Rust compiled to WASM, it at best will barely
+work, and it requires a ton of silver tape.
+
+There is a good reason for the above-mentioned state of the world. The way you
+design/write the code in JS/TS differs a lot from the Rust way of working. Some
+things can be easily translated into Rust. Some will look strange or plainly
+wrong if done in Rust. Some will not have any sense.
+
+Some examples:
+
+- `<Primary />` MDX tag to show the primary story can't be translated into Rust.
+  This concept is designed around "default exports" from JS modules.
+- Most of `CSF` could be translated into Rust using macros and made look alike,
+  but it would just feel plainly wrong.
+- Embedding stories into the Markdown is one of the things that feels natural on
+  both sides.
+
+`leptos_forge` is written in Rust, and we do things "the Rust way," so there are and will be a lot of differences.
+
 ## History of the project
 
-This project started as an internal project to help me build my web application. I knew JS, I knew React and I knew Storybook. JS/TS were not
-the best choice for me because I'm alone and I need to maintain a huge codebase for a single person (+400k lines of code, a bunch of services). 
-I decided to move towards Rust (which I'm familiar with). After checking bunch of technologies, I decided to use Leptos.
+This project started as an internal project to help me build my web application. 
+I knew JS, I knew React and I knew Storybook. JS/TS were not the best choice for
+me because I'm alone and I need to maintain a huge codebase for a single person
+(+400k lines of code, a bunch of services). I decided to move towards Rust
+(which I'm familiar with). After checking bunch of technologies, I decided to
+use Leptos.
 
-As part of the rewrite, I've created what would be a proto `leptos_forge`. After using it for about half a year internally, I decided to make it public.
-I works for me, so maybe for others also.
+As part of the rewrite, I've created what would be a proto `leptos_forge`. After
+using it for about half a year internally, I decided to make it public. I works
+for me, so maybe for others also.
 
 And here we are.
 
@@ -70,20 +106,14 @@ And here we are.
 
 /// Main page for the leptos_forge site
 #[derive(Debug, Default, Clone, Copy)]
-struct Main;
+pub struct Main;
 
 impl Section for Main {
     fn description(&self) -> &'static str {
         MAIN_DESCRIPTION
     }
-}
 
-/// Top level routes for the leptos_forge site
-pub const ROUTES: &[RouteDef] = &[
-    RouteDef::section::<Main>("/", "Leptos Forge", &[]),
-    RouteDef::header("guides", "GUIDES", setup::ROUTES),
-    RouteDef::header("documentation", "DOCUMENTATION", usage::ROUTES),
-    RouteDef::header("development", "DEVELOPMENT", &[
-        RouteDef::section::<Components>("components", "Components", components::ROUTES)
-    ])
-];
+    fn subroutes(&self) -> Vec<RouteDef> {
+        vec![]
+    }
+}

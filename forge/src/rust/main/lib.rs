@@ -3,7 +3,7 @@
 
 #![doc(test(attr(deny(unused))))]
 #![doc(test(attr(deny(dead_code))))]
-#![allow(dead_code)]
+// #![allow(dead_code)]
 
 #![deny(missing_docs)]
 #![deny(clippy::empty_docs)]

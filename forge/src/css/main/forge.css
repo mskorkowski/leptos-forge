@@ -85,6 +85,10 @@
   
 }
 
+/*
+* Container element which we can layout however you would like to which will
+* have a scrollable content potentially 
+*/
 @utility scrollbox {
   @apply relative;
 }
@@ -93,8 +97,16 @@
   @apply overflow-hidden;
 }
 
+/*
+* Scrollable element inside the scrollbox
+*/
 @utility scrollable {
   @apply absolute top-0 left-0 right-0 bottom-0 overflow-auto;
+}
+
+@utility relscrollable-* {
+  @apply relative;
+  max-heght: calc(---value(integer) * var(--spacing));
 }
 
 @utility forge-animate-once {
