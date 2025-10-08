@@ -21,6 +21,8 @@ pub enum MarkdownToken<'source> {
         story: Option<&'source str>,
         /// Length of matching text from the original Markdown source
         len: usize,
+        /// Wherever the control panel should be shown
+        controls: bool,
     },
     /// Chunk of the Markdown
     Markdown{
@@ -87,6 +89,49 @@ const MAX_TAG_SEQUENCE_SIZE_HEADER: usize = 8;
 ///    2. Output can be almost correct - just a bit of code fence at the start and end
 ///       of the code block
 ///    3. Anything in between - part of the page goes bonkers
+/// 
+/// ## Limitations of the `<Story />` tag parsing
+/// 
+/// > [!WARNING]
+/// >
+/// > Examples of Markdown code below are broken. They work due to bugs/limitations 
+/// > of the software today. Fixing the code so they will no longer work is planned
+/// > in the near future.
+/// >
+/// > We don't consider removing these bugs to be a breaking changes.
+/// 
+/// Due to the way the `<Story />` tag parsing is implemented there are some
+/// limitations/bugs
+/// 
+/// ### Parsing `of` attribute
+/// 
+/// If you write your story like this 
+/// 
+/// ```markdown
+/// <Story whatever="some value of="subpath/to/the/story" />
+/// ```
+/// 
+/// Then we will find the `of` attribute with `subpath/to/the/story` being path
+/// to the story.
+/// 
+/// ### Parsing boolean attributes
+/// 
+/// We currently support boolean attributes only in form of the attribute name
+/// 
+/// So only valid syntax for such attributes, for example `controls` looks like
+/// 
+/// ```markdown
+/// <Story of="subpath/to/story" controls />
+/// ```
+/// 
+/// Second issue comes from the way we look up for the boolean attributes. If you
+/// write a story tag
+/// 
+/// ```markdown
+/// <Story of="mechanism which controls the world" />
+/// ```
+/// 
+/// It will also enable controls for your story.
 pub struct MarkdownParser{
     /// List of matchers used to parse the markdown code
     matchers: Vec<Matcher>,
@@ -382,7 +427,6 @@ struct OfAttribute<'source> {
 /// Methods checks if at source[index] is the start of `of` attribute
 fn parse_of_attribute(source: &'_ str) -> Option<OfAttribute<'_>> {
     if source[..2].to_ascii_lowercase().starts_with("of") {
-        println!("Stats with of");
         let mut rest = source[2..].chars().enumerate();
 
         let mut current = rest.next();
@@ -395,7 +439,6 @@ fn parse_of_attribute(source: &'_ str) -> Option<OfAttribute<'_>> {
 
         if let Some((_, eq)) = current && 
            eq != '=' {
-            println!("Not an equal sign");
             return None;
         }
 
@@ -404,7 +447,6 @@ fn parse_of_attribute(source: &'_ str) -> Option<OfAttribute<'_>> {
         while let Some((_, char)) = current &&
                 char.is_whitespace()
         {
-            println!("Skipping whitespace again");
             current = rest.next();
         }
 
@@ -430,6 +472,81 @@ fn parse_of_attribute(source: &'_ str) -> Option<OfAttribute<'_>> {
     
 
     None
+}
+
+/// Searches for the boolean attribute in the `<Story />` tag
+/// 
+/// # Arguments
+/// 
+/// - **attribute** - the name of the attribute
+/// - **source** - content of the tag
+/// 
+/// # Limitations
+/// 
+/// Currently we are just searching for the `attribute` inside of the content
+/// of the `<Story />`. Assuming we are searching for `controls` attribute, if 
+/// you write your story tag like this
+/// 
+/// ```markdown
+/// 
+/// <Story of="my controls are/awesome" />
+/// 
+/// ```
+/// 
+/// You will also enable the controls panel
+fn parse_bool_attribute(attribute: &'_ str, source: &'_ str) -> bool {
+    let mut source = source;
+    while let Some(idx) = source.find(attribute) {
+
+        let start: usize = if idx == 0 {
+            // match is at the beginning of the source, so we don't have to check 
+            // the character before the attribute string
+            0
+        }
+        else {
+            idx - 1
+        };
+
+        let end = if idx + attribute.len() == source.len() { //we are at the last word in source
+            source.len()
+        }
+        else {
+            idx + attribute.len() + 1
+        };
+
+        let attribute_name = &source[start..end];
+        let mut attribute_chars = attribute_name.chars();
+        
+        if let Some(first_char) = attribute_chars.next() &&
+            (idx == 0 || first_char.is_whitespace()) {
+
+            // -1 for the first character which we already verified is a whitespace
+            // -1 for the last character which we still need to check is a whitespace
+            let mut attribute_chars = attribute_chars.skip(attribute_name.len() -1 -1); 
+
+            let last_char = attribute_chars.next();
+
+            if let Some(last_char) = last_char &&
+               last_char.is_whitespace() {
+                
+                return true;
+            }
+            else if end == source.len() {
+                return true;
+            }
+        }
+
+        source = &source[idx + attribute.len() ..];
+
+        while source.starts_with(attribute) {
+            // removes the regex case consecutive spellings of the attribute name
+            // `attribute(attribute)+`
+            source = &source[attribute.len() ..]; 
+        }
+
+    }
+
+    false
 }
 
 /// Finds an `of` attribute in the source
@@ -479,14 +596,16 @@ fn find_of_attribute(source: &'_ str) -> Option<&'_ str> {
 
 /// Reads the custom `<Story />` tag
 fn story<'source>(source: &'source str) -> Option<MarkdownToken<'source>> {
-    if source.starts_with("<Story ") {
+    if source.starts_with("<Story") {
         if let Some(end) = source.find("/>") {
-            let tag = &source["<Story ".len() .. end];
-            println!("Tag: '{tag}'");
+            let tag = &source["<Story".len() .. end];
             let story = find_of_attribute(tag);
+            let controls = parse_bool_attribute("controls", tag);
+
             return Some(MarkdownToken::Story{ 
                 story, 
-                len: end+2, 
+                len: end+2,
+                controls
             });
         }
         else {

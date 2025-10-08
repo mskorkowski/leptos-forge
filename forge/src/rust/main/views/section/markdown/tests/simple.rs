@@ -56,15 +56,17 @@ r####"## Kaboom
 /// A smoke test to check if we can handle a correctly formatted `<Story />` tag
 #[test]
 fn md_just_a_story() {
-    let markdown = "<Story of=\"aa/bb\" /><Story of='aa/bb'/>";
+    let markdown = "<Story of=\"aa/bb\" /><Story of='aa/bb' controls/>";
     let expected = vec![
         MarkdownToken::Story{ 
             story: Some("aa/bb"),
             len: 20, 
+            controls: false,
         },
         MarkdownToken::Story{ 
             story: Some("aa/bb"),
-            len: 19, 
+            len: 28, 
+            controls: true,
         }
     ];
 
