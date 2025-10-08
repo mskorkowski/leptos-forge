@@ -17,5 +17,5 @@ fn main() {
     let manifest_file = Utf8PathBuf::from_path_buf(cwd).unwrap().join("Cargo.toml");
 
     // Collate resources from the crate's dependencies.
-    collate_resources(&manifest_file).expect("There was an error during building of the resources");
+    collate_resources(&manifest_file).expect("There was an error during bundling of the resources");
 }
