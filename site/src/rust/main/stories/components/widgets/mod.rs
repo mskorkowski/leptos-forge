@@ -38,7 +38,7 @@ impl Section for Widgets {
     fn subroutes(&self) -> Vec<RouteDef> {
         vec![
             RouteDef::story::<BasicCodeareaStory>("codearea", "Codearea" ),
-            RouteDef::page::<BasicLogoStory>("logo", "Logo"),
+            RouteDef::story::<BasicLogoStory>("logo", "Logo"),
             RouteDef::story::<BasicTextFieldStory>("text_field", "TextField"),
             RouteDef::story::<BasicPasswordFieldStory>("password", "Password"),
             RouteDef::story::<BasicTextareaStory>("textarea", "Textarea"),

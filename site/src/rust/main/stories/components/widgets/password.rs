@@ -97,8 +97,8 @@ impl Story for BasicPasswordFieldStory {
 
     fn subroutes(&self) -> Vec<RouteDef> {
         vec![
-            RouteDef::page::<NonemptyPasswordFieldStory>("nonempty", "Nonempty"),
-            RouteDef::page::<NonemptyVisiblePasswordFieldStory>("visible", "Visible"),
+            RouteDef::story::<NonemptyPasswordFieldStory>("nonempty", "Nonempty"),
+            RouteDef::story::<NonemptyVisiblePasswordFieldStory>("visible", "Visible"),
         ]
     }
 }

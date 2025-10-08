@@ -115,7 +115,7 @@ impl Story for BasicLabelStory {
 
     fn subroutes(&self) -> Vec<RouteDef> {
         vec![
-            RouteDef::page::<InlineLabelStory>("inline", "InlineLabel"),
+            RouteDef::story::<InlineLabelStory>("inline", "InlineLabel"),
         ]
     }
 }

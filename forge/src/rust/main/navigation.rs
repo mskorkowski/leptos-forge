@@ -123,8 +123,10 @@ impl PathSpec {
         use PathSpec::*;
 
         match self {
-            Root => view!{ <Navigate to="/" label=label class="ml-6 border-l-0" location store/> }.into_any(),
-            Level1(seg1) => view!{ <Navigate to=format!("/{seg1}") label=label class="ml-6" location store/> }.into_any(),
+            // we are using `border-l-0!` as a hack to remove the left border which looks nicely when we use headers, but not so nice when we don't
+            Root => view!{ <Navigate to="/" label=label class="ml-6 border-l-0!" location store/> }.into_any(),
+            // we are using `border-l-0!` as a hack to remove the left border which looks nicely when we use headers, but not so nice when we don't
+            Level1(seg1) => view!{ <Navigate to=format!("/{seg1}") label=label class="ml-6 border-l-0!" location store/> }.into_any(),
             Level2(seg1, seg2) => view!{ <Navigate to=format!("/{seg1}/{seg2}") label=label class="ml-6 pl-6" location store/> }.into_any(),
             Level3(seg1, seg2, seg3) => view!{ <Navigate to=format!("/{seg1}/{seg2}/{seg3}") label=label class="ml-6 pl-9" location store/> }.into_any(),
             Level4(seg1, seg2, seg3, seg4) => view!{ <Navigate to=format!("/{seg1}/{seg2}/{seg3}/{seg4}") label=label class="ml-6 pl-12" location store/> }.into_any(),
@@ -156,28 +158,39 @@ pub enum RouteDef {
         /// 
         /// - **view** - wherever we should show the canvas.
         ///   
-        ///   Currently it probably doesn't make any sense to set this value to
-        ///   `false` to disable rendering of the component, but you can.
+        ///   Current embedding code hard codes this to true since it wouldn't
+        ///   make a lot of sense to do otherwise currently due to the fact that
+        ///   every embedding is on it's own.
+        /// 
         /// - **controls** - wherever we should show controls
         /// - **description** - wherever we should show description of the story
+        /// 
+        ///   Current version of the Markdown parser doesn't allow to set this
+        ///   value.
         /// 
         /// # Embedding in the section
         /// 
         /// Inside the Markdown returned from [Section::description] method
         /// you can add the `<Story />` tag. It has the following boolean attributes
         /// 
-        /// - **view**
         /// - **controls**
-        /// - **description**
+        /// 
         /// 
         /// The code below will enable all of the before mentioned attributes
         /// 
         /// ```markdown
         /// 
-        /// <Story of="path/to/the/substory" view controls description />
+        /// <Story of="path/to/the/substory" controls />
         /// 
         /// ```
+        /// 
+        /// 
         embedded: fn(view: bool, controls: bool, description: bool) -> AnyView,
+        /// Wherever this route should be hidden from the menu/router but still
+        /// provide to the story embedding resolution
+        /// 
+        /// hidden entry hides it's all children
+        private: bool,
     },
     /// Grouping for a set of routes without any path to be taken
     Header{
@@ -254,6 +267,14 @@ impl RouteDef{
                 routes.extend(
                     subroutes.
                         iter().
+                        filter(|r| {
+                            match r {
+                                RouteDef::Route { private , .. } => {
+                                    !private
+                                }
+                                _ => true, // I seriously don't understand what is should mean, but hey
+                            }
+                        }).
                         flat_map(|r| {
                             r.as_routes(my_path)
                         })
@@ -268,6 +289,14 @@ impl RouteDef{
                 routes.extend(
                     subroutes.
                         iter().
+                        filter(|r| {
+                            match r {
+                                RouteDef::Route { private , .. } => {
+                                    !private
+                                }
+                                _ => true, // I seriously don't understand what is should mean, but hey
+                            }
+                        }).
                         flat_map(|r| {
                             r.as_routes(my_path)
                         })
@@ -293,6 +322,14 @@ impl RouteDef{
                 views.extend(
                     subroutes.
                         iter().
+                        filter(|r| {
+                            match r {
+                                RouteDef::Route { private , .. } => {
+                                    !private
+                                }
+                                _ => true, // I seriously don't understand what is should mean, but hey
+                            }
+                        }).
                         flat_map(|r| {
                             r.as_menu_items(my_path, location, store)
                         })
@@ -313,6 +350,14 @@ impl RouteDef{
                 views.extend(
                     subroutes.
                         iter().
+                        filter(|r| {
+                            match r {
+                                RouteDef::Route { private , .. } => {
+                                    !private
+                                }
+                                _ => true, // I seriously don't understand what is should mean, but hey
+                            }
+                        }).
                         flat_map(|r| {
                             r.as_menu_items(my_path, location, store)
                         })
@@ -329,6 +374,7 @@ impl RouteDef{
     /// This story doesn't have any subseries defined
     /// 
     /// Alias for the `component` but without a subroutes argument
+    #[deprecated]
     pub fn page<S: 'static + Story + Default + Copy + ThreadSafe>(path: &'static str, label: &'static str) -> RouteDef {
         RouteDef::story::<S>(path, label)
     }
@@ -342,7 +388,32 @@ impl RouteDef{
             embedded: |view, controls, description| { view!{ 
                 <EmbeddedStory<S> view  controls description />
             }.into_any() },
-            subroutes: S::default().subroutes()
+            subroutes: S::default().subroutes(),
+            private: false,
+        }
+    }
+
+    /// Creates a new private route with a story and it's related sub-stories
+    /// 
+    /// Private story can't be routed into, but still can be embedded into the
+    /// section
+    /// 
+    /// It's useful when you need to embed the story in some super generic sections
+    /// which needs an interactive example but are not really a story of some
+    /// component.
+    /// 
+    /// You can also use it to add custom features for your documentation
+    /// which are not supported by the `leptos_forge`.
+    pub fn private<S: 'static + Story + Default + Copy + ThreadSafe>(path: &'static str, label: &'static str) -> RouteDef {
+        RouteDef::Route{ 
+            path,
+            label,
+            component: || view!{ <Story<S> /> }.into_any(),
+            embedded: |view, controls, description| { view!{ 
+                <EmbeddedStory<S> view  controls description />
+            }.into_any() },
+            subroutes: S::default().subroutes(),
+            private: true,
         }
     }
 
@@ -366,6 +437,7 @@ impl RouteDef{
             component: || { view!{ <section::Section<S> /> }.into_any() },
             embedded: |_, _, _| view!{ <Markdown src="> Embedding sections is not allowed"  /> }.into_any(),
             subroutes: S::default().subroutes(),
+            private: false,
         }
     }
 

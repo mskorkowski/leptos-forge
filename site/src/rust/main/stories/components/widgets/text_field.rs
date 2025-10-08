@@ -79,7 +79,7 @@ impl Story for BasicTextFieldStory {
 
     fn subroutes(&self) -> Vec<RouteDef> {
         vec![
-            RouteDef::page::<NonemptyTextFieldStory>("nonempty", "Nonempty"),
+            RouteDef::story::<NonemptyTextFieldStory>("nonempty", "Nonempty"),
         ]
     }
 }

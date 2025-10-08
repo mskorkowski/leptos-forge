@@ -251,7 +251,7 @@ impl Section for AddingTests {
 
     fn subroutes(&self) -> Vec<RouteDef> {
         vec![
-            RouteDef::page::<TestedCounterStory>("tested_counter_story", "Counter with tests"),
+            RouteDef::story::<TestedCounterStory>("tested_counter_story", "Counter with tests"),
         ]
     }
 }

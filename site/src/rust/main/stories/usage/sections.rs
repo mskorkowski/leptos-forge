@@ -96,6 +96,17 @@ const ROUTES: &[RouteDef] = &[
 ];
 ```
 
+## Embedding stories
+
+Syntax:
+
+`<Story of="path/to/the/substory" controls/>`
+
+| Attribute | Value | Description |
+|:-----------|:---------|:----------------|
+| of | string | Path to the substory, relative to the section where you embed the story. It's not possible to "go up in sections tree" |
+| controls | bool | Boolean attribute. If present it will enable rendering of the embedded controls panel |
+
 "############;
 
 

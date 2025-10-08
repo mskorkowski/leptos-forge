@@ -56,7 +56,7 @@ impl Story for BasicSwitchStory {
 
     fn subroutes(&self) -> Vec<RouteDef> {
         vec![
-            RouteDef::page::<ToggledOnSwitchStory>("toggled-on", "Toggled on"),
+            RouteDef::story::<ToggledOnSwitchStory>("toggled-on", "Toggled on"),
         ]
     }
 }
