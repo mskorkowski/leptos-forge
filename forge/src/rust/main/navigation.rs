@@ -17,6 +17,7 @@ use ui_components::primitives::markdown::Markdown;
 use utils_leptos::signal::ThreadSafe;
 
 use crate::views::story::EmbeddedStory;
+use crate::IntoStory;
 
 use super::story::Story;
 use super::views::story::Story;
@@ -369,18 +370,8 @@ impl RouteDef{
         
     }
 
-    /// Creates a new page route with a story
-    /// 
-    /// This story doesn't have any subseries defined
-    /// 
-    /// Alias for the `component` but without a subroutes argument
-    #[deprecated]
-    pub fn page<S: 'static + Story + Default + Copy + ThreadSafe>(path: &'static str, label: &'static str) -> RouteDef {
-        RouteDef::story::<S>(path, label)
-    }
-
     /// Creates a new page route with a story and it's related sub-stories
-    pub fn story<S: 'static + Story + Default + Copy + ThreadSafe>(path: &'static str, label: &'static str) -> RouteDef {
+    pub fn story<S: 'static + IntoStory + Default + Copy + ThreadSafe>(path: &'static str, label: &'static str) -> RouteDef {
         RouteDef::Route{ 
             path,
             label,
@@ -388,7 +379,7 @@ impl RouteDef{
             embedded: |view, controls, description| { view!{ 
                 <EmbeddedStory<S> view  controls description />
             }.into_any() },
-            subroutes: S::default().subroutes(),
+            subroutes: S::default().into_story().subroutes(),
             private: false,
         }
     }
@@ -404,7 +395,7 @@ impl RouteDef{
     /// 
     /// You can also use it to add custom features for your documentation
     /// which are not supported by the `leptos_forge`.
-    pub fn private<S: 'static + Story + Default + Copy + ThreadSafe>(path: &'static str, label: &'static str) -> RouteDef {
+    pub fn private<S: 'static + IntoStory + Default + Copy + ThreadSafe>(path: &'static str, label: &'static str) -> RouteDef {
         RouteDef::Route{ 
             path,
             label,
@@ -412,7 +403,7 @@ impl RouteDef{
             embedded: |view, controls, description| { view!{ 
                 <EmbeddedStory<S> view  controls description />
             }.into_any() },
-            subroutes: S::default().subroutes(),
+            subroutes: S::default().into_story().subroutes(),
             private: true,
         }
     }
