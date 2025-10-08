@@ -98,7 +98,7 @@ fn MarkdownTokenView<S: 'static + Section + Default + Copy + Send>(
             let src = format!("{}{text}", "#".repeat(level));
             view!{<Markdown src /> }.into_any()
         },
-        Story { story: Some(path), .. } => {
+        Story { story: Some(path), controls, .. } => {
             let path: Split<'_, &'static str> = path.split("/");
             if let Some(route) = navigate_subtree(path, &subroutes) {
                 match route {
@@ -106,7 +106,7 @@ fn MarkdownTokenView<S: 'static + Section + Default + Copy + Send>(
                         view!{<Markdown src="> Expected story, but header was found" /> }.into_any()
                     }
                     RouteDef::Route { embedded, .. } => {
-                        embedded(true, true, false)
+                        embedded(true, controls, false)
                     }
                 }
             }
