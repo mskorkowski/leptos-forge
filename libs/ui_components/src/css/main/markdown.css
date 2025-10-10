@@ -52,52 +52,55 @@
 }
 
 .markdown blockquote {
-    @apply border-l-forgeblue-800 border-solid bg-forgegray-100 mb-6 py-3 px-3;
-}
+    @apply border-l-forgeblue-800 border-solid border-l-3 bg-forgegray-100 mb-6 pl-10 pt-3 pb-3;
 
-.markdown blockquote.markdown-alert-note::before {
-    @apply text-forgeblue-700 font-bold;
-    content: "ℹ️ Note!";
-}
+    &:is(.markdown-alert-note, .markdown-alert-tip, .markdown-alert-important, .markdown-alert-warning, .markdown-alert-caution) {
+        @apply border-l-(--forge-markdown-admonish-color) border-solid border-l-3;
 
-.markdown blockquote.markdown-alert-note {
-    @apply border-l-forgeblue-700 border-solid border-l-3;
-}
+        &:has(> :not(:is(h1, h2, h3, h4, h5, h6, h7, h8):first-child))::before {
+            @apply font-bold block mb-3 mt-2 text-(--forge-markdown-admonish-color);
+            content: var(--forge-markdown-admonish-content-full);
+        }
 
-.markdown blockquote.markdown-alert-tip::before {
-    @apply text-green-700 font-bold;
-    content: "💡 Tip!";
-}
+        & > :is(h1, h2, h3, h4, h5, h6, h7, h8):first-child {
+            @apply inline-block ml-1 text-(--forge-markdown-admonish-color);
+        }
 
-.markdown blockquote.markdown-alert-tip {
-    @apply border-l-green-700 border-solid border-l-3;
-}
+        &:has(> :is(h1, h2, h3, h4, h5, h6, h7, h8):first-child)::before {
+            @apply font-bold inline-block;
+            content: var(--forge-markdown-admonish-content-icon);
+        }
+    }
 
-.markdown blockquote.markdown-alert-important::before {
-    @apply text-purple-700 font-bold;
-    content: "❕ IMPORTANT!";
-}
+    &.markdown-alert-note {
+        --forge-markdown-admonish-content-full: "ℹ️ Note!";
+        --forge-markdown-admonish-content-icon: "ℹ️";
+        --forge-markdown-admonish-color: var(--color-forgeblue-700);
+    }
 
-.markdown blockquote.markdown-alert-important {
-    @apply border-l-purple-700 border-solid border-l-3;
-}
+    &.markdown-alert-tip {
+        --forge-markdown-admonish-content-full: "💡 Tip!";
+        --forge-markdown-admonish-content-icon: "💡";
+        --forge-markdown-admonish-color: var(--color-green-700);
+    }
 
-.markdown blockquote.markdown-alert-warning::before {
-    @apply text-orange-500 font-bold;
-    content: "⚠️ WARNING!";
-}
+    &.markdown-alert-important {
+        --forge-markdown-admonish-content-full: "❕ IMPORTANT!";
+        --forge-markdown-admonish-content-icon: "❕";
+        --forge-markdown-admonish-color: var(--color-purple-700);
+    }
 
-.markdown blockquote.markdown-alert-warning {
-    @apply border-l-orange-500 border-solid border-l-3;
-}
+    &.markdown-alert-warning {
+        --forge-markdown-admonish-content-full: "⚠️ WARNING!";
+        --forge-markdown-admonish-content-icon: "⚠️";
+        --forge-markdown-admonish-color: var(--color-orange-500);
+    }
 
-.markdown blockquote.markdown-alert-caution::before {
-    @apply text-red-500 font-bold;
-    content: "🛑͏ CAUTION!";
-}
-
-.markdown blockquote.markdown-alert-caution {
-    @apply border-l-red-500 border-solid border-l-4;
+    &.markdown-alert-caution {
+        --forge-markdown-admonish-content-full: "🛑͏ CAUTION!";
+        --forge-markdown-admonish-content-icon: "🛑͏";
+        --forge-markdown-admonish-color: var(--color-red-500);
+    }
 }
 
 .markdown a {
