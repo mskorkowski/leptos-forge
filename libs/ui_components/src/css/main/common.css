@@ -106,7 +106,7 @@
 
 @utility relscrollable-* {
   @apply relative;
-  max-heght: calc(---value(integer) * var(--spacing));
+  max-height: calc(---value(integer) * var(--spacing));
 }
 
 @utility forge-animate-once {

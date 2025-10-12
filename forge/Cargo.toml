@@ -5,8 +5,7 @@ edition.workspace = true
 readme = "../README.md"
 build="src/rust/build/build.rs"
 include = [
-    "src/css/forge.css",
-    "src/resources/generated/leptos-forge.css",
+    "target/resources/leptos_forge/main.css",
     "src/resources/logo/logo.svg"
 ]
 
@@ -24,6 +23,8 @@ ui_components.workspace = true
 ui_layout.workspace = true
 
 [build-dependencies]
+cargo_metadata.workspace = true
+cargo-resources.workspace = true
 build-print.workspace = true
 
 [features]
@@ -33,8 +34,14 @@ default = []
 workspace = true
 
 [package.metadata.cargo_resources]
+resource_root = "target/resources"
+requires = [
+    { resource_name = "leptos_forge_ui_components/common.css" },
+    { resource_name = "leptos_forge_ui_components/markdown.css" },
+    { resource_name = "leptos_forge_ui_components/typography.css" },
+    { resource_name = "leptos_forge_ui_components/main.css" }
+]
 provides = [
-    { crate_path = "src/resources/generated/leptos-forge.css", output_path="leptos_forge/leptos_forge.css" },
-    { crate_path = "src/css/main/forge.css", output_path="leptos_forge/common.css"},
-    { crate_path = "src/resources/logo/logo.svg", output_path="leptos_forge/logo/logo.svg" }
+    { crate_path = "target/resources/leptos_forge/main.css", output_path="leptos_forge/main.css", resource_name="leptos_forge/main.css"},
+    { crate_path = "src/resources/logo/logo.svg", output_path="leptos_forge/logo/logo.svg", resource_name="leptos_forge/logo/logo.svg" },
 ]

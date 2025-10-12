@@ -6,15 +6,15 @@
     @apply pt-2 mb-6 font-bold text-forgeblue-950;
 }
 
-.markdown h1:first-child {
+.markdown > h1:first-child {
     @apply text-5xl md:text-6xl lg:text-7xl 2xl:text-8xl font-bold text-forgeblue-950;
 }
 
-.markdown h1:first-child:has(+ h1) {
+.markdown > h1:first-child:has(+ h1) {
     @apply inline-block;
 }
 
-.markdown h1:first-child + h1 {
+.markdown > h1:first-child + h1 {
     @apply inline-block text-4xl pt-0 text-forgegray-700 font-bold;
 }
 
@@ -57,19 +57,43 @@
     &:is(.markdown-alert-note, .markdown-alert-tip, .markdown-alert-important, .markdown-alert-warning, .markdown-alert-caution) {
         @apply border-l-(--forge-markdown-admonish-color) border-solid border-l-3;
 
-        &:has(> :not(:is(h1, h2, h3, h4, h5, h6, h7, h8):first-child))::before {
+        &:has(> :not(:is(h1, h2, h3, h4, h5, h6):first-child))::before {
             @apply font-bold block mb-3 mt-2 text-(--forge-markdown-admonish-color);
             content: var(--forge-markdown-admonish-content-full);
         }
 
-        & > :is(h1, h2, h3, h4, h5, h6, h7, h8):first-child {
+        & > :is(h1, h2, h3, h4, h5, h6):first-child {
             @apply inline-block ml-1 text-(--forge-markdown-admonish-color);
         }
 
-        &:has(> :is(h1, h2, h3, h4, h5, h6, h7, h8):first-child)::before {
+        & > :is(h1, h2, h3, h4, h5, h6):first-child::before {
             @apply font-bold inline-block;
             content: var(--forge-markdown-admonish-content-icon);
         }
+/* 
+        &:has(> h1:first-child)::before {
+            @apply text-4xl pt-1 mb-9;
+        }
+
+        &:has(> h2:first-child)::before {
+            @apply text-3xl;
+        }
+
+        &:has(> h3:first-child)::before {
+            @apply text-2xl; 
+        }
+
+        &:has(> h4:first-child)::before {
+            @apply text-xl;
+        }
+
+        &:has(> h5:first-child)::before {
+            @apply text-lg;
+        }
+
+        &:has(> h6:first-child)::before {
+            @apply forge-text-standard;
+        } */
     }
 
     &.markdown-alert-note {
@@ -79,7 +103,7 @@
     }
 
     &.markdown-alert-tip {
-        --forge-markdown-admonish-content-full: "💡 Tip!";
+        --forge-markdown-admonish-content-full: "💡 Tipsy!"; 
         --forge-markdown-admonish-content-icon: "💡";
         --forge-markdown-admonish-color: var(--color-green-700);
     }
@@ -170,7 +194,7 @@
 
 /* Based on https://dylanatsmith.com/wrote/styling-the-kbd-element */
 .markdown kbd {
-  /* Set up custom properties for colours so we can switch them in dark mode */
+  /* Set up custom properties for colors so we can switch them in dark mode */
   --kbd-color-background: var(--color-white);
   --kbd-color-border:     var(--color-gray-800);
   --kbd-color-text:       var(--color-gray-800);
@@ -230,7 +254,7 @@
   position: relative;
   top: -1px;
 
-  /* This is my favourite part of the whole thing. The key gets
+  /* This is my favorite part of the whole thing. The key gets
      “pushed” down and the shadow gets reduced so it looks like
      it might when typing on a physical keyboard. */
   &:hover {
