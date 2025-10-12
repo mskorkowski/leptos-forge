@@ -20,12 +20,12 @@ reactive_stores.workspace = true
 utils_leptos.workspace = true 
 
 ui_components.workspace = true
-ui_layout.workspace = true
 
 [build-dependencies]
 cargo_metadata.workspace = true
 cargo-resources.workspace = true
 build-print.workspace = true
+chrono.workspace = true
 
 [features]
 default = []

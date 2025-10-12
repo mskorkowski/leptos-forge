@@ -11,6 +11,7 @@
 #![doc(test(attr(deny(unused))))]
 #![doc(test(attr(deny(dead_code))))]
 
+pub mod layout;
 pub mod model;
 pub mod primitives;
 pub mod widgets;

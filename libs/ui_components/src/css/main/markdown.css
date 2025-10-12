@@ -103,7 +103,7 @@
     }
 
     &.markdown-alert-tip {
-        --forge-markdown-admonish-content-full: "💡 Tipsy!"; 
+        --forge-markdown-admonish-content-full: "💡 Tip!"; 
         --forge-markdown-admonish-content-icon: "💡";
         --forge-markdown-admonish-color: var(--color-green-700);
     }

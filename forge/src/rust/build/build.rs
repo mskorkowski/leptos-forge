@@ -10,12 +10,18 @@
 
 use std::thread::sleep;
 use std::time::Duration;
-use std::{env::current_dir};
+use std::env::current_dir;
 use std::process::Command;
 use cargo_metadata::camino::Utf8PathBuf;
 use cargo_resources::collate_resources;
-use build_print::{println, error, info, warn};
+use build_print::println;
+use build_print::error;
+use build_print::info;
+use build_print::warn;
+use chrono::DateTime;
+use chrono::Utc;
 use std::path::Path;
+use std::fs::metadata;
 use std::fs::OpenOptions;
 use std::io::prelude::*;
 
@@ -56,7 +62,8 @@ fn println<S: ToString>(s: S) {
 
 /// Entry point for the build script.
 fn main() {
-    info("leptos_forge: Running build script!");
+    info("leptos_forge: Running build script!\n");
+    info(format!("\tCurrent directory: {}", current_dir().expect("Must have some current directory, no?").display()));
     std::println!("cargo::rerun-if-changed=src/css/main");
     std::println!("cargo::rerun-if-changed=src/resources/logo");
     std::println!("cargo::rerun-if-changed=src/resources/generated");
@@ -99,6 +106,11 @@ fn main() {
             let _ = writeln!(f, "  ");
             let _ = f.sync_all();
         }
+
+        let metadata = metadata(path).expect("File should exist");
+        let modified = metadata.modified().expect("Update should exist. Maybe?");
+        let daytime: DateTime<Utc> = modified.into();
+        info(format!("\n\tFile: {} was modified at: {:?}", path.display(), daytime));
     }
 
     let cwd = current_dir().unwrap();
@@ -143,6 +155,18 @@ fn main() {
     }
     else {
         info("Tailwind run successfully");
+    }
+
+    let generated_files = vec![
+        "target/resources/leptos_forge/main.css"
+    ];
+
+    for file in generated_files {
+        let path = Path::new(file);
+        let metadata = metadata(path).expect("File should exist");
+        let modified = metadata.modified().expect("Update should exist. Maybe?");
+        let daytime: DateTime<Utc> = modified.into();
+        info(format!("\n\tFile: {} was modified at: {:?}", path.display(), daytime));
     }
 
     // Rerun collate resource so we provide a proper thing downstream
