@@ -6,8 +6,6 @@ use forge::Section;
 const RESOURCES: &str = r############"
 # Resources
 
-## Backstory
-
 Let's assume you have an image named `logo.png` in your project that you would
 like to show as the logo on top of the `leptos_forge` powered site. But this 
 image will also be used in the application you are building. This means both
@@ -16,13 +14,22 @@ the image file to both locations. If it's a single image file, then why not? But
 there are also icons you are using, and CSS files, and ... and so on. Copying
 the files simply doesn't scale well.
 
-## Solution
-
 To manage resources in the project across dependencies, `leptos_forge` uses the 
 [`cargo-resources`](https://github.com/PeteEvans/cargo-resources) crate.
 
-There are two parts to the usage of the `cargo-resources` crate: providing the
-resources and using them in your project.
+We've chosen the `cargo-resource` because 
+
+- it doesn't bloat wasm file
+- it nicely integrates with `cargo`
+- you can call it from build script
+- We found Manganis harder to integrate and currently requires `dx`
+
+## Using `cargo-resources`
+
+There are two parts to the usage of the `cargo-resources` crate: 
+
+1. providing the resources 
+2. using them in your project.
 
 ### Providing the Resources
 
@@ -42,7 +49,7 @@ Providing the resource has three steps.
    ```
 
    The `package.include` list contains additional files to be packaged in the 
-   Cargo crate and are not part of Rust code.
+   Cargo crate and are not part of Rust code. This is a standard Cargo part.
 
 3. Add the `package.metadata.cargo_resources.provides` section to your 
    `Cargo.toml` file. This section tells `cargo-resources` how to package the 
@@ -54,12 +61,19 @@ Providing the resource has three steps.
      { crate_path = "assets/images/logo.png", output_path="my-crate/images/logo.png", encoding="Bin" },
    ]
    ```
+
+   - `crate_path` - is the path in the crate source code where the file is. This
+     path must be present in the Cargo's `package.include`. Otherwise your 
+     dependencies won't have an ability to read your resource files since they
+     won't be a part of your crate.
+   - `output_path` is a path relative to the assets root directory. The location
+     off assets root directory is defined by the downstream crates
    
 ### Using the resources
 
 To use the resources there is an additional configuration still to be made. In
 the application's `Cargo.toml` you need to add `package.metadata.cargo_resources.resource_root`. 
-This is the path to directory relative to the `Cargo.toml` where the resources 
+This is the path to directory relative to the `Cargo.toml` where the assets 
 will be placed.
 
 ```toml
@@ -67,9 +81,11 @@ will be placed.
 resource_root = "target/resources"
 ```
 
-This gives the final path of the resources to be concatenation of the `resource_root`
-and the `output_path` of the specific resource. In the case of `logo.png` file 
-used in examples in this section it would be `target/resources/my-crate/images/logo.png`.
+To know where your resource would end up in the directory structure you need to
+concatenate the `resource_root` with the asset `output_path`.
+
+In the case of `logo.png` file used in examples in this section it would be 
+`target/resources/my-crate/images/logo.png`.
 
 > [!TIP]
 >
@@ -80,25 +96,19 @@ used in examples in this section it would be `target/resources/my-crate/images/l
 
 ### Running the application
 
-Before you run the application you need to run the `cargo resources` command or
-use the `build.rs` script. There are two ways to run the command for your
-`leptos_forge` based project.
+#### Manual bundling of the resources
 
-1. Let it be part of your build script (as seen in the setup)
-2. Run it from using `trunk`
-3. Manual running `cargo resources`
+Every time you wish to run the application, after you build it you need to run the 
 
-Both options have their advantages and disadvantages. Comparison is presented in
-the table below
+```bash
+cargo resources
+```
 
-|                        | Trunk                                       | Build script                                | Manual
-|:-----------------------|:--------------------------------------------|:--------------------------------------------|:--------------------------------------------|
-| Dependency version update | Your resources are updated automatically when you run `trunk` command | You must run `cargo build` prior to running `trunk`. We've seen the cases where `trunk` didn't respect the build script. | You must run it manually |
-| nix                    | `cargo_resources` is both a lib and cli application. Unfortunate part is that it's not packaged for `nix`. | Since it's a build script, `cargo-resources` will be build as a lib and linked to the build script which makes it trivial to use. | The same issue as trunk has. |
-| Other build configurations | This works only for trunk. Any other build setup will fail | This works for any setup which runs a `cargo build` internally. | You must not forget to run it |
+So the running involves three steps
 
-If you followed the [create project guide](/guides/create_project) then you have
-a build script configured already.
+1. build - build the application
+2. resources - bundle the resources
+3. run - run the app
 
 #### Using `trunk` to bundle the resources
 
@@ -106,7 +116,7 @@ In your `Trunk.toml` add the following hook:
 
 ```toml
 [[hooks]]
-stage = "pre_build"
+stage = "build"
 command = "cargo"
 command_arguments = ["resources"]
 ```
@@ -166,6 +176,23 @@ To use the Tailwind within the `leptos_forge` based application you need to
 adjust the Tailwind `main.css` file to include the necessary files and make
 small changes to the `index.html` file used by the `trunk`.
 
+## Adding dependencies for the build script
+
+In your `Cargo.toml` in the build-dependencies section add
+
+```toml
+[build-dependencies]
+...
+build-print.workspace = true
+```
+
+> [!NOTE]
+>
+> #### `build-print`
+>
+> `build-print` crate works around the `cargo` limitations on message formatting
+> and allows you to show more then `warning` and `error` (and hides the ugly syntax)
+
 ## Setting up `cargo-resources`
 
 I assume you have `cargo-resources` set up and running. If not you can follow
@@ -176,6 +203,75 @@ configuration
 ```toml
 [package.metadata.cargo_resources]
 resource_root = "target/resources"
+```
+
+## Building css
+
+In your build script after collating the resource add
+
+```
+/// Description in case of tailwind execution failure
+const TAILWIND_FAILURE: &str = "Build script can't find the tailwindcss cli. Please check your tailwind installation";
+
+/// Simple helper function to print the multiline string to the cargo output
+fn error<S: ToString>(s: S) {
+    for line in s.to_string().split("\n") {
+            error!("{line}");
+    }
+}
+
+/// Simple helper function to print the multiline string to the cargo output
+fn info<S: ToString>(s: S) {
+    for line in s.to_string().split("\n") {
+            info!("{line}");
+    }
+    
+}
+
+/// Simple helper function to print a normal multiline test to the cargo output
+fn println<S: ToString>(s: S) {
+    for line in s.to_string().split("\n") {
+            println!("{line}");
+    }
+}
+
+fn main() {
+    ...
+
+    // Collate resources from the crate's dependencies.
+    collate_resources(&manifest_file).expect("There was an error during bundling of the resources");
+
+    // After all dependencies are in place (inside of the `package.metadata.cargo_resources.resource_root`
+    // path we can run tailwind to build them
+
+    let output = Command::new("tailwindcss")
+        .args(vec![
+            "--input", "src/css/main/main.css",
+            "--output", "target/resources/leptos_forge_site/main.css",
+            "--optimize" // remove duplicated classes, ...
+        ])
+        .output()
+        .expect(TAILWIND_FAILURE);
+
+    if !output.status.success() {
+        println(format!("Tailwind Stopped with an {}", output.status));
+        error("");
+        error("--------[ STDOUT ]------------------------");
+        error("");
+        println(String::from_utf8_lossy(&output.stdout));
+        error("");
+        error("--------[ STDERR ]------------------------");
+        error("");
+        error(String::from_utf8_lossy(&output.stderr));
+
+    }
+    else {
+        info("[SITE] Tailwind run successfully");
+    }
+
+}
+
+
 ```
 
 ## Setting up Tailwind
@@ -208,13 +304,14 @@ be slightly adjusted compared to the [create project](/guides/create_project)
         <meta charset="UTF-8">
         <title>My leptos_forge site</title>
         <link data-trunk rel="copy-dir" href="target/resources" data-target-path="resources" />
-        <!-- <link data-trunk rel="css" href="target/resources/leptos_forge.css" /> -->      <!-- remove this line -->
-        <link data-trunk rel="tailwind-css" href="assets/css/main.css" />                    <!-- add this line -->
+        <link rel="stylesheet" href="/resources/leptos_forge_site/main.css" />
         <link data-trunk rel="rust" href="Cargo.toml"/>
     </head>
     <body></body>
 </html>
 ```
+
+
 
 "############;
 

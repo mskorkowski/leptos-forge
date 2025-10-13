@@ -68,18 +68,17 @@ will be overriding all of the methods.
 The rest of this document contains the detailed description about creating 
 meaningful stories.
 
-> [!INFO]
+> [!NOTE]
 >
-> We need to discuss the required traits: `Default`, `Clone`, and `Copy`.
+> #### Why do we need the `Default` trait?
 >
-> **Default**: You must implement the `Default` trait so there exists meaningful
-> initial state of the story. There is also the benefit of doing it this way
+> You must implement the `Default` trait so there exists meaningful
+> initial state of the story. There is added the benefit of doing it this way
 > you pass the story around as a type, which allows stories to be created lazy
-> way as you enter their story. The consequence of this is the we don't preserve
-> the state of the components between navigation.
+> way as you enter their story. 
 >
-> **Clone**: Inside of the story handling code, we must pass it across multiple
-> components. This requires 
+> The consequence of this is the we don't preserve the state of the components 
+> between navigation.
 
 ## Adding the view and controls
 

@@ -2,19 +2,27 @@
 //! [setup process][super::SETUP] and it's later refinement [`CounterStory`][super::refine_story::CounterStory] 
 //! 
 
-use forge::RouteDef;
+use testing_library_dom::fire_event;
+use testing_library_dom::get_by_text;
+use testing_library_dom::get_by_test_id;
+use testing_library_dom::MatcherOptions;
+use testing_library_dom::SelectorMatcherOptions;
+
 use leptos::prelude::*;
+use leptos::web_sys::MouseEvent;
+use leptos::web_sys::MouseEventInit;
+
+use utils_leptos::signal::URwSignal;
+use ui_components::widgets::field::TextField;
 
 use forge::play;
 use forge::Play;
-use forge::test_id;
+use forge::RouteDef;
 use forge::Section;
 use forge::Story;
+use forge::test_id;
 
-use testing_library_dom::get_by_test_id;
-use utils_leptos::signal::URwSignal;
-use testing_library_dom::MatcherOptions;
-use ui_components::widgets::field::TextField;
+
 
 /// description of the [Implement the first story][RefineCounterStory] section
 const ADDING_TESTS: &str = r#############"
@@ -28,8 +36,8 @@ we call them `plays`. To write tests, we will use
 [`testing-library-dom`](https://github.com/RustForWeb/testing-library), 
 a rewrite in Rust of the [JS TestingLibrary](https://testing-library.com).
 
-TestingLibrary has excellent [documentation about writing maintainable tests](https://testing-library.com/docs/)
-for your components, even if you don't use the `leptos_forge`.
+TestingLibrary has excellent [documentation about writing maintainable interaction tests](https://testing-library.com/docs/)
+for your components.
 
 `leptos_forge` has a built-in plays runner for your stories. You can run
 a test after entering a story. In this section, we will guide you on how
@@ -126,8 +134,15 @@ another function from `Story::plays`. This function should return a list of play
 where each play contains a number of steps.  
 
 ```rust  
+use leptos::web_sys::{MouseEvent, MouseEventInit};
+use testing_library_dom::{
+    get_by_text,
+    get_by_test_id, 
+    fire_event,
+    MatcherOptions,
+    SelectorMatcherOptions
+};
 use forge::{Play, play};  
-use testing_library_dom::{get_by_test_id, MatcherOptions};
 
 impl Story for TestedCounterStory {  
     ...  
@@ -145,7 +160,7 @@ impl Story for TestedCounterStory {
                     |_canvas, story| {  
                         story.message.set(COUNTER_PLAY_MESSAGE.to_string());  
                         story.threshold.set(COUNTER_PLAY_THRESHOLD);  
-                        story.value.set(COUNTER_PLAY_THRESHOLD - 1);  
+                        story.value.set(COUNTER_PLAY_THRESHOLD);  
                         Ok(())  
                     }  
                 )  
@@ -166,10 +181,24 @@ impl Story for TestedCounterStory {
                     }  
                 )  
                 .next(  
-                    "Increase the counter",  
-                    |_canvas, story| {  
-                        story.value.set(COUNTER_PLAY_THRESHOLD);  
-                        Ok(())  
+                    |canvas, _story| { 
+                        let Ok(button) = get_by_text(canvas, "+", SelectorMatcherOptions::default()) else {
+                            return Err("Can't find the increase button");
+                        };
+                        
+                        let mouse_event_init = MouseEventInit::new();
+                        mouse_event_init.set_bubbles(true);
+                        mouse_event_init.set_cancelable(true);
+
+                        let Ok(event) = MouseEvent::new_with_mouse_event_init_dict("click", &mouse_event_init) else {
+                            return Err("Can't create a click event");
+                        };
+                        
+                        let Ok(_) = fire_event(&button, &event) else {
+                            return Err("Event should be fired.");
+                        };
+
+                        Ok(()) 
                     }  
                 )  
                 .next(  
@@ -428,8 +457,23 @@ impl Story for TestedCounterStory {
                 ).
                 next(
                     "Increase the counter",
-                    |_canvas, story| { 
-                        story.value.set(COUNTER_PLAY_THRESHOLD+1);
+                    |canvas, _story| { 
+                        let Ok(button) = get_by_text(canvas, "+", SelectorMatcherOptions::default()) else {
+                            return Err("Can't find the increase button");
+                        };
+                        
+                        let mouse_event_init = MouseEventInit::new();
+                        mouse_event_init.set_bubbles(true);
+                        mouse_event_init.set_cancelable(true);
+
+                        let Ok(event) = MouseEvent::new_with_mouse_event_init_dict("click", &mouse_event_init) else {
+                            return Err("Can't create a click event");
+                        };
+                        
+                        let Ok(_) = fire_event(&button, &event) else {
+                            return Err("Event should be fired.");
+                        };
+
                         Ok(()) 
                     }
                 ).
