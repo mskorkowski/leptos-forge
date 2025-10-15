@@ -155,8 +155,10 @@ where
 
 /// List of states for a button which is shown in the password field
 #[derive(Debug, Clone, Copy)]
+#[derive(Default)]
 pub enum PasswordButtonStates {
     /// The password should be visible as the `*` in the password field
+    #[default]
     Hidden,
     /// The password should be shown as a plaintext
     Visible,
@@ -183,11 +185,5 @@ impl Next for PasswordButtonStates {
             Hidden => icondata::MdiEyeClosed,
             Visible => icondata::MdiEyeOutline,
         }
-    }
-}
-
-impl Default for PasswordButtonStates {
-    fn default() -> Self {
-        Self::Hidden
     }
 }
