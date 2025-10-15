@@ -57,17 +57,17 @@
     &:is(.markdown-alert-note, .markdown-alert-tip, .markdown-alert-important, .markdown-alert-warning, .markdown-alert-caution) {
         @apply border-l-(--forge-markdown-admonish-color) border-solid border-l-3;
 
-        &:has(> :not(:is(h1, h2, h3, h4, h5, h6):first-child))::before {
+        &:not(:has(> :is(h1, h2, h3, h4, h5, h6):first-child))::before {
             @apply font-bold block mb-3 mt-2 text-(--forge-markdown-admonish-color);
             content: var(--forge-markdown-admonish-content-full);
         }
 
         & > :is(h1, h2, h3, h4, h5, h6):first-child {
-            @apply inline-block ml-1 text-(--forge-markdown-admonish-color);
+            @apply inline-block text-(--forge-markdown-admonish-color);
         }
 
         & > :is(h1, h2, h3, h4, h5, h6):first-child::before {
-            @apply font-bold inline-block;
+            @apply inline-block mr-4;
             content: var(--forge-markdown-admonish-content-icon);
         }
 /* 
@@ -97,7 +97,7 @@
     }
 
     &.markdown-alert-note {
-        --forge-markdown-admonish-content-full: "ℹ️ Note!";
+        --forge-markdown-admonish-content-full: "ℹ️ Notes!";
         --forge-markdown-admonish-content-icon: "ℹ️";
         --forge-markdown-admonish-color: var(--color-forgeblue-700);
     }

@@ -187,8 +187,7 @@ build-print.workspace = true
 ```
 
 > [!NOTE]
->
-> #### `build-print`
+> ##### `build-print`
 >
 > `build-print` crate works around the `cargo` limitations on message formatting
 > and allows you to show more then `warning` and `error` (and hides the ugly syntax)
