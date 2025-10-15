@@ -19,6 +19,7 @@ use build_print::error;
 use build_print::info;
 use build_print::warn;
 use chrono::DateTime;
+use chrono::Local;
 use chrono::Utc;
 use std::path::Path;
 use std::fs::metadata;
@@ -64,9 +65,22 @@ fn println<S: ToString>(s: S) {
 fn main() {
     info("leptos_forge: Running build script!\n");
     info(format!("\tCurrent directory: {}", current_dir().expect("Must have some current directory, no?").display()));
+    info(format!("\tOUT_DIR:           {}", std::env::var("OUT_DIR").expect("Cargo doc requires that this variable is set: https://doc.rust-lang.org/cargo/reference/environment-variables.html#environment-variables-cargo-sets-for-build-scripts")));
+    info(format!("\tCARGO_FEATURE_CLEAN_RESOURCES: {:?}", std::env::var("CARGO_FEATURE_CLEAN_RESOURCES")));
+    info("");
+    // Print all environment variables.
+    // for (key, value) in std::env::vars() {
+    //     info(format!("\t\t{key}: {value}"));
+    // }
     std::println!("cargo::rerun-if-changed=src/css/main");
     std::println!("cargo::rerun-if-changed=src/resources/logo");
-    std::println!("cargo::rerun-if-changed=src/resources/generated");
+
+    // We remove the `target/resources` to force the resource resolution by the
+    // cargo-resources, no question asked
+
+    if std::env::var("CARGO_FEATURE_CLEAN_RESOURCES").is_ok() {
+        let _ = std::fs::remove_dir_all("target/resources");
+    }
 
     // # cargo-resources work around
     //
@@ -86,7 +100,7 @@ fn main() {
     // Create an empty file (if local resources are not present) and always 
     // collate twice (first for the seeding) and second to update the just generated
     // resources provided by this crate
-
+    //
     // Creating an empty file
     let generated_files = vec![
         "target/resources/leptos_forge/main.css"
@@ -110,6 +124,7 @@ fn main() {
         let metadata = metadata(path).expect("File should exist");
         let modified = metadata.modified().expect("Update should exist. Maybe?");
         let daytime: DateTime<Utc> = modified.into();
+        let daytime: DateTime<Local> = daytime.with_timezone(&Local);
         info(format!("\n\tFile: {} was modified at: {:?}", path.display(), daytime));
     }
 
@@ -119,6 +134,15 @@ fn main() {
 
     // Collate resources from the crate's dependencies so we can generate our 
     // own stuff
+    //
+    // We run it in the loop because `build script` could be run before all of
+    // the resources are available. 
+    //
+    // > Cargo runs the build script just before a build, but it's not expected
+    // > for Cargo build script to
+    // > 
+    // > 1. Generate resources which would be required downstream
+    // > 2. Depend on upstream resources built as described in point 1.
     while let Err(e) = collate_resources(&manifest_file) {
         if cnt > 100 {
             error("It was not possible to bundle the resources");
@@ -133,10 +157,12 @@ fn main() {
     }
 
     let output = Command::new("tailwindcss")
+        // .env("DEBUG", "*")
         .args(vec![
             "--input", "src/css/main/main.css",
             "--output", "target/resources/leptos_forge/main.css",
-            "--optimize"
+            "--optimize",
+            "--verbose"
         ])
         .output()
         .expect(TAILWIND_FAILURE);
@@ -155,10 +181,22 @@ fn main() {
     }
     else {
         info("Tailwind run successfully");
+        info("");
+        info("--------[ STDOUT ]------------------------");
+        info("");
+        info(String::from_utf8_lossy(&output.stdout));
+        info("");
+        info("--------[ STDERR ]------------------------");
+        info("");
+        info(String::from_utf8_lossy(&output.stderr));
     }
 
     let generated_files = vec![
-        "target/resources/leptos_forge/main.css"
+        "target/resources/leptos_forge/main.css",
+        "target/resources/leptos_forge_ui_components/common.css",
+        "target/resources/leptos_forge_ui_components/main.css",
+        "target/resources/leptos_forge_ui_components/markdown.css",
+        "target/resources/leptos_forge_ui_components/typography.css",
     ];
 
     for file in generated_files {
@@ -166,7 +204,8 @@ fn main() {
         let metadata = metadata(path).expect("File should exist");
         let modified = metadata.modified().expect("Update should exist. Maybe?");
         let daytime: DateTime<Utc> = modified.into();
-        info(format!("\n\tFile: {} was modified at: {:?}", path.display(), daytime));
+        let daytime: DateTime<Local> = daytime.with_timezone(&Local);
+        info(format!("\tFile: {} was modified at: {:?}", path.display(), daytime));
     }
 
     // Rerun collate resource so we provide a proper thing downstream

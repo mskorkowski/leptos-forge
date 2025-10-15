@@ -33,6 +33,9 @@ build-print.workspace = true
 
 [features]
 default = []
+clean_resources = [
+    "forge/clean_resources"
+]
 
 [lints]
 workspace = true

@@ -36,9 +36,18 @@ fn println<S: ToString>(s: S) {
 }
 
 fn main() {
+    info("Running build script!\n");
+    info(format!("\tCurrent directory: {}", current_dir().expect("Must have some current directory, no?").display()));
+    info(format!("\tOUT_DIR:           {}", std::env::var("OUT_DIR").expect("Cargo doc requires that this variable is set: https://doc.rust-lang.org/cargo/reference/environment-variables.html#environment-variables-cargo-sets-for-build-scripts")));
     std::println!("cargo::rerun-if-changed=src/css/main");
     std::println!("cargo::rerun-if-changed=src/js/loader");
     std::println!("cargo::rerun-if-changed=src/resources");
+
+    // We remove the `target/resources` to force the resource resolution by the
+    // cargo-resources, no question asked
+    if std::env::var("CARGO_FEATURE_CLEAN_RESOURCES").is_ok() {
+        let _ = std::fs::remove_dir_all("target/resources");
+    }
 
     let cwd = current_dir().unwrap();
     let manifest_file = Utf8PathBuf::from_path_buf(cwd).unwrap().join("Cargo.toml");
@@ -47,10 +56,13 @@ fn main() {
     collate_resources(&manifest_file).expect("[site] There was an error during bundling of the resources");
 
     let output = Command::new("tailwindcss")
+        // .env("DEBUG", "*")
         .args(vec![
             "--input", "src/css/main/main.css",
             "--output", "target/resources/leptos_forge_site/main.css",
-            "--optimize"
+            "--map",
+            "--optimize",
+            "--verbose"
         ])
         .output()
         .expect(TAILWIND_FAILURE);
@@ -68,6 +80,14 @@ fn main() {
 
     }
     else {
-        info("[SITE] Tailwind run successfully");
+        info("Tailwind run successfully");
+        info("");
+        info("--------[ STDOUT ]------------------------");
+        info("");
+        info(String::from_utf8_lossy(&output.stdout));
+        info("");
+        info("--------[ STDERR ]------------------------");
+        info("");
+        info(String::from_utf8_lossy(&output.stderr));
     }
 }
