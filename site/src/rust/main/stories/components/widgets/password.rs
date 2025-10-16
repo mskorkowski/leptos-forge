@@ -11,7 +11,6 @@ use utils_leptos::signal::URwSignal;
 
 use forge::Story;
 
-
 /// Description of the empty password field widget story
 const PASSWORD_FIELD_EMPTY_DESC: &str = r############"
 # PasswordField
@@ -46,14 +45,9 @@ pub struct BasicPasswordFieldStory {
 impl Default for BasicPasswordFieldStory {
     fn default() -> Self {
         let label: URwSignal<String> = URwSignal::new("Password".to_string());
-        let text: URwSignal<Password> = URwSignal::new(
-            Password::new(String::default())
-        );
+        let text: URwSignal<Password> = URwSignal::new(Password::new(String::default()));
 
-        BasicPasswordFieldStory{
-            label,
-            text,
-        }
+        BasicPasswordFieldStory { label, text }
     }
 }
 
@@ -73,16 +67,12 @@ impl Story for BasicPasswordFieldStory {
         let text: URwSignal<String> = self.text.map(
             |password| {
                 // Safety: User must be able to see password in the ui
-                unsafe {
-                    password.get_raw_password_value().to_string()
-                }
+                unsafe { password.get_raw_password_value().to_string() }
             },
             |password: &mut Password, new_password: String| {
                 // Safety: User must be able to update the password in the ui
-                unsafe {
-                    password.set_raw_password_value(new_password)
-                }
-            }
+                unsafe { password.set_raw_password_value(new_password) }
+            },
         );
 
         view! {
@@ -138,14 +128,10 @@ pub struct NonemptyPasswordFieldStory {
 impl Default for NonemptyPasswordFieldStory {
     fn default() -> Self {
         let label: URwSignal<String> = URwSignal::new("Password".to_string());
-        let text: URwSignal<Password> = URwSignal::new(
-            Password::new("simplePassword123".to_string())
-        );
+        let text: URwSignal<Password> =
+            URwSignal::new(Password::new("simplePassword123".to_string()));
 
-        NonemptyPasswordFieldStory{
-            label,
-            text,
-        }
+        NonemptyPasswordFieldStory { label, text }
     }
 }
 
@@ -165,16 +151,12 @@ impl Story for NonemptyPasswordFieldStory {
         let text: URwSignal<String> = self.text.map(
             |password| {
                 // Safety: User must be able to see password in the ui
-                unsafe {
-                    password.get_raw_password_value().to_string()
-                }
+                unsafe { password.get_raw_password_value().to_string() }
             },
             |password: &mut Password, new_password: String| {
                 // Safety: User must be able to update the password in the ui
-                unsafe {
-                    password.set_raw_password_value(new_password)
-                }
-            }
+                unsafe { password.set_raw_password_value(new_password) }
+            },
         );
 
         view! {
@@ -223,14 +205,10 @@ pub struct NonemptyVisiblePasswordFieldStory {
 impl Default for NonemptyVisiblePasswordFieldStory {
     fn default() -> Self {
         let label: URwSignal<String> = URwSignal::new("Password".to_string());
-        let text: URwSignal<Password> = URwSignal::new(
-            Password::new("simplePassword123".to_string())
-        );
+        let text: URwSignal<Password> =
+            URwSignal::new(Password::new("simplePassword123".to_string()));
 
-        NonemptyVisiblePasswordFieldStory{
-            label,
-            text,
-        }
+        NonemptyVisiblePasswordFieldStory { label, text }
     }
 }
 
@@ -250,16 +228,12 @@ impl Story for NonemptyVisiblePasswordFieldStory {
         let text: URwSignal<String> = self.text.map(
             |password| {
                 // Safety: User must be able to see password in the ui
-                unsafe {
-                    password.get_raw_password_value().to_string()
-                }
+                unsafe { password.get_raw_password_value().to_string() }
             },
             |password: &mut Password, new_password: String| {
                 // Safety: User must be able to update the password in the ui
-                unsafe {
-                    password.set_raw_password_value(new_password)
-                }
-            }
+                unsafe { password.set_raw_password_value(new_password) }
+            },
         );
 
         view! {

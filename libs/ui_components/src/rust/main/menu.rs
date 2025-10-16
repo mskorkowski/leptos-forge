@@ -4,8 +4,8 @@
 
 use std::mem::MaybeUninit;
 
-use leptos::prelude::*;
 use leptos::ev::MouseEvent;
+use leptos::prelude::*;
 use leptos_node_ref::AnyNodeRef;
 use leptos_router::components::A;
 use reactive_stores::Patch;
@@ -20,10 +20,10 @@ use utils_leptos::stores::stored_ref::StoredRef;
 #[component]
 pub fn Menu(
     /// Elements in the menu
-    /// 
-    /// Each element of the menu will be wrapped with a `li` tag. So if you would like to 
+    ///
+    /// Each element of the menu will be wrapped with a `li` tag. So if you would like to
     /// create a complex element with then you must wrap it so it will have single parent.
-    children: ChildrenFragment
+    children: ChildrenFragment,
 ) -> impl IntoView {
     let children = children()
         .nodes
@@ -31,7 +31,7 @@ pub fn Menu(
         .map(|child| view! { <li>{child}</li> })
         .collect::<Vec<_>>();
 
-    view!{
+    view! {
         <nav class="mt-4">
           <ul>{ children }</ul>
         </nav>
@@ -52,7 +52,6 @@ pub fn Navigate<'a, S: ToString + ThreadSafe + Clone>(
     /// current location
     store: Store<MenuState>,
 ) -> impl IntoView {
-    
     let div = AnyNodeRef::new();
 
     let highlight = ("font-bold", "text-forgegray-50", "border-l-forgegray-50");
@@ -63,18 +62,15 @@ pub fn Navigate<'a, S: ToString + ThreadSafe + Clone>(
         let to_string = to.to_string();
 
         #[allow(unused_assignments)] // this warning is
-                                     // 
-                                     // 1. related to the effect variable, and talks about it not being read in the
-                                     //    Navigate component function itself
-                                     // 2. false since we move effect into the effect callback
-
+        //
+        // 1. related to the effect variable, and talks about it not being read in the
+        //    Navigate component function itself
+        // 2. false since we move effect into the effect callback
         if to_string == location {
-            store.last_selected_item().patch(
-                Some(LastSelectedItem{
-                    to: to_string,
-                    menu_item: div.into()
-                })
-            );
+            store.last_selected_item().patch(Some(LastSelectedItem {
+                to: to_string,
+                menu_item: div.into(),
+            }));
 
             // Safety: This should be hacky but safe way since we are reading the `effect` variable
             // only after moving it into the effect callback, so it must become initialized before
@@ -83,38 +79,35 @@ pub fn Navigate<'a, S: ToString + ThreadSafe + Clone>(
             // Our goal here is to drop the effect after first successful firing since it won't be
             // needed later
             #[allow(unsafe_code)]
-            let mut effect: Effect<LocalStorage> = unsafe{ *MaybeUninit::zeroed().assume_init_mut() };
+            let mut effect: Effect<LocalStorage> =
+                unsafe { *MaybeUninit::zeroed().assume_init_mut() };
 
             effect = {
                 Effect::watch(
-                    move || div.get(), 
+                    move || div.get(),
                     move |element, _, _| {
                         if element.is_some() {
                             let last_selected_item = store.last_selected_item().get_untracked();
                             let to_string = to.to_string();
-                            if let Some(last_selected_item) = last_selected_item &&
-                                last_selected_item.to == to_string 
+                            if let Some(last_selected_item) = last_selected_item
+                                && last_selected_item.to == to_string
                             {
-                                store.last_selected_item().patch(
-                                    Some(LastSelectedItem{
-                                        to: to_string,
-                                        menu_item: div.into()
-                                    })
-                                );
+                                store.last_selected_item().patch(Some(LastSelectedItem {
+                                    to: to_string,
+                                    menu_item: div.into(),
+                                }));
 
                                 effect.stop();
                                 effect.dispose();
                             }
-
                         }
-                    }, 
-                    true
+                    },
+                    true,
                 )
             };
 
             format!("{} {} {} {class}", highlight.0, highlight.1, highlight.2)
-        }
-        else {
+        } else {
             class.to_string()
         }
     };
@@ -132,28 +125,23 @@ pub fn Navigate<'a, S: ToString + ThreadSafe + Clone>(
                     use_swap_class(last_selected_item.menu_item, highlight, normal);
                     use_swap_class(div, normal, highlight);
 
-                    store.last_selected_item().patch(
-                        Some(LastSelectedItem{
-                            to,
-                            menu_item: div.into()
-                        })
-                    );
+                    store.last_selected_item().patch(Some(LastSelectedItem {
+                        to,
+                        menu_item: div.into(),
+                    }));
                 }
-            }
-            else {
+            } else {
                 use_swap_class(div, normal, highlight);
 
-                store.last_selected_item().patch(
-                    Some(LastSelectedItem{
-                        to,
-                        menu_item: div.into()
-                    })
-                );
+                store.last_selected_item().patch(Some(LastSelectedItem {
+                    to,
+                    menu_item: div.into(),
+                }));
             }
         }
     };
 
-    let link_class = view!{
+    let link_class = view! {
         <{..} class="hover:text-forgeblue-300" />
     };
 
@@ -169,33 +157,28 @@ pub fn Navigate<'a, S: ToString + ThreadSafe + Clone>(
 pub fn MenuHeader(label: &'static str, class: &'static str) -> impl IntoView {
     let class = format!("{class} ml-6 pb-2 pt-8 font-bold text-forgegray-400");
 
-    view!{
+    view! {
         <div class=class>{label}</div>
     }
 }
 
 /// Last item which was selected from the menu
 #[derive(Debug, Clone)]
-struct LastSelectedItem{
+struct LastSelectedItem {
     /// Path where last selected item was routing
-    /// 
+    ///
     /// We use it to detect the case when user is routing second time to the same path
     /// so we don't blink the highlighting
     to: String,
     /// Node reference to the last selected item in the menu.
-    /// 
+    ///
     /// This allows us to adjust the classes of the menu item without knowing which exactly
     /// element we are dealing with (as long, as we are not messing with the store state)
     menu_item: StoredRef,
 }
 
 impl PatchField for LastSelectedItem {
-    fn patch_field(
-        &mut self,
-        new: Self,
-        path: &StorePath,
-        notify: &mut dyn FnMut(&StorePath),
-    ) {
+    fn patch_field(&mut self, new: Self, path: &StorePath, notify: &mut dyn FnMut(&StorePath)) {
         if self.to != new.to || self.menu_item == StoredRef::Empty {
             *self = new;
             notify(path);
@@ -206,7 +189,7 @@ impl PatchField for LastSelectedItem {
 /// State of the menu
 
 #[derive(Debug, Store, Patch)]
-pub struct MenuState{
+pub struct MenuState {
     /// Provides information about the last item which was selected in the menu
     last_selected_item: Option<LastSelectedItem>,
 }
@@ -215,7 +198,7 @@ impl MenuState {
     /// Create a new instance of [MenuState]
     #[allow(clippy::new_without_default)] // I expect the `new` to grow with menu configuration so let's skip this
     pub fn new() -> Self {
-        Self{
+        Self {
             last_selected_item: None,
         }
     }

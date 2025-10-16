@@ -3,14 +3,14 @@
 use leptos::prelude::*;
 
 use crate::model::Password;
-use crate::primitives::input::button::ClearInputButton;
-use crate::primitives::input::button::ToggleInputButton;
-use crate::primitives::input::button::PasswordButtonStates;
-use crate::primitives::input::CodeareaInput;
 use crate::primitives::input::BlobFileInput;
+use crate::primitives::input::CodeareaInput;
 use crate::primitives::input::PasswordInput;
 use crate::primitives::input::TextInput;
 use crate::primitives::input::TextareaInput;
+use crate::primitives::input::button::ClearInputButton;
+use crate::primitives::input::button::PasswordButtonStates;
+use crate::primitives::input::button::ToggleInputButton;
 use crate::primitives::label::InlineFieldLabel;
 use crate::primitives::label::Readonly;
 use crate::primitives::label::TextFieldLabel;
@@ -24,7 +24,7 @@ fn no_default_value() -> Option<String> {
 }
 
 /// TextField widget with label
-/// 
+///
 /// 1. If field doesn't have any value then label will be displayed as the placeholder
 /// 2. If field receives a focus or value then label will move out of the field to the top left corner
 /// 3. If field has value then label will be displayed at the top left corner
@@ -43,34 +43,29 @@ pub fn TextField<S1: ToString>(
     #[prop(optional,default=no_default_value)]
     default: fn() -> Option<String>,
 ) -> impl IntoView {
-
     let clear = URwSignal::new(false);
 
-    Effect::new(
-        move ||{
-            if clear.get() && !text.get_untracked().is_empty() {
-                if let Some(default) = default() {
-                    text.set(default.to_string());
-                }
-                else {
-                    text.set(String::default());
-                }
-                clear.set(false);
+    Effect::new(move || {
+        if clear.get() && !text.get_untracked().is_empty() {
+            if let Some(default) = default() {
+                text.set(default.to_string());
+            } else {
+                text.set(String::default());
             }
+            clear.set(false);
         }
-    );
+    });
 
     let clear_button_visibility = Signal::derive(move || {
         let text = text.get();
         if let Some(default) = default() {
             default != text
-        }
-        else {
+        } else {
             !text.is_empty()
         }
     });
 
-    view!{
+    view! {
         <div class="leptos-forge-field-box relative pt-8">
             <ClearInputButton clear={clear.write_only()} show={clear_button_visibility} />
             <TextInput id={id.to_string()} text=text />
@@ -91,7 +86,7 @@ pub fn Textarea(
     /// Id of the textarea
     id: &'static str,
 ) -> impl IntoView {
-    view!{
+    view! {
         <div class="leptos-forge-field-box relative pt-8">
             <TextareaInput id=id text=text />
             <TextFieldLabel for_id=id text=label/>
@@ -111,7 +106,7 @@ pub fn Codearea(
     /// Id of the textarea
     id: &'static str,
 ) -> impl IntoView {
-    view!{
+    view! {
         <div class="leptos-forge-field-box relative pt-8">
             <CodeareaInput id=id text=text />
             <TextFieldLabel for_id=id text=label/>
@@ -131,7 +126,7 @@ pub fn BlobFile(
     /// if of the file input
     id: &'static str,
 ) -> impl IntoView {
-    view!{
+    view! {
         <div class="leptos-forge-field-box relative pt-8">
             <BlobFileInput id=id file=file />
             <TextFieldLabel for_id=id text=label force_z_index=-10 />
@@ -140,7 +135,7 @@ pub fn BlobFile(
 }
 
 /// Password field widget with label
-/// 
+///
 /// 1. If field doesn't have any value then label will be displayed as the placeholder
 /// 2. If field receives a focus or value then label will move out of the field to the top left corner
 /// 3. If field has value then label will be displayed at the top left corner
@@ -159,10 +154,9 @@ pub fn PasswordField<S: ToString>(
     /// Id of the text field
     id: S,
 ) -> impl IntoView {
-
     // let state = URwSignal::new(PasswordButtonStates::default());
-   
-    view!{
+
+    view! {
         <div class="leptos-forge-field-box relative pt-8">
             <ToggleInputButton<PasswordButtonStates> state=state show={true} />
             <PasswordInput id={id.to_string()} password=password state=state/>
@@ -177,7 +171,7 @@ pub fn PasswordField<S: ToString>(
 #[component]
 pub fn SwitchField<S: ToString>(
     /// Value of the switch
-    /// 
+    ///
     /// If `true` switch will be moved to the left and marked as active (light blue background)
     /// If `false` switch will be moved to the right and marked as inactive (dark grey background)
     #[prop(into)]
@@ -188,25 +182,25 @@ pub fn SwitchField<S: ToString>(
     /// Id of the text field
     id: S,
 ) -> impl IntoView {
-    view!{
+    view! {
         <div class="leptos-forge-field-box relative pt-8">
-            
+
             <InlineFieldLabel for_id={id.to_string()} text=label/>
             <Switch
                 id={id.to_string()}
-                value=value 
+                value=value
             />
         </div>
     }
 }
 
 /// Readonly field with label
-/// 
+///
 /// 1. Label will be shown on the left hand side of the field
 #[component]
 pub fn ReadonlyField<S: ToString>(
     /// Value of the switch
-    /// 
+    ///
     /// If `true` switch will be moved to the left and marked as active (light blue background)
     /// If `false` switch will be moved to the right and marked as inactive (dark grey background)
     #[prop(into)]
@@ -217,7 +211,7 @@ pub fn ReadonlyField<S: ToString>(
     /// Id of the text field
     id: S,
 ) -> impl IntoView {
-    view!{
+    view! {
         <div class="leptos-forge-field-box relative pt-8">
             <InlineFieldLabel for_id={id.to_string()} text=label/>
             <Readonly id={id.to_string()} value=value />

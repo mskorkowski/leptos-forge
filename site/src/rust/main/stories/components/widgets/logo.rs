@@ -1,5 +1,5 @@
-//! Stories about logo 
-//! 
+//! Stories about logo
+//!
 
 use leptos::prelude::*;
 
@@ -31,10 +31,7 @@ impl Default for BasicLogoStory {
     fn default() -> Self {
         let label: URwSignal<String> = URwSignal::new("Alternative text about logo".to_string());
         let file: URwSignal<String> = URwSignal::new(String::new());
-        BasicLogoStory{
-            label,
-            file
-        }
+        BasicLogoStory { label, file }
     }
 }
 
@@ -56,7 +53,7 @@ impl Story for BasicLogoStory {
 
         view! {
             <BlobFile id="leptos-forge-1-image-upload" label="Select an image" file=file/>
-            <TextField text=label label="Alternative text" id="leptos-forge-2-alt-text"/> 
+            <TextField text=label label="Alternative text" id="leptos-forge-2-alt-text"/>
         }
     }
 

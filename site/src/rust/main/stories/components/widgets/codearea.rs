@@ -3,8 +3,8 @@
 use forge::RouteDef;
 use leptos::prelude::*;
 
-use ui_components::widgets::field::TextField;
 use ui_components::widgets::field::Codearea;
+use ui_components::widgets::field::TextField;
 use utils_leptos::signal::URwSignal;
 
 use forge::Story;
@@ -45,10 +45,7 @@ impl Default for BasicCodeareaStory {
         let label: URwSignal<String> = URwSignal::new("Codearea label".to_string());
         let text: URwSignal<String> = URwSignal::new("".to_string());
 
-        BasicCodeareaStory{
-            label,
-            text,
-        }
+        BasicCodeareaStory { label, text }
     }
 }
 
@@ -77,9 +74,9 @@ impl Story for BasicCodeareaStory {
     }
 
     fn subroutes(&self) -> Vec<RouteDef> {
-        vec![
-            RouteDef::story::<NonemptyCodeareaStory>("nonempty", "Nonempty"),
-        ]
+        vec![RouteDef::story::<NonemptyCodeareaStory>(
+            "nonempty", "Nonempty",
+        )]
     }
 }
 
@@ -120,10 +117,7 @@ impl Default for NonemptyCodeareaStory {
         let label: URwSignal<String> = URwSignal::new("Text field label".to_string());
         let text: URwSignal<String> = URwSignal::new("Text field value".to_string());
 
-        NonemptyCodeareaStory{
-            label,
-            text,
-        }
+        NonemptyCodeareaStory { label, text }
     }
 }
 

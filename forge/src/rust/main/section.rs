@@ -1,10 +1,10 @@
 //! Trait for grouping the [stories][Story] together
-//! 
+//!
 
 use crate::RouteDef;
 
 /// Description of the [Section] shown when you don't implement a description
-/// 
+///
 /// When you add section into your `leptos_forge` application it will show up in the UI
 /// as the description.
 const SECTION_DESC: &str = r#############"
@@ -60,15 +60,14 @@ impl Section for MySection {
 "#############;
 
 /// Section describing big chunk of the UI components
-/// 
+///
 /// Sections contain only Markdown text.
-pub trait Section: Default { 
-    // 
+pub trait Section: Default {
+    //
     //  Things to update when changing the API
     //
     //  - **`usage/section`** - document the usage of the Section on the site.
-    // 
-
+    //
 
     /// Function returns the text of the section
     fn description(&self) -> &'static str {

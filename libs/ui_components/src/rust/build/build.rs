@@ -1,30 +1,32 @@
 //! Build script for leptos_forge_ui_components
 
+use build_print::error;
+use build_print::info;
+use build_print::println;
 use std::process::Command;
-use build_print::{println, error, info};
 
 /// Description in case of tailwind execution failure
-const TAILWIND_FAILURE: &str = "Build script can't find the tailwindcss cli. Please check your tailwind installation";
+const TAILWIND_FAILURE: &str =
+    "Build script can't find the tailwindcss cli. Please check your tailwind installation";
 
 /// Simple helper function to print the multiline string to the cargo output
 fn error<S: ToString>(s: S) {
     for line in s.to_string().split("\n") {
-            error!("{line}");
+        error!("{line}");
     }
 }
 
 /// Simple helper function to print the multiline string to the cargo output
 fn info<S: ToString>(s: S) {
     for line in s.to_string().split("\n") {
-            info!("{line}");
+        info!("{line}");
     }
-    
 }
 
 /// Simple helper function to print a normal multiline test to the cargo output
 fn println<S: ToString>(s: S) {
     for line in s.to_string().split("\n") {
-            println!("{line}");
+        println!("{line}");
     }
 }
 
@@ -33,9 +35,11 @@ fn main() {
 
     let output = Command::new("tailwindcss")
         .args(vec![
-            "--input", "src/css/main/main.css",
-            "--output", "target/resources/leptos_forge_ui_components/main.css",
-            "--optimize"
+            "--input",
+            "src/css/main/main.css",
+            "--output",
+            "target/resources/leptos_forge_ui_components/main.css",
+            "--optimize",
         ])
         .output()
         .expect(TAILWIND_FAILURE);
@@ -50,9 +54,7 @@ fn main() {
         error("--------[ STDERR ]------------------------");
         error("");
         error(String::from_utf8_lossy(&output.stderr));
-
-    }
-    else {
+    } else {
         info("[UI_COMPONENTS] Tailwind run successfully");
     }
 }

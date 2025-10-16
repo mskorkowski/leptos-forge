@@ -1,24 +1,24 @@
 //! Generic implementation of the [RwSignal] to make it more useful for writing applications
-//! 
+//!
 //! Author of leptos thinks RwSignal can be confusing, I say it it's a developer responsibility to not make it
 //! confusing by:
-//! 
+//!
 //! 1. Naming stuff correctly
 //! 2. Writing documentation that explains what the signal does and how to use it
 //! 3. Believing  in the intelligence of the user (that might be somewhat questionable from time to time, I agree)
-//! 
+//!
 
 use std::panic::Location;
 
-use leptos::attr::any_attribute::AnyAttribute;
 use leptos::attr::Attribute;
 use leptos::attr::AttributeValue;
-use leptos::prelude::guards::ReadGuard;
+use leptos::attr::any_attribute::AnyAttribute;
 use leptos::prelude::Track;
+use leptos::prelude::guards::ReadGuard;
 use leptos::tachys::html::property::IntoProperty;
 use leptos::tachys::hydration::Cursor;
-use leptos::tachys::reactive_graph::bind::IntoSplitSignal;
 use leptos::tachys::reactive_graph::RenderEffectState;
+use leptos::tachys::reactive_graph::bind::IntoSplitSignal;
 use leptos::tachys::renderer::types::Element;
 use leptos::tachys::ssr::StreamBuilder;
 use leptos::tachys::view::Mountable;
@@ -35,22 +35,22 @@ use reactive_stores::Subfield;
 
 use reactive_graph::effect::RenderEffect;
 use reactive_graph::owner::SyncStorage;
-use reactive_graph::traits::Get;
+use reactive_graph::signal::signal;
 use reactive_graph::traits::DefinedAt;
 use reactive_graph::traits::Dispose;
+use reactive_graph::traits::Get;
 use reactive_graph::traits::ReadUntracked;
 use reactive_graph::traits::Set;
-use reactive_graph::traits::With;
 use reactive_graph::traits::Update;
+use reactive_graph::traits::With;
 use reactive_graph::wrappers::read::Signal;
-use reactive_graph::wrappers::write::SignalSetter;
 use reactive_graph::wrappers::read::SignalReadGuard;
-use reactive_graph::signal::signal;
+use reactive_graph::wrappers::write::SignalSetter;
 use utils::prelude::ThreadSafe;
 
 /// Signal which allows reading and writing a value
-/// 
-/// You should never, ever create an RwSignal which reads from one value and writes to the other. I consider 
+///
+/// You should never, ever create an RwSignal which reads from one value and writes to the other. I consider
 /// you to be warned.
 #[derive(Debug)]
 pub struct URwSignal<T>
@@ -65,7 +65,7 @@ where
     write_signal: SignalSetter<T>,
 }
 
-impl<T> Clone for URwSignal<T> 
+impl<T> Clone for URwSignal<T>
 where
     T: ThreadSafe,
 {
@@ -74,29 +74,25 @@ where
     }
 }
 
-impl<T> Copy for URwSignal<T> 
-where 
-    T: ThreadSafe,
-{}
+impl<T> Copy for URwSignal<T> where T: ThreadSafe {}
 
-
-impl<T> URwSignal<T> 
+impl<T> URwSignal<T>
 where
-    T: ThreadSafe
+    T: ThreadSafe,
 {
     /// Creates a new RwSignal with initial value `initial`
     #[track_caller]
     pub fn new(initial: T) -> Self {
         let (read, write) = signal(initial);
-        Self { 
+        Self {
             defined_at: Location::caller(),
-            read_signal: read.into(), 
+            read_signal: read.into(),
             write_signal: write.into(),
         }
     }
 }
 
-impl<T> URwSignal<T> 
+impl<T> URwSignal<T>
 where
     T: ThreadSafe + Clone,
 {
@@ -110,25 +106,20 @@ where
         self.write_signal
     }
 
-
     /// Transforms signal of T into signal of A
-    /// 
+    ///
     /// Allows consistent read/write with the derived URwSignal
     #[track_caller]
     pub fn map<A>(
         &self,
         towards: impl Fn(&T) -> A + Send + Sync + 'static,
-        from: impl Fn(&mut T, A) + Send + Sync + 'static
-    ) -> URwSignal<A> 
+        from: impl Fn(&mut T, A) + Send + Sync + 'static,
+    ) -> URwSignal<A>
     where
         A: ThreadSafe,
     {
         let read: Signal<T> = self.read_signal;
-        let new_read: Signal<A> = Signal::derive(move || {
-            read.with(
-                |t| towards(t)
-            )
-        });
+        let new_read: Signal<A> = Signal::derive(move || read.with(|t| towards(t)));
 
         let write: SignalSetter<T> = self.write_signal;
         let new_write = SignalSetter::map(move |a: A| {
@@ -136,8 +127,8 @@ where
             from(&mut t, a);
             write.set(t);
         });
-        
-        URwSignal{
+
+        URwSignal {
             defined_at: Location::caller(),
             read_signal: new_read,
             write_signal: new_write,
@@ -145,7 +136,7 @@ where
     }
 }
 
-impl<T> Dispose for URwSignal<T> 
+impl<T> Dispose for URwSignal<T>
 where
     T: ThreadSafe,
 {
@@ -154,18 +145,16 @@ where
     }
 }
 
-impl<T> DefinedAt for URwSignal<T> 
+impl<T> DefinedAt for URwSignal<T>
 where
     T: ThreadSafe,
 {
     fn defined_at(&self) -> Option<&'static Location<'static>> {
-        {
-            Some(self.defined_at)
-        }
+        { Some(self.defined_at) }
     }
 }
 
-impl<T> PartialEq for URwSignal<T> 
+impl<T> PartialEq for URwSignal<T>
 where
     T: ThreadSafe,
 {
@@ -174,20 +163,16 @@ where
     }
 }
 
-impl<T> Eq for URwSignal<T> 
-where 
-    T: ThreadSafe,
-{}
+impl<T> Eq for URwSignal<T> where T: ThreadSafe {}
 
-impl<T> ReadUntracked for URwSignal<T> 
-where 
+impl<T> ReadUntracked for URwSignal<T>
+where
     T: ThreadSafe + Clone,
 {
     type Value = ReadGuard<T, SignalReadGuard<T, SyncStorage>>;
 
     fn try_read_untracked(&self) -> Option<Self::Value> {
-        self.read_signal
-            .try_read_untracked()
+        self.read_signal.try_read_untracked()
     }
 }
 
@@ -206,7 +191,7 @@ where
     }
 }
 
-impl<T> Get for URwSignal<T> 
+impl<T> Get for URwSignal<T>
 where
     T: ThreadSafe + Clone,
 {
@@ -227,20 +212,12 @@ where
     type Cloneable = Self;
     type CloneableOwned = Self;
 
-    fn build(
-        self,
-        el: &Element,
-        key: &str,
-    ) -> Self::State {
-        (move || self.get()).build(el, key)    
+    fn build(self, el: &Element, key: &str) -> Self::State {
+        (move || self.get()).build(el, key)
     }
 
-    fn hydrate<const FROM_SERVER: bool>(
-            self,
-            el: &Element,
-            key: &str,
-    ) -> Self::State {
-        (move || self.get()).hydrate::<FROM_SERVER>(el, key)    
+    fn hydrate<const FROM_SERVER: bool>(self, el: &Element, key: &str) -> Self::State {
+        (move || self.get()).hydrate::<FROM_SERVER>(el, key)
     }
 
     fn rebuild(self, state: &mut Self::State, key: &str) {
@@ -256,16 +233,16 @@ where
     }
 }
 
-impl<T> From<T> for URwSignal<T> 
+impl<T> From<T> for URwSignal<T>
 where
-    T: ThreadSafe
+    T: ThreadSafe,
 {
     #[track_caller]
     fn from(value: T) -> Self {
         let (read, write) = signal(value);
 
-        URwSignal { 
-            defined_at: Location::caller(), 
+        URwSignal {
+            defined_at: Location::caller(),
             read_signal: read.into(),
             write_signal: write.into(),
         }
@@ -322,13 +299,7 @@ where
         extra_attrs: Vec<AnyAttribute>,
     ) {
         let value = self.get();
-        value.to_html_with_buf(
-            buf,
-            position,
-            escape,
-            mark_branches,
-            extra_attrs,
-        )
+        value.to_html_with_buf(buf, position, escape, mark_branches, extra_attrs)
     }
 
     fn to_html_async_with_buf<const OUT_OF_ORDER: bool>(
@@ -356,8 +327,7 @@ where
         cursor: &Cursor,
         position: &PositionState,
     ) -> Self::State {
-        (move || self.get())
-            .hydrate::<FROM_SERVER>(cursor, position)
+        (move || self.get()).hydrate::<FROM_SERVER>(cursor, position)
     }
 
     fn into_owned(self) -> Self::Owned {
@@ -372,13 +342,10 @@ where
     URwSignal<T>: Get<Value = T>,
 {
     type Output<SomeNewAttr: Attribute> = Self;
-   
-    fn add_any_attr<NewAttr: Attribute>(
-            self,
-            _attr: NewAttr,
-        ) -> Self::Output<NewAttr>
-        where
-            Self::Output<NewAttr>: RenderHtml 
+
+    fn add_any_attr<NewAttr: Attribute>(self, _attr: NewAttr) -> Self::Output<NewAttr>
+    where
+        Self::Output<NewAttr>: RenderHtml,
     {
         todo!()
     }
@@ -406,19 +373,11 @@ where
 
     fn to_template(_key: &str, _buf: &mut String) {}
 
-    fn hydrate<const FROM_SERVER: bool>(
-        self,
-        key: &str,
-        el: &Element,
-    ) -> Self::State {
+    fn hydrate<const FROM_SERVER: bool>(self, key: &str, el: &Element) -> Self::State {
         (move || self.get()).hydrate::<FROM_SERVER>(key, el)
     }
 
-    fn build(
-        self,
-        el: &Element,
-        key: &str,
-    ) -> Self::State {
+    fn build(self, el: &Element, key: &str) -> Self::State {
         (move || self.get()).build(el, key)
     }
 
@@ -441,20 +400,19 @@ where
     }
 }
 
-
 impl<T> Serialize for URwSignal<T>
 where
     T: ThreadSafe + Serialize,
 {
     fn serialize<Ser>(&self, serializer: Ser) -> Result<Ser::Ok, Ser::Error>
     where
-        Ser: Serializer 
+        Ser: Serializer,
     {
-        self.read_signal.serialize(serializer)    
+        self.read_signal.serialize(serializer)
     }
 }
 
-impl<T> From<URwSignal<T>> for Signal<T> 
+impl<T> From<URwSignal<T>> for Signal<T>
 where
     T: ThreadSafe,
 {
@@ -466,44 +424,41 @@ where
 
 impl<T> IntoSplitSignal for URwSignal<T>
 where
-    T: ThreadSafe + Clone
+    T: ThreadSafe + Clone,
 {
     type Value = T;
     type Read = Signal<T>;
     type Write = SignalSetter<T>;
 
     fn into_split_signal(self) -> (Self::Read, Self::Write) {
-        (
-            self.read_signal,
-            self.write_signal
-        )
+        (self.read_signal, self.write_signal)
     }
 }
 
-impl<Inner, Prev, T> From<Subfield<Inner,Prev,T>> for URwSignal<T> 
+impl<Inner, Prev, T> From<Subfield<Inner, Prev, T>> for URwSignal<T>
 where
     Inner: StoreField<Value = Prev> + Track + ThreadSafe + Clone,
     Prev: 'static,
     T: Send + Sync + Clone + 'static,
 {
     #[track_caller]
-    fn from(value: Subfield<Inner,Prev,T>) -> Self {
+    fn from(value: Subfield<Inner, Prev, T>) -> Self {
         let r: Signal<T> = value.clone().into();
-        let w: SignalSetter<T> = SignalSetter::map(move |t| { 
+        let w: SignalSetter<T> = SignalSetter::map(move |t| {
             value.update(|v| {
                 *v = t;
             });
         });
 
-        URwSignal{
+        URwSignal {
             defined_at: Location::caller(),
-            read_signal: r, 
-            write_signal: w 
+            read_signal: r,
+            write_signal: w,
         }
     }
 }
 
-impl<T> From<URwSignal<T>> for SignalSetter<T> 
+impl<T> From<URwSignal<T>> for SignalSetter<T>
 where
     T: Send + Sync + 'static,
 {

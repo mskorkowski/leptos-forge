@@ -1,5 +1,5 @@
 //! Stories for primitive components
-//! 
+//!
 
 pub mod button;
 pub mod label;
@@ -16,7 +16,6 @@ use label::BasicLabelStory;
 use markdown::MarkdownBaseStory;
 use switch::BasicSwitchStory;
 
-
 /// description of the primitives
 const PRIMITIVES_DESC: &str = r############"
 # Primitives
@@ -30,7 +29,7 @@ in the applications. Rarely do they exist independently of other components.
 "############;
 
 /// Primitives section in the menu
-#[derive(Debug,Default,Clone,Copy)]
+#[derive(Debug, Default, Clone, Copy)]
 pub struct Primitives;
 
 impl Section for Primitives {
@@ -39,16 +38,15 @@ impl Section for Primitives {
     }
 
     fn subroutes(&self) -> Vec<RouteDef> {
-         vec![
+        vec![
             RouteDef::story::<BasicButtonStory>("button", "Button"),
             RouteDef::story::<BasicLabelStory>("label", "Label"),
             RouteDef::story::<MarkdownBaseStory>("markdown", "Markdown"),
-            RouteDef::Route
-            {
+            RouteDef::Route {
                 path: "menu",
                 label: "Menu",
-                component: || view!{"Menu"}.into_any(),
-                embedded: |_,_,_| view!{"Embedded menu"}.into_any(),
+                component: || view! {"Menu"}.into_any(),
+                embedded: |_, _, _| view! {"Embedded menu"}.into_any(),
                 subroutes: vec![],
                 private: false,
             },

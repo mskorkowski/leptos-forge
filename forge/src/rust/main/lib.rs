@@ -1,10 +1,9 @@
 //! `leptos_forge` helps you build a reliable web UI interfaces in Leptos.
-//! 
+//!
 
 #![doc(test(attr(deny(unused))))]
 #![doc(test(attr(deny(dead_code))))]
 // #![allow(dead_code)]
-
 #![deny(missing_docs)]
 #![deny(clippy::empty_docs)]
 #![deny(clippy::missing_docs_in_private_items)]

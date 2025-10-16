@@ -1,5 +1,5 @@
 //! Implements a view for the [app::Section]
-//! 
+//!
 
 mod markdown;
 
@@ -15,7 +15,7 @@ use ui_components::primitives::markdown::Markdown;
 use crate::RouteDef;
 use crate::Section;
 
-/// Displays a [Section] in the 
+/// Displays a [Section] in the
 #[component]
 pub fn Section<S: 'static + Section + Default + Copy + Send>(
     /// Section to be shown
@@ -32,13 +32,14 @@ pub fn Section<S: 'static + Section + Default + Copy + Send>(
 
     console_log("rendering tokens");
 
-    let views = tokens.into_iter().
-        map(| token | {
-
-            view!{
+    let views = tokens
+        .into_iter()
+        .map(|token| {
+            view! {
                 <MarkdownTokenView<S> token />
             }
-        }).collect_view();
+        })
+        .collect_view();
 
     console_log("rendering <Section>");
 
@@ -52,16 +53,17 @@ pub fn Section<S: 'static + Section + Default + Copy + Send>(
 }
 
 /// Finds a story in the subroutes tree
-fn navigate_subtree<'a>(mut path: Split<'a, &'static str>, subroutes: &'a Vec<RouteDef>) -> Option<&'a RouteDef> {  
+fn navigate_subtree<'a>(
+    mut path: Split<'a, &'static str>,
+    subroutes: &'a Vec<RouteDef>,
+) -> Option<&'a RouteDef> {
     let mut next = path.next();
     let mut subroutes = subroutes;
 
     while let Some(segment) = next {
         if let Some(route) = subroutes.iter().find(|route| route.path() == segment) {
-            subroutes = match  route {
-                RouteDef::Header { subroutes, .. } | RouteDef::Route { subroutes, .. } => {
-                    subroutes
-                }
+            subroutes = match route {
+                RouteDef::Header { subroutes, .. } | RouteDef::Route { subroutes, .. } => subroutes,
             };
 
             next = path.next();
@@ -69,14 +71,12 @@ fn navigate_subtree<'a>(mut path: Split<'a, &'static str>, subroutes: &'a Vec<Ro
             if next.is_none() {
                 return Some(route);
             }
-        }
-        else {
+        } else {
             return None;
         }
     }
 
     None
-
 }
 
 /// Generates a view for [MarkdownToken] instances
@@ -112,7 +112,7 @@ fn MarkdownTokenView<S: 'static + Section + Default + Copy + Send>(
             }
             else {
                 view!{<Markdown src="> Can't find story to show" /> }.into_any()
-            }        
+            }
         },
         Story{ story: None, .. }  => {
             view!{<Markdown src="> Attribute of was not found in the `<Story />` tag.\n> \n> Add the `of=\"subroute/path\"` to your `<Story />` tag." />}.into_any()
@@ -126,26 +126,26 @@ fn MarkdownTokenView<S: 'static + Section + Default + Copy + Send>(
 }
 
 /// Markdown header component
-/// 
+///
 /// This allows us to remove one level of div and a call to a Markdown parser
 /// for every header
 #[component]
 fn MarkdownHeader(
-    /// Level of the header 
-    /// 
+    /// Level of the header
+    ///
     /// - `# Header` - 1
     /// - `## Header` - 2
     /// ...
-    level: usize, 
+    level: usize,
     /// Value of the header
-    text: String
+    text: String,
 ) -> impl IntoView {
     match level {
-        1 => view!{<h1>{text}</h1>}.into_any(),
-        2 => view!{<h2>{text}</h2>}.into_any(),
-        3 => view!{<h3>{text}</h3>}.into_any(),
-        4 => view!{<h4>{text}</h4>}.into_any(),
-        5 => view!{<h5>{text}</h5>}.into_any(),
-        _ => view!{<h6>{text}</h6>}.into_any(),
+        1 => view! {<h1>{text}</h1>}.into_any(),
+        2 => view! {<h2>{text}</h2>}.into_any(),
+        3 => view! {<h3>{text}</h3>}.into_any(),
+        4 => view! {<h4>{text}</h4>}.into_any(),
+        5 => view! {<h5>{text}</h5>}.into_any(),
+        _ => view! {<h6>{text}</h6>}.into_any(),
     }
 }

@@ -1,0 +1,4 @@
+edition = "2024"
+imports_indent = "Block"
+imports_layout = "Vertical"
+imports_granularity = "Item"

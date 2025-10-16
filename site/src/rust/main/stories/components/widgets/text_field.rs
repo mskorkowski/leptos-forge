@@ -1,6 +1,5 @@
 //! Text filed story
-//! 
-
+//!
 
 use forge::RouteDef;
 use leptos::prelude::*;
@@ -46,10 +45,7 @@ impl Default for BasicTextFieldStory {
         let label: URwSignal<String> = URwSignal::new("Text field label".to_string());
         let text: URwSignal<String> = URwSignal::new("".to_string());
 
-        BasicTextFieldStory{
-            label,
-            text,
-        }
+        BasicTextFieldStory { label, text }
     }
 }
 
@@ -78,9 +74,9 @@ impl Story for BasicTextFieldStory {
     }
 
     fn subroutes(&self) -> Vec<RouteDef> {
-        vec![
-            RouteDef::story::<NonemptyTextFieldStory>("nonempty", "Nonempty"),
-        ]
+        vec![RouteDef::story::<NonemptyTextFieldStory>(
+            "nonempty", "Nonempty",
+        )]
     }
 }
 
@@ -121,10 +117,7 @@ impl Default for NonemptyTextFieldStory {
         let label: URwSignal<String> = URwSignal::new("Text field label".to_string());
         let text: URwSignal<String> = URwSignal::new("Text field value".to_string());
 
-        NonemptyTextFieldStory{
-            label,
-            text,
-        }
+        NonemptyTextFieldStory { label, text }
     }
 }
 

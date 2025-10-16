@@ -1,5 +1,5 @@
 //! Provides a builder for creating tests in the [stories][Story::]
-//! 
+//!
 
 use super::Play;
 use super::Step;
@@ -17,10 +17,10 @@ type StepFn<S> = fn(canvas: &HtmlElement, &mut S) -> Result<(), &'static str>;
 #[derive(Clone)]
 pub struct SimpleStep<S: Story> {
     /// Description of the step shown in the UI
-    /// 
+    ///
     /// It should be short, one liner if possible, which will describe the actions taken
     /// during this step.
-    /// 
+    ///
     /// It will be shown in the test runner UI.
     description: &'static str,
     /// Function to run when the step is played
@@ -53,14 +53,14 @@ impl<S: Story + 'static> From<SimpleStep<S>> for Box<dyn Step<Story = S>> {
 }
 
 /// The simple implementation of the play interface should be enough for most of the use cases
-/// 
+///
 /// It doubles as the factory for creating a tests
 pub struct SimplePlay<S: Story> {
     /// Description of the play
-    /// 
+    ///
     /// It should be short, one liner if possible, which will describe what this play
     /// is about in relation to the story.
-    /// 
+    ///
     /// It will be shown in the UI as the header above the tests
     description: &'static str,
 
@@ -90,17 +90,16 @@ impl<S: Story + 'static> Play for SimplePlay<S> {
     }
 
     fn steps(&self) -> Vec<Box<dyn Step<Story = Self::Story>>> {
-        self.steps.
-            iter().
-            map(|step| step.clone().into()).
-            collect::<Vec<_>>()
+        self.steps
+            .iter()
+            .map(|step| step.clone().into())
+            .collect::<Vec<_>>()
     }
 }
 
-
 /// Create a play for the story
 pub fn play<S: Story>(name: &'static str) -> SimplePlay<S> {
-    SimplePlay{
+    SimplePlay {
         description: name,
         steps: Vec::new(),
     }
@@ -109,11 +108,11 @@ pub fn play<S: Story>(name: &'static str) -> SimplePlay<S> {
 /// Add test id to the element
 pub fn test_id<S: ToString>(test_id: Option<S>) -> AnyAttribute {
     if let Some(test_id) = test_id {
-        (view!{
+        (view! {
             <{..} data-testid={test_id.to_string()} />
-        }).into_any_attr()
-    }
-    else {
+        })
+        .into_any_attr()
+    } else {
         ().into_any_attr()
     }
 }

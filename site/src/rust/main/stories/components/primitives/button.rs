@@ -1,11 +1,11 @@
 //! Stories for Button primitive
-//! 
+//!
 
 use leptos::prelude::*;
 use ui_components::primitives::button::Button;
 use ui_components::primitives::button::ButtonClick;
-use ui_components::widgets::field::TextField;
 use ui_components::widgets::field::ReadonlyField;
+use ui_components::widgets::field::TextField;
 use utils_leptos::signal::URwSignal;
 
 use forge::Story;
@@ -57,9 +57,9 @@ pub struct BasicButtonStory {
 
 impl Default for BasicButtonStory {
     fn default() -> Self {
-        Self{ 
+        Self {
             click: URwSignal::new(ButtonClick::Released),
-            text: URwSignal::new("Button".to_string())
+            text: URwSignal::new("Button".to_string()),
         }
     }
 }
@@ -76,7 +76,7 @@ impl Story for BasicButtonStory {
             format!("{state:?}")
         });
 
-        view!{
+        view! {
             <>
                 <TextField id="button-text" text={self.text} label="Button label" />
                 <ReadonlyField id="button-state" value={state} label="State" />
@@ -87,7 +87,7 @@ impl Story for BasicButtonStory {
     fn view(&self) -> impl IntoView {
         let text: URwSignal<String> = self.text;
 
-        view!{
+        view! {
             <Button
                 id="button_id"
                 class="bg-forgegray-100 border-forgegray-400 h-12 inline-block px-4 hover:bg-forgegray-200 active:bg-forgegray-300"

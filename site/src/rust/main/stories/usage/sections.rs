@@ -164,7 +164,6 @@ impl Section for MySection {
 
 "############;
 
-
 /// Section about sections in `leptos_forge`
 #[derive(Debug, Default, Clone, Copy)]
 pub struct SectionsSection;

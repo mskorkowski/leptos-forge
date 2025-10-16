@@ -355,7 +355,6 @@ We've just implemented a basic story for our counter component. The next step is
 
 "#############;
 
-
 /// This section describes how you can implement your first story
 #[derive(Debug, Default, Clone, Copy)]
 pub struct RefineCounterStory;
@@ -369,7 +368,10 @@ impl Section for RefineCounterStory {
         vec![
             RouteDef::private::<SimpleCounterStory<0>>("simple_counter_story", "Simple Counter"),
             RouteDef::private::<SimpleCounterStory<3>>("simple_counter_story_3", "Simple Counter"),
-            RouteDef::private::<SimpleCounterStory<3000>>("simple_counter_story_3000", "Simple Counter"),
+            RouteDef::private::<SimpleCounterStory<3000>>(
+                "simple_counter_story_3000",
+                "Simple Counter",
+            ),
             RouteDef::story::<CounterStory<0>>("counter_story", "Counter"),
         ]
     }
@@ -385,16 +387,18 @@ impl Section for RefineCounterStory {
 #[component]
 fn SimpleCounter(
     /// Value of the counter
-    value: URwSignal<i32>
+    value: URwSignal<i32>,
 ) -> impl IntoView {
-    let button_style = || view!{
-        <{..} style="border: 1px solid black; padding: 1em 2em; border-radius: 3px; margin: 0px 2em; cursor: pointer;" />
+    let button_style = || {
+        view! {
+            <{..} style="border: 1px solid black; padding: 1em 2em; border-radius: 3px; margin: 0px 2em; cursor: pointer;" />
+        }
     };
 
-    view!{
+    view! {
         <div>
-            <button 
-                on:click=move |_| { 
+            <button
+                on:click=move |_| {
                     value.set(
                         value.get_untracked() - 1
                     );
@@ -402,8 +406,8 @@ fn SimpleCounter(
                 {..button_style()}
             >-</button>
             <span>{value}</span>
-            <button 
-                on:click=move |_| { 
+            <button
+                on:click=move |_| {
                     value.set(
                         value.get_untracked() + 1
                     );
@@ -415,7 +419,7 @@ fn SimpleCounter(
 }
 
 /// Counter story described in [RefineCounterStory]
-/// 
+///
 /// This version is used to show the component and controls during the development
 #[derive(Debug, Clone, Copy)]
 struct SimpleCounterStory<const D: i32> {
@@ -426,8 +430,8 @@ struct SimpleCounterStory<const D: i32> {
 impl<const D: i32> SimpleCounterStory<D> {
     /// Creates new instance of this
     pub fn new(value: i32) -> Self {
-        SimpleCounterStory { 
-            value: URwSignal::new(value)
+        SimpleCounterStory {
+            value: URwSignal::new(value),
         }
     }
 }
@@ -440,7 +444,7 @@ impl<const D: i32> Default for SimpleCounterStory<D> {
 
 impl<const D: i32> Story for SimpleCounterStory<D> {
     fn view(&self) -> impl IntoView {
-        view!{
+        view! {
             <SimpleCounter value={self.value} />
         }
     }
@@ -452,17 +456,17 @@ impl<const D: i32> Story for SimpleCounterStory<D> {
                 if let Ok(new_value) = text.parse::<i32>() {
                     *v = new_value;
                 }
-            }, 
+            },
         );
 
-        view!{
+        view! {
             <TextField id="counter_value" text=value label="Value" default=|| { Some(0.to_string()) } />
         }
     }
 }
 
 /// Counter component described in [RefineCounterStory] section of the site
-/// 
+///
 /// This is the final version of this component
 #[component]
 fn Counter(
@@ -475,14 +479,16 @@ fn Counter(
     #[prop(into)]
     threshold: Signal<i32>,
 ) -> impl IntoView {
-    let button_style = || view!{
-        <{..} style="border: 1px solid black; padding: 1em 2em; border-radius: 3px; margin: 0px 2em; cursor: pointer;" />
+    let button_style = || {
+        view! {
+            <{..} style="border: 1px solid black; padding: 1em 2em; border-radius: 3px; margin: 0px 2em; cursor: pointer;" />
+        }
     };
 
-    view!{
+    view! {
         <div>
-            <button 
-                on:click=move |_| { 
+            <button
+                on:click=move |_| {
                     value.set(
                         value.get_untracked() - 1
                     );
@@ -490,8 +496,8 @@ fn Counter(
                 {..button_style()}
             >-</button>
             <span>{value}</span>
-            <button 
-                on:click=move |_| { 
+            <button
+                on:click=move |_| {
                     value.set(
                         value.get_untracked() + 1
                     );
@@ -524,7 +530,7 @@ The default message is "You are working hard".
 "############;
 
 /// Counter story created as part of the [RefineCounterStory] section of the site
-/// 
+///
 /// This way user can compare the result he got and the one he is expected to get
 /// alongside doing a tutorial
 #[derive(Debug, Clone, Copy)]
@@ -549,7 +555,7 @@ impl<const D: i32> Default for CounterStory<D> {
 
 impl<const D: i32> Story for CounterStory<D> {
     fn view(&self) -> impl IntoView {
-        view!{
+        view! {
             <Counter value={self.value} message={self.message} threshold={self.threshold} />  // <- added missing properties
         }
     }
@@ -561,10 +567,11 @@ impl<const D: i32> Story for CounterStory<D> {
                 if let Ok(new_value) = text.parse::<i32>() {
                     *v = new_value;
                 }
-            }, 
+            },
         );
 
-        let threshold = self.threshold.map( // <- we've added a `threshold` variable. The transformation is exactly the same as for value
+        let threshold = self.threshold.map(
+            // <- we've added a `threshold` variable. The transformation is exactly the same as for value
             |v| v.to_string(),
             |v, text| {
                 if let Ok(new_value) = text.parse::<i32>() {
@@ -573,7 +580,7 @@ impl<const D: i32> Story for CounterStory<D> {
             },
         );
 
-        view!{
+        view! {
             <TextField id="counter_value" text=value label="Value" default=|| { Some(0.to_string()) } />
 
             <TextField id="counter_threshold" text=threshold label="Threshold" default=|| { Some(10_000.to_string()) } /> // <- we've added the threshold control field

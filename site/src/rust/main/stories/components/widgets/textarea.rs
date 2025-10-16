@@ -45,10 +45,7 @@ impl Default for BasicTextareaStory {
         let label: URwSignal<String> = URwSignal::new("Textarea label".to_string());
         let text: URwSignal<String> = URwSignal::new("".to_string());
 
-        BasicTextareaStory{
-            label,
-            text,
-        }
+        BasicTextareaStory { label, text }
     }
 }
 
@@ -77,9 +74,9 @@ impl Story for BasicTextareaStory {
     }
 
     fn subroutes(&self) -> Vec<RouteDef> {
-        vec![
-            RouteDef::story::<NonemptyTextareaStory>("nonempty", "Nonempty"),
-        ]
+        vec![RouteDef::story::<NonemptyTextareaStory>(
+            "nonempty", "Nonempty",
+        )]
     }
 }
 
@@ -120,10 +117,7 @@ impl Default for NonemptyTextareaStory {
         let label: URwSignal<String> = URwSignal::new("Text field label".to_string());
         let text: URwSignal<String> = URwSignal::new("Text field value".to_string());
 
-        NonemptyTextareaStory{
-            label,
-            text,
-        }
+        NonemptyTextareaStory { label, text }
     }
 }
 

@@ -103,7 +103,6 @@ And here we are.
 
 "############;
 
-
 /// Main page for the leptos_forge site
 #[derive(Debug, Default, Clone, Copy)]
 pub struct Main;

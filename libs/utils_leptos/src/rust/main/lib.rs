@@ -5,6 +5,6 @@
 
 extern crate leptos;
 
-pub mod stores;
 pub mod css;
 pub mod signal;
+pub mod stores;

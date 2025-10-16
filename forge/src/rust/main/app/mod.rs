@@ -5,18 +5,18 @@ mod state;
 use leptos::leptos_dom::logging::console_log;
 use leptos::prelude::*;
 use leptos::tachys::view::iterators::StaticVec;
-use leptos_router::components::Routes;
 use leptos_router::components::Router;
+use leptos_router::components::Routes;
 use reactive_stores::Store;
 use state::State;
 use ui_components::menu::MenuState;
 
 use super::navigation::PathSpec;
 use super::navigation::RouteDef;
-use ui_components::widgets::logo::Logo;
 use ui_components::layout::main_menu::MainMenu;
 use ui_components::layout::root::Root;
 use ui_components::menu::Menu;
+use ui_components::widgets::logo::Logo;
 
 use super::views::content::Content;
 
@@ -29,9 +29,8 @@ pub fn App(
     #[prop(default=Option::<&'static str>::None,optional)]
     logo: Option<&'static str>,
 ) -> impl IntoView {
-
     let _store = Store::new(State::new());
-    
+
     let menu_defs = {
         let routes = routes.clone();
         move || {
@@ -42,25 +41,21 @@ pub fn App(
             let path = location.pathname().expect("We are running csr mode. Window should exist, location should exist and pathname should be there");
 
             StaticVec::from(
-                routes.
-                    iter().
-                    flat_map(move |route| {
-                        route.as_menu_items(PathSpec::Root, &path, menu)
-                    }).
-                    collect::<Vec<_>>()
-            )
-        }
-    };    
-
-    let route_defs = { 
-        move || {
-            StaticVec::from( 
                 routes
                     .iter()
-                    .flat_map(|route| {
-                        route.as_routes(PathSpec::Root).into_iter()
-                    })
-                    .collect::<Vec<_>>()
+                    .flat_map(move |route| route.as_menu_items(PathSpec::Root, &path, menu))
+                    .collect::<Vec<_>>(),
+            )
+        }
+    };
+
+    let route_defs = {
+        move || {
+            StaticVec::from(
+                routes
+                    .iter()
+                    .flat_map(|route| route.as_routes(PathSpec::Root).into_iter())
+                    .collect::<Vec<_>>(),
             )
         }
     };

@@ -1,5 +1,5 @@
 //! Contains a section describing nix flake configuration to install rust and all required dependencies for `leptos_forge`
-//! 
+//!
 
 use forge::Section;
 
@@ -69,7 +69,6 @@ The example configuration is based on the `flake.nix` from the `leptos` source
 code.
 
 "############;
-
 
 /// Setup section
 #[derive(Debug, Default, Clone, Copy)]

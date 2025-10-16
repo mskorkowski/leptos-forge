@@ -1,5 +1,5 @@
 //! Stories about widgets
-//! 
+//!
 
 pub mod codearea;
 pub mod logo;
@@ -27,7 +27,7 @@ Widgets are most useful elements of the design language and can be used to creat
 "############;
 
 /// Widget section on the site
-#[derive(Debug,Default,Clone, Copy)]
+#[derive(Debug, Default, Clone, Copy)]
 pub struct Widgets;
 
 impl Section for Widgets {
@@ -37,7 +37,7 @@ impl Section for Widgets {
 
     fn subroutes(&self) -> Vec<RouteDef> {
         vec![
-            RouteDef::story::<BasicCodeareaStory>("codearea", "Codearea" ),
+            RouteDef::story::<BasicCodeareaStory>("codearea", "Codearea"),
             RouteDef::story::<BasicLogoStory>("logo", "Logo"),
             RouteDef::story::<BasicTextFieldStory>("text_field", "TextField"),
             RouteDef::story::<BasicPasswordFieldStory>("password", "Password"),

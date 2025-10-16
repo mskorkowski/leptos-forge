@@ -1,28 +1,26 @@
 //! In this module we keep stories about adding your first tests into `CounterStory` created as part of
-//! [setup process][super::SETUP] and it's later refinement [`CounterStory`][super::refine_story::CounterStory] 
-//! 
+//! [setup process][super::SETUP] and it's later refinement [`CounterStory`][super::refine_story::CounterStory]
+//!
 
-use testing_library_dom::fire_event;
-use testing_library_dom::get_by_text;
-use testing_library_dom::get_by_test_id;
 use testing_library_dom::MatcherOptions;
 use testing_library_dom::SelectorMatcherOptions;
+use testing_library_dom::fire_event;
+use testing_library_dom::get_by_test_id;
+use testing_library_dom::get_by_text;
 
 use leptos::prelude::*;
 use leptos::web_sys::MouseEvent;
 use leptos::web_sys::MouseEventInit;
 
-use utils_leptos::signal::URwSignal;
 use ui_components::widgets::field::TextField;
+use utils_leptos::signal::URwSignal;
 
-use forge::play;
 use forge::Play;
 use forge::RouteDef;
 use forge::Section;
 use forge::Story;
+use forge::play;
 use forge::test_id;
-
-
 
 /// description of the [Implement the first story][RefineCounterStory] section
 const ADDING_TESTS: &str = r#############"
@@ -268,7 +266,6 @@ After you press `Play`, the test will complete and you will see
 
 "#############;
 
-
 /// This section describes how you can implement your first story
 #[derive(Debug, Default, Clone, Copy)]
 pub struct AddingTests;
@@ -279,9 +276,10 @@ impl Section for AddingTests {
     }
 
     fn subroutes(&self) -> Vec<RouteDef> {
-        vec![
-            RouteDef::story::<TestedCounterStory>("tested_counter_story", "Counter with tests"),
-        ]
+        vec![RouteDef::story::<TestedCounterStory>(
+            "tested_counter_story",
+            "Counter with tests",
+        )]
     }
 }
 
@@ -308,14 +306,16 @@ fn Counter(
     #[prop(into)]
     threshold: Signal<i32>,
 ) -> impl IntoView {
-    let button_style = || view!{
-        <{..} style="border: 1px solid black; padding: 1em 2em; border-radius: 3px; margin: 0px 2em; cursor: pointer;" />
+    let button_style = || {
+        view! {
+            <{..} style="border: 1px solid black; padding: 1em 2em; border-radius: 3px; margin: 0px 2em; cursor: pointer;" />
+        }
     };
 
-    view!{
+    view! {
         <div>
-            <button 
-                on:click=move |_| { 
+            <button
+                on:click=move |_| {
                     value.set(
                         value.get_untracked() - 1
                     );
@@ -323,8 +323,8 @@ fn Counter(
                 {..button_style()}
             >-</button>
             <span>{value}</span>
-            <button 
-                on:click=move |_| { 
+            <button
+                on:click=move |_| {
                     value.set(
                         value.get_untracked() + 1
                     );
@@ -360,7 +360,7 @@ The default message is "You are working hard".
 "############;
 
 /// Counter story created as part of the [RefineCounterStory] section of the site
-/// 
+///
 /// This way user can compare the result he got and the one he is expected to get
 /// alongside doing a tutorial
 #[derive(Debug, Clone, Copy)]
@@ -385,7 +385,7 @@ impl Default for TestedCounterStory {
 
 impl Story for TestedCounterStory {
     fn view(&self) -> impl IntoView {
-        view!{
+        view! {
             <Counter value={self.value} message={self.message} threshold={self.threshold} />  // <- added missing properties
         }
     }
@@ -397,10 +397,11 @@ impl Story for TestedCounterStory {
                 if let Ok(new_value) = text.parse::<i32>() {
                     *v = new_value;
                 }
-            }, 
+            },
         );
 
-        let threshold = self.threshold.map( // <- we've added a `threshold` variable. The transformation is exactly the same as for value
+        let threshold = self.threshold.map(
+            // <- we've added a `threshold` variable. The transformation is exactly the same as for value
             |v| v.to_string(),
             |v, text| {
                 if let Ok(new_value) = text.parse::<i32>() {
@@ -409,7 +410,7 @@ impl Story for TestedCounterStory {
             },
         );
 
-        view!{
+        view! {
             <TextField id="counter_value" text=value label="Value" default=|| { Some(0.to_string()) } />
 
             <TextField id="counter_threshold" text=threshold label="Threshold" default=|| { Some(10_000.to_string()) } /> // <- we've added the threshold control field
@@ -422,91 +423,99 @@ impl Story for TestedCounterStory {
         COUNTER_STORY
     }
 
-    fn plays(&self) -> Vec<Box<dyn Play<Story=Self>>> {
+    fn plays(&self) -> Vec<Box<dyn Play<Story = Self>>> {
         vec![{
             /// Message to set when running the play
             const COUNTER_PLAY_MESSAGE: &str = "Value has crossed the threshold";
             /// Threshold to set when running the play
             const COUNTER_PLAY_THRESHOLD: i32 = 15_000;
 
-            play::<Self>("When the counter value crosses the threshold, a message should be shown.").
-                next(
-                    "Set the well known state to the Counter", 
-                    |_canvas, story| { 
+            play::<Self>("When the counter value crosses the threshold, a message should be shown.")
+                .next(
+                    "Set the well known state to the Counter",
+                    |_canvas, story| {
                         story.message.set(COUNTER_PLAY_MESSAGE.to_string());
                         story.threshold.set(COUNTER_PLAY_THRESHOLD);
                         story.value.set(COUNTER_PLAY_THRESHOLD);
-                        Ok(()) 
-                    }
-                ).
-                next(
+                        Ok(())
+                    },
+                )
+                .next(
                     "Check that message is **not** shown yet",
-                    |canvas, _story| { 
-                        let Ok(message_span) = get_by_test_id(canvas, COUNTER_MESSAGE_TEST_ID, MatcherOptions::default()) else {
+                    |canvas, _story| {
+                        let Ok(message_span) = get_by_test_id(
+                            canvas,
+                            COUNTER_MESSAGE_TEST_ID,
+                            MatcherOptions::default(),
+                        ) else {
                             return Err("Unable to get a message span");
                         };
 
                         let message = message_span.inner_text();
 
                         if !message.is_empty() {
-                            return Err("Showing message, while it should be empty")
+                            return Err("Showing message, while it should be empty");
                         }
 
-                        Ok(()) 
-                    }
-                ).
-                next(
-                    "Increase the counter",
-                    |canvas, _story| { 
-                        let Ok(button) = get_by_text(canvas, "+", SelectorMatcherOptions::default()) else {
-                            return Err("Can't find the increase button");
-                        };
-                        
-                        let mouse_event_init = MouseEventInit::new();
-                        mouse_event_init.set_bubbles(true);
-                        mouse_event_init.set_cancelable(true);
+                        Ok(())
+                    },
+                )
+                .next("Increase the counter", |canvas, _story| {
+                    let Ok(button) = get_by_text(canvas, "+", SelectorMatcherOptions::default())
+                    else {
+                        return Err("Can't find the increase button");
+                    };
 
-                        let Ok(event) = MouseEvent::new_with_mouse_event_init_dict("click", &mouse_event_init) else {
-                            return Err("Can't create a click event");
-                        };
-                        
-                        let Ok(_) = fire_event(&button, &event) else {
-                            return Err("Event should be fired.");
-                        };
+                    let mouse_event_init = MouseEventInit::new();
+                    mouse_event_init.set_bubbles(true);
+                    mouse_event_init.set_cancelable(true);
 
-                        Ok(()) 
-                    }
-                ).
-                next(
+                    let Ok(event) =
+                        MouseEvent::new_with_mouse_event_init_dict("click", &mouse_event_init)
+                    else {
+                        return Err("Can't create a click event");
+                    };
+
+                    let Ok(_) = fire_event(&button, &event) else {
+                        return Err("Event should be fired.");
+                    };
+
+                    Ok(())
+                })
+                .next(
                     "Check that counter was increased and that message **is** shown",
-                    |canvas, _story| { 
-                        let Ok(message_span) = get_by_test_id(canvas, COUNTER_MESSAGE_TEST_ID, MatcherOptions::default()) else {
+                    |canvas, _story| {
+                        let Ok(message_span) = get_by_test_id(
+                            canvas,
+                            COUNTER_MESSAGE_TEST_ID,
+                            MatcherOptions::default(),
+                        ) else {
                             return Err("Unable to get a message span");
                         };
 
                         let message = message_span.inner_text();
 
                         if message.is_empty() {
-                            return Err("Message is not visible")
+                            return Err("Message is not visible");
                         }
 
                         if message.as_str() != COUNTER_PLAY_MESSAGE {
-                            return Err("Displaying wrong message")
+                            return Err("Displaying wrong message");
                         }
 
                         Ok(())
-                    }
-                ).
-                next(
+                    },
+                )
+                .next(
                     "Set some sensible values to the Counter",
-                    |_canvas, story| { 
+                    |_canvas, story| {
                         story.message.set("You work hard!".to_string());
                         story.threshold.set(10_000);
                         story.value.set(0);
-                        Ok(()) 
-                    }
-                ).
-                into()
+                        Ok(())
+                    },
+                )
+                .into()
         }]
     }
 }

@@ -1,7 +1,7 @@
 //! Story which shows the support for `<kdb>` tag in Markdown
 
-use leptos::prelude::*;
 use forge::Story;
+use leptos::prelude::*;
 use ui_components::primitives::markdown::Markdown;
 use ui_components::widgets::field::Codearea;
 use utils_leptos::signal::URwSignal;
@@ -27,30 +27,30 @@ For example:
 
 /// Story showcasing the `<kbd>` html tag behavior
 #[derive(Debug, Clone, Copy)]
-pub struct KbdStory{
+pub struct KbdStory {
     /// markdown content be shown to the user
-    markdown: URwSignal<String>
+    markdown: URwSignal<String>,
 }
 
 impl Default for KbdStory {
     fn default() -> Self {
-        Self{ 
+        Self {
             markdown: URwSignal::new(
-                "Example of the `<kdb>` to showing alt key:\n\n<kbd>alt</kbd>".to_string()
-            ) 
+                "Example of the `<kdb>` to showing alt key:\n\n<kbd>alt</kbd>".to_string(),
+            ),
         }
     }
 }
 
 impl Story for KbdStory {
     fn controls(&self) -> impl IntoView {
-        view!{
+        view! {
             <Codearea id="leptos-forge-markdown-demo-textarea" text=self.markdown label={"Markdown document".to_string()} />
         }
     }
 
     fn description(&self) -> &'static str {
-       KBD   
+        KBD
     }
 
     fn view(&self) -> impl IntoView {
