@@ -61,7 +61,6 @@ fn main() {
         .args(vec![
             "--input", "src/css/main/main.css",
             "--output", "target/resources/leptos_forge_site/main.css",
-            "--map",
             "--optimize",
             "--verbose"
         ]);

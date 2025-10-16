@@ -1,4 +1,4 @@
-//! Reimplementation of the [RwSignal] to make it more useful for writing applications
+//! Generic implementation of the [RwSignal] to make it more useful for writing applications
 //! 
 //! Author of leptos thinks RwSignal can be confusing, I say it it's a developer responsibility to not make it
 //! confusing by:

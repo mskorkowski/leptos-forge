@@ -6,7 +6,6 @@ use forge::Section;
 
 /// Describes customizing views
 const CUSTOM_VIEWS: &str = r############"
-
 # Customizing `leptos_forge`
 
 If stories and sections are not enough for you, you can add your own kind of
