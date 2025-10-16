@@ -95,8 +95,8 @@ fn MarkdownTokenView<S: 'static + Section + Default + Copy + Send>(
 
     match token {
         Header{ level, text, ..  } => {
-            let src = format!("{}{text}", "#".repeat(level));
-            view!{<Markdown src /> }.into_any()
+            let text = text.to_string();
+            view!{<MarkdownHeader level text /> }.into_any()
         },
         Story { story: Some(path), controls, .. } => {
             let path: Split<'_, &'static str> = path.split("/");
@@ -122,5 +122,30 @@ fn MarkdownTokenView<S: 'static + Section + Default + Copy + Send>(
                 <Markdown src={text} />
             }.into_any()
         }
+    }
+}
+
+/// Markdown header component
+/// 
+/// This allows us to remove one level of div and a call to a Markdown parser
+/// for every header
+#[component]
+fn MarkdownHeader(
+    /// Level of the header 
+    /// 
+    /// - `# Header` - 1
+    /// - `## Header` - 2
+    /// ...
+    level: usize, 
+    /// Value of the header
+    text: String
+) -> impl IntoView {
+    match level {
+        1 => view!{<h1>{text}</h1>}.into_any(),
+        2 => view!{<h2>{text}</h2>}.into_any(),
+        3 => view!{<h3>{text}</h3>}.into_any(),
+        4 => view!{<h4>{text}</h4>}.into_any(),
+        5 => view!{<h5>{text}</h5>}.into_any(),
+        _ => view!{<h6>{text}</h6>}.into_any(),
     }
 }

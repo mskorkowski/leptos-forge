@@ -143,9 +143,9 @@ impl PathSpec {
 /// Define routes in the application
 #[derive(Debug,Clone)]
 pub enum RouteDef {
-    /// Menu entry which can be navigated, a route to be taken by the user
+    /// Menu entry which can be navigated
     Route{
-        /// path part in the url
+        /// path segment in the url
         path: &'static str,
         /// Label in the menu
         label: &'static str,

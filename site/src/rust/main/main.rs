@@ -39,6 +39,8 @@ use stories::usage::stories::StorySection;
 use stories::usage::urwsignal::URwSignalSection;
 use stories::Main;
 
+use crate::stories::usage::custom_views::CustomViews;
+
 /// Entrypoint of the application
 pub fn main() {
     _ = console_log::init_with_level(Level::Debug);
@@ -60,6 +62,7 @@ pub fn main() {
             RouteDef::section::<SectionsSection>("section", "Section"),
             RouteDef::section::<RoutesSection>("routes", "Routing"),
             RouteDef::section::<URwSignalSection>("urwsignal", "URwSignal"),
+            RouteDef::section::<CustomViews>("customizing", "Customizing")
         ]),
         RouteDef::header("development", "DEVELOPMENT", vec![
             RouteDef::section::<Components>("components", "Components")

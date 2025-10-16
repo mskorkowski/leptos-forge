@@ -19,10 +19,10 @@ be able to derive it.
 To create a new section you need to define a new struct that implements the
 `leptos_forge::Section` trait.
 
-| Function                                | Description                            |
-|:----------------------------------------|:---------------------------------------|
-| `fn description(&self) -> &'static str` | This function returns a Markdown formatted string with the content of the section |
-
+| Function                                | Description                            | Default behavior                            |
+|:----------------------------------------|:---------------------------------------|---------------------------------------------|
+| `fn description(&self) -> &'static str` | Returns a Markdown formatted string with the content of this section | Returns "How to implement a section" guide |
+| `fn subroutes(&self) -> Vec<RouteDef>`  | Returns a vector with stories and sections under this section        | Returns an empty vector |
 
 Example:
 
@@ -30,7 +30,7 @@ Example:
 
 use leptos_forge::Section;
 
-#[derive(Default)]
+#[derive(Default, Clone, Copy)]
 pub struct MySection;
 
 impl Section for MySection {
@@ -66,46 +66,101 @@ impl Section for MySection {
 >
 > ```
 
-## Adding a Section
+## Adding stories and subsections
 
-To add a section to your `ROUTES`, you need to add it. The easiest way is to call 
-the `RouteDef::section` function.
+To add stories and section under the section you must implement the `subroutes`
+method. 
 
-`RouteDef::section` takes three arguments:
+Example:
 
-| Argument    | Type                  | Description                                                |
-|:------------|:----------------------|:-----------------------------------------------------------|
-| `path`      | `&'static str`        | The last segment of the path leading to the section        |
-| `label`     | `&'static str`        | The label shown in the menu that you click                 |
-| `subroutes` | `&'static [RouteDef]` | Subroutes that will be added to the menu as submenu items   |
-
-For the `MySection` above, the call could look like:
+Assuming that there is a story `ComponentStory` and a section `TranslatingComponentSection`.
+To add them
 
 ```rust
+use leptos_forge::Section;
 use leptos_forge::RouteDef;
 
-const ROUTES: &[RouteDef] = &[
+#[derive(Default, Clone, Copy)]
+pub struct MySection;
+
+impl Section for MySection {
     ...
-    RouteDef::section::<MySection>(
-        "my_section",    // <- path
-        "My Section",    // <- label
-        &[
-            ...          // <- subroutes
-        ])
-    ...
-];
+
+    fn subroutes(&self) -> Vec<RouteDef> {
+        vec![
+            RouteDef::story::<ComponentStory>("component", "Component"),        
+            RouteDef::section::<TranslatingComponentSection>("translation", "Translation"),
+        ]
+    }
+
+}
 ```
+
+You can read more about this in the [Routing](http://localhost:8000/documentation/routes) section.
 
 ## Embedding stories
 
 Syntax:
 
-`<Story of="path/to/the/substory" controls/>`
+```
+<Story of="path/to/the/substory" controls/>
+```
 
 | Attribute | Value | Description |
 |:-----------|:---------|:----------------|
 | of | string | Path to the substory, relative to the section where you embed the story. It's not possible to "go up in sections tree" |
-| controls | bool | Boolean attribute. If present it will enable rendering of the embedded controls panel |
+| controls | bool | Boolean attribute. If present it will enable rendering of the embedded control panel |
+
+### Limitations of the `controls` attribute
+
+Only supported syntax for the `controls` attribute is
+
+```
+<Story ... controls />
+```
+
+We don't support `controls=""` or other forms of the boolean attributes in html.
+
+The progress can be tracked in the [GH issue](https://github.com/mskorkowski/leptos-forge/issues/62?issue=mskorkowski%7Cleptos-forge%7C73)
+
+### Example
+
+```rust
+use leptos_forge::Section;
+use leptos_forge::Story;
+use leptos_forge::RouteDef;
+
+#[derive(Default, Clone, Copy)]
+pub struct ComponentStory;
+
+impl Story for ComponentStory {
+    ...
+}
+
+const MY_SECTION: &'static str = r########"
+# My Section
+
+To embed the ComponentStory you should write
+
+<Story of="component" />
+
+"########;
+
+#[derive(Default, Clone, Copy)]
+pub struct MySection;
+
+impl Section for MySection {
+    fn description(&self) -> &'static str {
+    }
+
+    fn subroutes(&self) -> Vec<RouteDef> {
+        vec![
+            RouteDef::story::<ComponentStory>("component", "Component"),
+        ]
+    }
+
+}
+```
 
 "############;
 

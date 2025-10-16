@@ -52,7 +52,7 @@
 }
 
 .markdown blockquote {
-    @apply border-l-forgeblue-800 border-solid border-l-3 bg-forgegray-100 mb-6 pl-10 pt-3 pb-3;
+    @apply border-l-forgeblue-800 border-solid border-l-3 bg-forgegray-100 mb-6 pl-10 pt-3 pb-3 pr-10;
 
     &:is(.markdown-alert-note, .markdown-alert-tip, .markdown-alert-important, .markdown-alert-warning, .markdown-alert-caution) {
         @apply border-l-(--forge-markdown-admonish-color) border-solid border-l-3;
@@ -97,7 +97,7 @@
     }
 
     &.markdown-alert-note {
-        --forge-markdown-admonish-content-full: "ℹ️ Notes!";
+        --forge-markdown-admonish-content-full: "ℹ️ Note!";
         --forge-markdown-admonish-content-icon: "ℹ️";
         --forge-markdown-admonish-color: var(--color-forgeblue-700);
     }

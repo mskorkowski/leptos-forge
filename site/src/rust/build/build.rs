@@ -55,7 +55,8 @@ fn main() {
     // Collate resources from the crate's dependencies.
     collate_resources(&manifest_file).expect("[site] There was an error during bundling of the resources");
 
-    let output = Command::new("tailwindcss")
+    let mut tailwind: Command = Command::new("tailwindcss");
+    tailwind
         // .env("DEBUG", "*")
         .args(vec![
             "--input", "src/css/main/main.css",
@@ -63,8 +64,11 @@ fn main() {
             "--map",
             "--optimize",
             "--verbose"
-        ])
-        .output()
+        ]);
+
+    info(format!("\ntailwindcss command:\n\n\t\t{:?}", tailwind));
+
+    let output = tailwind.output()
         .expect(TAILWIND_FAILURE);
 
     if !output.status.success() {
