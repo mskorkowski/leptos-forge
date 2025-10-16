@@ -23,8 +23,12 @@ ui_components.workspace = true
 console_log.workspace = true
 console_error_panic_hook.workspace = true
 log.workspace = true
-testing-library-dom.workspace = true
 uuid.workspace = true
+
+# Unfortunately, testing-library-dom which has the `create_event` and `fire_event` has not been released on crates.io yet
+#
+# This dependency is here directly because this crate is not going to be published
+testing-library-dom = { version = "0.0.1", git="https://github.com/RustForWeb/testing-library.git", rev="05c93b5" }
 
 [build-dependencies]
 cargo_metadata.workspace = true

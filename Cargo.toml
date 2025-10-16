@@ -36,8 +36,6 @@ pulldown-cmark = "0.13.0"
 reactive_graph = { version = "0.2.5" }
 reactive_stores = { version = "0.2.5" }
 
-# Unfortunately, testing-library-dom which has the `create_event` and `fire_event` has not been released on crates.io yet
-testing-library-dom = { version = "0.0.1", git="https://github.com/RustForWeb/testing-library.git", rev="05c93b5" }
 proptest = "1.5.0"
 send_wrapper="0.6.0"
 serde = "1.0.215"
