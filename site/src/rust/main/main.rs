@@ -12,7 +12,6 @@
 #![deny(missing_docs)]
 #![deny(clippy::empty_docs)]
 #![deny(clippy::missing_docs_in_private_items)]
-#![deny(clippy::missing_docs_in_private_items)]
 #![deny(clippy::missing_safety_doc)]
 #![deny(clippy::missing_errors_doc)]
 #![deny(clippy::missing_fields_in_debug)]
@@ -40,6 +39,8 @@ use stories::usage::stories::StorySection;
 use stories::usage::urwsignal::URwSignalSection;
 use stories::Main;
 
+use crate::stories::usage::custom_views::CustomViews;
+
 /// Entrypoint of the application
 pub fn main() {
     _ = console_log::init_with_level(Level::Debug);
@@ -61,6 +62,7 @@ pub fn main() {
             RouteDef::section::<SectionsSection>("section", "Section"),
             RouteDef::section::<RoutesSection>("routes", "Routing"),
             RouteDef::section::<URwSignalSection>("urwsignal", "URwSignal"),
+            RouteDef::section::<CustomViews>("customizing", "Customizing")
         ]),
         RouteDef::header("development", "DEVELOPMENT", vec![
             RouteDef::section::<Components>("components", "Components")

@@ -76,7 +76,6 @@ definition of the `CounterStory` struct to include a `value` field.
 ```rust
 #[derive(Debug, Default, Clone, Copy)]
 pub struct CounterStory {
-    /// Value of the counter
     value: URwSignal<i32>,
 }
 ```
@@ -100,9 +99,7 @@ area.
 Now when you open the `Button` story at the top left side of the gray area you
 will find the component. It should look like this:
 
-![Example counter component rendered in the canvas area](/resources/leptos_forge_site/images/guides/refine_story/01-component_view.png)
-
-<Story of="counter_story" />
+<Story of="simple_counter_story" />
 
 You can test our component by clicking on the `[-]` and `[+]` buttons.
 
@@ -170,18 +167,18 @@ arguments passed to this component are:
 
 Now if you go to the `Counter` story in your web browser, you will see:
 
-![Counter component and its control panel](/resources/leptos_forge_site/images/guides/refine_story/02-counter_with_control.png)
+<Story of="simple_counter_story" controls />
 
 After three clicks on the `[+]` button you will see:
 
-![Counter component and its control panel after third click on the plus button](/resources/leptos_forge_site/images/guides/refine_story/03-counter_with_control-3rd_click.png)
+<Story of="simple_counter_story_3" controls />
 
 If you would like to change the current value of the counter to `3000`, you can 
 just go to the control panel and add a few zeros **to** the input field.
 
 And you end up with:
 
-![Counter component and its control panel after writing 3000 in the input field](/resources/leptos_forge_site/images/guides/refine_story/04-counter_with_control-3000.png)
+<Story of="simple_counter_story_3000" controls />
 
 ## Let's spice it up
 
@@ -311,6 +308,8 @@ Now if you need to check how the `Counter` component will behave in various
 scenarios, you can just go to the browser and adjust values within the control
 panel we've created. It's faster than clicking `[+]` button 10000 times.
 
+<Story of="counter_story" controls />
+
 ## Documentation
 
 The next step we can take is to write documentation for our `Counter` which
@@ -327,12 +326,12 @@ using it within the `description` function.
 const COUNTER_STORY: &str = r############"
 # Counter
 
-Counter component which allows you to increment or decrement a value.
+Counter component which will be used as an example in the `leptos_forge` guide
 
 - When you press `[-]` button, the value will decrease by 1.
 - When you press `[+]` button, the value will increase by 1.
 
-If you exceed the threshold (by default 10000), the message will be shown.
+If value exceeds the threshold (by default 10000), the message will be shown.
 The default message is "You are working hard".
 
 "############;
@@ -368,7 +367,10 @@ impl Section for RefineCounterStory {
 
     fn subroutes(&self) -> Vec<RouteDef> {
         vec![
-            RouteDef::story::<CounterStory>("counter_story", "Counter")
+            RouteDef::private::<SimpleCounterStory<0>>("simple_counter_story", "Simple Counter"),
+            RouteDef::private::<SimpleCounterStory<3>>("simple_counter_story_3", "Simple Counter"),
+            RouteDef::private::<SimpleCounterStory<3000>>("simple_counter_story_3000", "Simple Counter"),
+            RouteDef::story::<CounterStory<0>>("counter_story", "Counter"),
         ]
     }
 }
@@ -379,9 +381,89 @@ impl Section for RefineCounterStory {
 //
 //----------------------------------------------------------------------------------------------------------------
 
+/// Counter component for simplified version of the counter
+#[component]
+fn SimpleCounter(
+    /// Value of the counter
+    value: URwSignal<i32>
+) -> impl IntoView {
+    let button_style = || view!{
+        <{..} style="border: 1px solid black; padding: 1em 2em; border-radius: 3px; margin: 0px 2em; cursor: pointer;" />
+    };
 
+    view!{
+        <div>
+            <button 
+                on:click=move |_| { 
+                    value.set(
+                        value.get_untracked() - 1
+                    );
+                }
+                {..button_style()}
+            >-</button>
+            <span>{value}</span>
+            <button 
+                on:click=move |_| { 
+                    value.set(
+                        value.get_untracked() + 1
+                    );
+                }
+                {..button_style()}
+            >+</button>
+        </div>
+    }
+}
+
+/// Counter story described in [RefineCounterStory]
+/// 
+/// This version is used to show the component and controls during the development
+#[derive(Debug, Clone, Copy)]
+struct SimpleCounterStory<const D: i32> {
+    /// Value of the simplified counter
+    value: URwSignal<i32>,
+}
+
+impl<const D: i32> SimpleCounterStory<D> {
+    /// Creates new instance of this
+    pub fn new(value: i32) -> Self {
+        SimpleCounterStory { 
+            value: URwSignal::new(value)
+        }
+    }
+}
+
+impl<const D: i32> Default for SimpleCounterStory<D> {
+    fn default() -> Self {
+        SimpleCounterStory::new(D)
+    }
+}
+
+impl<const D: i32> Story for SimpleCounterStory<D> {
+    fn view(&self) -> impl IntoView {
+        view!{
+            <SimpleCounter value={self.value} />
+        }
+    }
+
+    fn controls(&self) -> impl IntoView {
+        let value = self.value.map(
+            |v| v.to_string(),
+            |v, text| {
+                if let Ok(new_value) = text.parse::<i32>() {
+                    *v = new_value;
+                }
+            }, 
+        );
+
+        view!{
+            <TextField id="counter_value" text=value label="Value" default=|| { Some(0.to_string()) } />
+        }
+    }
+}
 
 /// Counter component described in [RefineCounterStory] section of the site
+/// 
+/// This is the final version of this component
 #[component]
 fn Counter(
     /// Value of the counter
@@ -431,12 +513,12 @@ fn Counter(
 const COUNTER_STORY: &str = r############"
 # Counter
 
-Counter component which allows you to increment or decrement a value.
+Counter component which will be used as an example in the `leptos_forge` guide
 
 - When you press `[-]` button, the value will decrease by 1.
 - When you press `[+]` button, the value will increase by 1.
 
-If you exceed the threshold (by default 10000) the message will be shown.
+If value exceeds the threshold (by default 10000), the message will be shown.
 The default message is "You are working hard".
 
 "############;
@@ -446,7 +528,7 @@ The default message is "You are working hard".
 /// This way user can compare the result he got and the one he is expected to get
 /// alongside doing a tutorial
 #[derive(Debug, Clone, Copy)]
-pub struct CounterStory {
+pub struct CounterStory<const D: i32> {
     /// Value of the counter
     value: URwSignal<i32>,
     /// Message to be shown if threshold is exceeded
@@ -455,17 +537,17 @@ pub struct CounterStory {
     threshold: URwSignal<i32>,
 }
 
-impl Default for CounterStory {
+impl<const D: i32> Default for CounterStory<D> {
     fn default() -> Self {
         CounterStory {
-            value: 0.into(),
+            value: D.into(),
             message: "You are working hard".to_string().into(),
             threshold: 10_000.into(),
         }
     }
 }
 
-impl Story for CounterStory {
+impl<const D: i32> Story for CounterStory<D> {
     fn view(&self) -> impl IntoView {
         view!{
             <Counter value={self.value} message={self.message} threshold={self.threshold} />  // <- added missing properties

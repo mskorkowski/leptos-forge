@@ -83,9 +83,9 @@ path = "src/main.rs"
 
 [dependencies]
 leptos = { version = "0.8", features = ["csr"] }
-forge = { version = "0.1.0", package = "leptos_forge", git="https://github.com/mskorkowski/leptos-forge.git" }
-ui_components = { version = "0.1", package = "leptos_forge_ui_components", git="https://github.com/mskorkowski/leptos-forge.git"  }
-utils_leptos = { version = "0.1", package = "leptos_forge_utils_leptos", git="https://github.com/mskorkowski/leptos-forge.git"  }
+forge = { version = "0.5", package = "leptos_forge", git="https://github.com/mskorkowski/leptos-forge.git" }
+ui_components = { version = "0.5", package = "leptos_forge_ui_components", git="https://github.com/mskorkowski/leptos-forge.git"  }
+utils_leptos = { version = "0.5", package = "leptos_forge_utils_leptos", git="https://github.com/mskorkowski/leptos-forge.git"  }
 testing-library-dom = { version = "0.0.1", git="https://github.com/RustForWeb/testing-library.git", rev="05c93b5" }
 
 console_error_panic_hook = "0.1.7"
@@ -190,9 +190,9 @@ Below is the basic `index.html` file you can use:
         <meta charset="UTF-8">
         <title>My leptos_forge site</title>
         <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, interactive-widget=overlays-content" />
-        <link data-trunk rel="copy-dir" href="target/resources" data-target-path="resources" />
-        <link data-trunk rel="css" href="target/resources/leptos_forge.css" />
         <link data-trunk rel="rust" href="Cargo.toml"/>
+        <link data-trunk rel="copy-dir" href="target/resources" data-target-path="resources" />
+        <link data-trunk rel="css" href="target/resources/leptos_forge/leptos_forge.css" />
     </head>
     <body></body>
 </html>
@@ -200,72 +200,50 @@ Below is the basic `index.html` file you can use:
 
 Using Tailwind in your `leptos_forge` application is described in [Tailwind chapter](/guides/tailwind).
 
-### Creating the application
+### Creating the first story
 
 Finally, after all of this, we are ready to create our `leptos_forge` hello world application.
+We will create the smallest example which we will refine later in the guide.
 
 Now we need to create a `src/main.rs` file with the following content:
 
 ```rust
-mod stories;
-
-use leptos::prelude::*;
-
-use forge::App;
 use log::Level;
-use stories::ROUTES;
+use leptos::prelude::*;
+use forge::{App, RouteDef, Story};
+
+#[derive(Debug, Default, Clone, Copy)]
+struct CounterStory {}
+
+impl Story for CounterStory {}
 
 /// Entrypoint of the application
 pub fn main() {
     _ = console_log::init_with_level(Level::Debug);
     console_error_panic_hook::set_once();
 
-    mount_to_body(|| view!{
-        <App routes=ROUTES logo="/resources/leptos_forge/logo/logo.svg" />
+   let routes = vec![
+      RouteDef::story::<CounterStory>("/", "Counter")
+   ];
+
+    mount_to_body(move || view!{
+        <App routes logo="/resources/leptos_forge/logo/logo.svg" />
     });
 }
 ```
 
-The interesting parts are:
-
-1. The file starts with `mod stories` which we will create in the second part. There we 
-   will keep all of our stories to show up in the `leptos_forge` based site. It's not 
-   a requirement. Just a good practice.
-2. We import `use forge::App`, which is the main entry point of our application.
-3. We import `use stories::ROUTES`, which we will use to contain the routes for Leptos.
-   We will set it up later.
-
-### Let's write the first story
-
-First we will write an empty story for a `Counter` and add it to the menu on the left side
-of the site. Later we will refine it into a useful example.
-
-```rust
-use forge::RouteDef;
-use forge::Story;
-
-pub const ROUTES: &[RouteDef] = &[
-    RouteDef::page::<CounterStory>("/", "Counter")
-];
-
-#[derive(Debug, Default, Clone, Copy)]
-struct CounterStory {}
-
-impl Story for CounterStory {}
-```
-
 Things which are noteworthy:
 
-1. We've created a constant `ROUTES` which we passed in the `main.rs` into the `forge::App`
-   component. Whenever you add a `RouteDef` to this constant, it will show up in the menu
-   of your application.
-2. When creating an entry in the `ROUTES` we used `RouteDef::page` function. This is the most
-   basic function to add the story to the application. We will cover more functions later.
-3. We've created a new type `CounterStory` struct. This struct derives `Clone`, `Copy`, and
-   `Default` traits. All three are required by `leptos_forge`.
-   1. `Default` allows you to setup initial state of the components in your story.
-   2. `Copy` is required to prevent you from storing data in the story itself. You should 
-      use signals for that.
+1. We use `forge::App`, which is the main entry point of our `leptos_forge` application.
+2. We've created a value `routes` which we passed in the `forge::App` component.
+   This value is the top level routing structure of the application.
+2. When creating an entry in the `routes` we used `RouteDef::story` function. 
+   This function allows to add stories about components into the `leptos_forge` 
+   based site.
+3. We've created a new type `CounterStory` struct. This struct derives `Clone`, 
+   `Copy`, and `Default` traits. All three are required by `leptos_forge`.
+   `leptos_forge` uses the `Default` trait to setup initial state of the components
+   in your story.
 
 ### Run it for the first time
 

@@ -14,8 +14,8 @@ use ui_components::menu::MenuState;
 use super::navigation::PathSpec;
 use super::navigation::RouteDef;
 use ui_components::widgets::logo::Logo;
-use ui_layout::main_menu::MainMenu;
-use ui_layout::root::Root;
+use ui_components::layout::main_menu::MainMenu;
+use ui_components::layout::root::Root;
 use ui_components::menu::Menu;
 
 use super::views::content::Content;

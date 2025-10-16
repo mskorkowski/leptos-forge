@@ -8,7 +8,7 @@ use std::marker::PhantomData;
 use leptos::html::Div;
 use leptos::prelude::*;
 use ui_components::widgets::details::Details;
-use utils_leptos::signal::ThreadSafe;
+use utils::prelude::ThreadSafe;
 use utils_leptos::signal::URwSignal;
 
 
@@ -17,6 +17,7 @@ use crate::views::control_pane::EmbeddedControlPane;
 use crate::views::tab_panel::Tab;
 use crate::views::tab_panel::TabPanel;
 use crate::views::widgets::test_viewer::TestView;
+use crate::IntoStory;
 use crate::Story;
 use super::canvas::Canvas;
 use super::control_pane::ControlPane;
@@ -27,12 +28,12 @@ use super::tab_panel::TabName;
 
 /// Page is the view for the single story about a component
 #[component]
-pub fn Story<S: 'static + Story + Default + Copy + ThreadSafe>(
+pub fn Story<S: 'static + IntoStory + Default + Copy + ThreadSafe>(
     /// Phantom data of the story
     #[prop(optional)]
     _story: PhantomData<S>
 ) -> impl IntoView {
-    let story = S::default();
+    let story = S::default().into_story();
     let canvas = NodeRef::new();
 
     let tabs: Vec<Box<dyn Tab<SidePanelTabs> + 'static>> = vec![
@@ -164,7 +165,7 @@ where
 }
 
 #[component]
-pub fn EmbeddedStory<S: 'static + Story + Default + Copy + ThreadSafe>(
+pub fn EmbeddedStory<S: 'static + IntoStory + Default + Copy + ThreadSafe>(
     /// If set to `true` embedded story will show the canvas with component
     view: bool, 
     /// If set to `true` embedded story will show the control panel
@@ -185,7 +186,7 @@ pub fn EmbeddedStory<S: 'static + Story + Default + Copy + ThreadSafe>(
     _story: PhantomData<S>
 ) -> impl IntoView {
     let canvas_ref = NodeRef::new();
-    let story = S::default();
+    let story = S::default().into_story();
     let canvas = if view {
         // let v = story.view().into_any();
         Some(view!{

@@ -40,3 +40,6 @@ Cargo.lock
 
 # Ignore vscode configuration
 .vscode
+
+# ignore tailwindlogs
+**/tailwindcss-*.log

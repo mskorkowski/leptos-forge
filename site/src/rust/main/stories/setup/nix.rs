@@ -7,61 +7,66 @@ use forge::Section;
 const NIX: &str = r############"
 # Nix
 
-The sample Nix flake configuration that can be used to develop the `leptos_forge` project looks like this
+The sample Nix flake configuration that can be used to develop the `leptos_forge` 
+project looks like this
 
 ```nix
 {
+  description = "A basic Rust devshell for NixOS users developing Leptos_forge";
+
   inputs = {
-    fenix = {
-      url = "github:nix-community/fenix";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-    nixpkgs.url = "nixpkgs/nixos-unstable";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+    rust-overlay.url = "github:oxalica/rust-overlay";
     flake-utils.url = "github:numtide/flake-utils";
   };
 
-  outputs = { self, fenix, flake-utils, nixpkgs }:
-    flake-utils.lib.eachDefaultSystem (system:
+  outputs =
+    {
+      nixpkgs,
+      rust-overlay,
+      flake-utils,
+      ...
+    }:
+    flake-utils.lib.eachDefaultSystem (
+      system:
       let
-        packages = nixpkgs.legacyPackages.${system};
-        rust-toolchain = with fenix.packages.${system}; fromToolchainFile {
-          file = ./rust-toolchain.toml;
-          sha256 = "sha256-+9FmLhAOezBZCOziO0Qct1NOrfpjNsXxc/8I0c7BdKE=";
+        overlays = [ (import rust-overlay) ];
+        pkgs = import nixpkgs {
+          inherit system overlays;
         };
-      in {
-        devShell = packages.mkShell rec {
-          buildInputs = with packages; [
-            clang
-            cargo-shear               # cleanup unused cargo dependencies
-            lld
-            pkg-config 
-            rust-analyzer             
-            rust-toolchain
-            tailwindcss_4             # tailwindcss v4 is required to build the `leptos_forge` crate
-            trunk
-          ];
-          LD_LIBRARY_PATH = packages.lib.makeLibraryPath buildInputs;
+      in
+      with pkgs;
+      {
+        devShells.default = mkShell {
+          buildInputs =
+            [
+              pkg-config
+              trunk
+              tailwindcss_4
+              (rust-bin.selectLatestNightlyWith (
+                toolchain:
+                toolchain.default.override {
+                  extensions = [
+                    "rust-src"
+                    "rust-analyzer"
+                  ];
+                  targets = [ "wasm32-unknown-unknown" ];
+                }
+              ))
+            ]
+            ++ pkgs.lib.optionals pkg.stdenv.isDarwin [
+              darwin.apple_sdk.frameworks.SystemConfiguration
+            ];
+
+          shellHook = '''';
         };
       }
     );
 }
 ```
 
-And `rust-toolchain.toml`
-
-```toml
-[toolchain]
-channel = "stable"
-components = [
-    "rust-analyzer",
-    "rust-src",
-    "rustfmt",
-]
-targets = [
-    "x86_64-unknown-linux-gnu",
-    "wasm32-unknown-unknown"
-]
-```
+The example configuration is based on the `flake.nix` from the `leptos` source
+code.
 
 "############;
 

@@ -4,8 +4,10 @@ version.workspace = true
 edition.workspace = true
 build="src/rust/build/build.rs"
 include = [
+    "src/css/main/forge.css",
     "src/css/main/markdown.css",
     "src/css/main/typography.css",
+    "target/resources/leptos_forge_ui_components/main.css",
 ]
 
 [lib]
@@ -23,8 +25,20 @@ utils.workspace = true
 utils_leptos.workspace = true
 uuid = { workspace = true, features = ["js", "v4"] }
 
+[build-dependencies]
+build-print.workspace = true
+
 [features]
 default = []
 
 [lints]
 workspace = true
+
+[package.metadata.cargo_resources]
+resource_root = "target/resources"
+provides = [
+    { crate_path = "src/css/main/common.css", output_path="leptos_forge_ui_components/common.css", resource_name="leptos_forge_ui_components/common.css"},
+    { crate_path = "src/css/main/markdown.css", output_path="leptos_forge_ui_components/markdown.css", resource_name="leptos_forge_ui_components/markdown.css"},
+    { crate_path = "src/css/main/typography.css", output_path="leptos_forge_ui_components/typography.css", resource_name="leptos_forge_ui_components/typography.css"},
+    { crate_path = "target/resources/leptos_forge_ui_components/main.css", output_path="leptos_forge_ui_components/main.css", resource_name="leptos_forge_ui_components/main.css" },
+]

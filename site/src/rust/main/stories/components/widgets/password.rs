@@ -238,9 +238,9 @@ impl Story for NonemptyVisiblePasswordFieldStory {
     fn view(&self) -> impl IntoView {
         let label: Signal<String> = self.label.into();
         let text: URwSignal<Password> = self.text;
-
+        let state = PasswordButtonStates::Visible;
         view! {
-            <PasswordField id="basic-input" password=text label=label state={(PasswordButtonStates::Visible,)}/>
+            <PasswordField id="basic-input" password=text label=label state/>
         }
     }
 

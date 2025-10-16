@@ -301,13 +301,13 @@ impl Default for InlineLabelStory {
 impl Story for InlineLabelStory {
     fn view(&self) -> impl IntoView {
         let label: Signal<String> = self.label.into();
-
-        view! {
+        let text = "sample text".to_string();
+        view!{
             <div class="relative"> 
                 <InlineFieldLabel for_id=INLINE_INPUT_ID_1 text=label/> <input type="text" class="forge-text-standard border-1 border-solid border-gray-800 ml-1" id=INLINE_INPUT_ID_1 /><br/>
                 <InlineFieldLabel for_id=INLINE_INPUT_ID_2 text=label/> <input type="checkbox" class="forge-text-standard border-1 border-solid border-gray-800 ml-1" id=INLINE_INPUT_ID_2 /><br/>
                 <InlineFieldLabel for_id=INLINE_INPUT_ID_3 text=label/> <input type="radio" class="forge-text-standard border-1 border-solid border-gray-800 ml-1" id=INLINE_INPUT_ID_2 />
-                <InlineFieldLabel for_id=INLINE_INPUT_ID_4 text=label/> <TextInput id=INLINE_INPUT_ID_4 text=("sample text".to_string(),) />
+                <InlineFieldLabel for_id=INLINE_INPUT_ID_4 text=label/> <TextInput id=INLINE_INPUT_ID_4 text />
             </div>
         }
     }
