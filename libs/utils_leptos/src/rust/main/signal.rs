@@ -150,7 +150,7 @@ where
     T: ThreadSafe,
 {
     fn defined_at(&self) -> Option<&'static Location<'static>> {
-        { Some(self.defined_at) }
+        Some(self.defined_at)
     }
 }
 
