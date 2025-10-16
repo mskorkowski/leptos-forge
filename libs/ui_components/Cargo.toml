@@ -26,8 +26,6 @@ utils_leptos.workspace = true
 uuid = { workspace = true, features = ["js", "v4"] }
 
 [build-dependencies]
-cargo_metadata.workspace = true
-cargo-resources.workspace = true
 build-print.workspace = true
 
 [features]
