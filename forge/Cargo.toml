@@ -16,7 +16,7 @@ path = "src/rust/main/lib.rs"
 leptos = { workspace = true, features = ["csr"] }
 leptos_router.workspace = true
 reactive_stores.workspace = true
-
+utils.workspace = true
 utils_leptos.workspace = true 
 
 ui_components.workspace = true

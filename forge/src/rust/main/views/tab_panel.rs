@@ -2,7 +2,7 @@
 //! 
 
 use leptos::prelude::*;
-use utils_leptos::signal::ThreadSafe;
+use utils::prelude::ThreadSafe;
 use utils_leptos::signal::URwSignal;
 
 /// Returns a name of the tab

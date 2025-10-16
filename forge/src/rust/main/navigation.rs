@@ -14,7 +14,8 @@ use ui_components::menu::MenuHeader;
 use ui_components::menu::MenuState;
 use ui_components::menu::Navigate;
 use ui_components::primitives::markdown::Markdown;
-use utils_leptos::signal::ThreadSafe;
+use utils::prelude::ThreadSafe;
+
 
 use crate::views::story::EmbeddedStory;
 use crate::IntoStory;

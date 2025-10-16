@@ -8,7 +8,7 @@ use std::marker::PhantomData;
 use leptos::html::Div;
 use leptos::prelude::*;
 use ui_components::widgets::details::Details;
-use utils_leptos::signal::ThreadSafe;
+use utils::prelude::ThreadSafe;
 use utils_leptos::signal::URwSignal;
 
 

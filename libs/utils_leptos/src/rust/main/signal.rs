@@ -46,14 +46,7 @@ use reactive_graph::wrappers::read::Signal;
 use reactive_graph::wrappers::write::SignalSetter;
 use reactive_graph::wrappers::read::SignalReadGuard;
 use reactive_graph::signal::signal;
-
-/// Type alias for `'static + Send + Sync` which is usable in generic type boundaries
-pub trait ThreadSafe: 'static + Send + Sync {}
-impl<T> ThreadSafe for T 
-where
-    T: 'static + Send + Sync
-{}
-
+use utils::prelude::ThreadSafe;
 
 /// Signal which allows reading and writing a value
 /// 
@@ -120,7 +113,7 @@ where
 
     /// Transforms signal of T into signal of A
     /// 
-    /// You should prefer this method over [`from`][Self::from] 
+    /// Allows consistent read/write with the derived URwSignal
     #[track_caller]
     pub fn map<A>(
         &self,
@@ -522,11 +515,5 @@ where
 impl<T: ThreadSafe + Default> Default for URwSignal<T> {
     fn default() -> Self {
         URwSignal::new(T::default())
-    }
-}
-
-impl<T: ThreadSafe> From<(T,)> for URwSignal<T> {
-    fn from(value: (T,)) -> Self {
-        URwSignal::new(value.0)
     }
 }

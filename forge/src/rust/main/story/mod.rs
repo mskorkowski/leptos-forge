@@ -8,7 +8,7 @@ use leptos::web_sys::HtmlElement;
 use leptos::IntoView;
 pub use tests::play;
 pub use tests::test_id;
-use utils_leptos::signal::ThreadSafe;
+use utils::prelude::ThreadSafe;
 
 use crate::RouteDef;
 
