@@ -1,13 +1,17 @@
 [package]
 name = "leptos_forge"
+license.workspace = true
+description = "Build and test your Leptos components"
 version.workspace = true
 edition.workspace = true
 readme = "../README.md"
 build="src/rust/build/build.rs"
 include = [
     "target/resources/leptos_forge/main.css",
-    "src/resources/logo/logo.svg"
+    "src"
 ]
+repository.workspace = true
+homepage.workspace = true
 
 [lib]
 path = "src/rust/main/lib.rs"

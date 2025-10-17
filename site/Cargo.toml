@@ -4,6 +4,10 @@ version.workspace = true
 edition.workspace = true
 publish = false # we don't need this crate to be published to the crates.io 
 build="src/rust/build/build.rs"
+license.workspace = true
+description = "Leptos_forge homepage"
+repository.workspace = true
+homepage.workspace = true
 
 [[bin]]
 name = "site"

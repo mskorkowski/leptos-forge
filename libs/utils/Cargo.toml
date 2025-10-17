@@ -2,6 +2,10 @@
 name = "leptos_forge_utils"
 version.workspace = true
 edition.workspace = true
+license.workspace = true
+description = "Small general purpose utility from leptos_forge project"
+repository.workspace = true
+homepage.workspace = true
 
 [lib]
 path = "src/rust/main/lib.rs"

@@ -11,6 +11,8 @@ version = "0.6.0"
 edition = "2024"
 rust-version = "1.88"
 license = "MIT"
+repository = "https://github.com/mskorkowski/leptos-forge"
+homepage = "https://mskorkowski.github.io/"
 
 [workspace.dependencies]
 # Internal dependencies

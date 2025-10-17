@@ -1,14 +1,16 @@
 [package]
 name = "leptos_forge_ui_components"
+description = "Components you can use in your leptos_forge application"
+license.workspace = true
 version.workspace = true
 edition.workspace = true
 build="src/rust/build/build.rs"
 include = [
-    "src/css/main/forge.css",
-    "src/css/main/markdown.css",
-    "src/css/main/typography.css",
+    "src",
     "target/resources/leptos_forge_ui_components/main.css",
 ]
+repository.workspace = true
+homepage.workspace = true
 
 [lib]
 path = "src/rust/main/lib.rs"
