@@ -1,5 +1,11 @@
 # `leptos_forge` Changes
 
+## 0.6.1
+
+### `leptos_forge_build_script`
+
+Better README.md documentation
+
 ## 0.6.0
 
 First crates.io release

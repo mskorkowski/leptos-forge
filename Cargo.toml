@@ -7,7 +7,7 @@ members = [
 ]
 
 [workspace.package]
-version = "0.6.0"
+version = "0.6.1"
 edition = "2024"
 rust-version = "1.88"
 license = "MIT"
@@ -17,11 +17,11 @@ homepage = "https://mskorkowski.github.io/"
 [workspace.dependencies]
 # Internal dependencies
 
-forge =         { version = "0.6.0", path = "forge", package = "leptos_forge" }
-utils =         { version = "0.6.0", path = "libs/utils",  package = "leptos_forge_utils" }
-utils_leptos =  { version = "0.6.0", path = "libs/utils_leptos", package = "leptos_forge_utils_leptos" }
-ui_components = { version = "0.6.0", path = "libs/ui_components", package = "leptos_forge_ui_components" }
-build_script =  { version = "0.6.0", path = "libs/build_script", package = "leptos_forge_build_script" }
+forge =         { version = "0.6.1", path = "forge", package = "leptos_forge" }
+utils =         { version = "0.6.1", path = "libs/utils",  package = "leptos_forge_utils" }
+utils_leptos =  { version = "0.6.1", path = "libs/utils_leptos", package = "leptos_forge_utils_leptos" }
+ui_components = { version = "0.6.1", path = "libs/ui_components", package = "leptos_forge_ui_components" }
+build_script =  { version = "0.6.1", path = "libs/build_script", package = "leptos_forge_build_script" }
 
 # External dependencies
 console_error_panic_hook = "0.1.7"
