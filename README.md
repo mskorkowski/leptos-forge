@@ -1,13 +1,29 @@
 # Leptos Forge
 
-Leptos Forge is the library which helps with creating and testing user interfaces written in Rust and [Leptos](https://leptos.dev/).
+Leptos Forge is the library which helps with creating and testing user interfaces 
+written in Rust and [Leptos](https://leptos.dev/).
 
 The most recent documentation is available at [leptos_forge site](https://mskorkowski.github.io).
 
 > **Warning**
 >
-> Leptos Forge is still at the early stages of development and is really a bare-bones project. Many of the developer experience features
-> are not yet implemented.
+> Leptos Forge is still at the early stages of development and is really 
+> a bare-bones project. Many of the developer experience features are not yet
+> implemented.
+
+## Parts already released to crates.io
+
+Parts released to `crates.io` are considered as good enough for others to use
+
+- `leptos_forge_build_script`
+    - readable output handling for cargo build scripts
+    - reliable integration with tailwindcss cli 
+- `leptos_forge_utils_leptos`
+    - **URwSignal** - generic purpose read/write signal
+    - css classes manipulation add/remove/swap
+    - **StoredRef** - wrapper type which allows to keep the `Element` in the leptos store
+- `leptos_forge_utils`
+  Probably useless outside of the `leptos_forge` codebase
 
 ## Features
 

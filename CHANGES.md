@@ -2,11 +2,26 @@
 
 ## 0.6.0
 
-First crates.io release of the library
+First crates.io release
 
-### `lib/leptos_forge_build_script`
+### `leptos_forge_build_script`
 
 - Reliable tailwindcss integration via build script
+
+### `leptos_forge_utils`
+
+Generic leptos free utils
+
+### `leptos_forge_utils_leptos`
+
+Generic utilities to be used together with `leptos`
+
+- **URwSignal** - generic purpose read/write signal implementation
+- css class swapping
+  - **use_swap_class** - to replace one set of css classes with another 
+  - **use_add_class** - to add a set of css classes
+  - **use_remove_class** - to remove a set of css classes
+- **StoredRef** - wrapper type which allows to keep the `Element` in the leptos store
 
 ## 0.5.* and earlier versions
 
