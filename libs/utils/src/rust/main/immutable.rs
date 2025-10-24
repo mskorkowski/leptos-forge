@@ -1,11 +1,25 @@
 //! Immutable new type structure for storing data
 
-use std::{borrow::Borrow, fmt::{Debug, Display}, hash::Hash, ops::{Add, Deref, Div, Index, Mul, Rem, Sub}};
+use std::borrow::Borrow;
+use std::fmt::Debug;
+use std::fmt::Display;
+use std::hash::Hash;
+use std::ops::Add;
+use std::ops::Deref;
+use std::ops::Div;
+use std::ops::Index;
+use std::ops::Mul;
+use std::ops::Rem;
+use std::ops::Sub;
 
 /// Immutable data structure
-/// 
+///
 /// You can access the data using `&self` or `self.deref()` but there is no way to get mutable reference.
-#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize), serde(transparent))]
+#[cfg_attr(
+    feature = "serde",
+    derive(serde::Serialize, serde::Deserialize),
+    serde(transparent)
+)]
 pub struct Immutable<T>(T);
 
 impl<T> Deref for Immutable<T> {
@@ -70,9 +84,7 @@ impl<T: Display> Display for Immutable<T> {
 
 impl<T: Debug> Debug for Immutable<T> {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        f.debug_tuple("Immutable").
-            field(&self.0).
-            finish()
+        f.debug_tuple("Immutable").field(&self.0).finish()
     }
 }
 
@@ -181,13 +193,12 @@ where
     }
 }
 
-impl<T> Immutable<T> 
+impl<T> Immutable<T>
 where
-    T: Copy
+    T: Copy,
 {
     /// Gets the copy of value in the container
     pub fn get(&self) -> T {
         self.0
     }
 }
-

@@ -1,5 +1,5 @@
 //! Defines story interface and all of fancy stuff that goes with it
-//! 
+//!
 
 mod tests;
 
@@ -13,11 +13,11 @@ use utils::prelude::ThreadSafe;
 use crate::RouteDef;
 
 /// One step in the testing process
-/// 
+///
 /// Step is an ephemeral description of a single step in the testing process.
 /// It will be created and destroyed whenever it's needed, even in the middle of
 /// the testing process.
-/// 
+///
 /// Do not store any data in the structures which implement this trait
 pub trait Step {
     /// Story for which the step is defined
@@ -25,21 +25,21 @@ pub trait Step {
     /// Description of the step
     fn description(&self) -> &'static str;
     /// Play the step
-    /// 
+    ///
     /// If the step fails, it should return an error message using
     /// Markdown so it can display it nicely in the UI
-    /// 
+    ///
     /// # Errors
-    /// 
+    ///
     /// If the step fails, it should return an error message which can be displayed in the UI
     /// formatted in Markdown.
     fn run(&self, canvas: &HtmlElement, story: &mut Self::Story) -> Result<(), &'static str>;
 }
 
 /// A play for a story
-/// 
+///
 /// Play is an ephemeral container for a list of steps. It will be freely created and destroyed as needed
-/// even in the middle of the testing process. You shouldn't keep any data in the play. 
+/// even in the middle of the testing process. You shouldn't keep any data in the play.
 pub trait Play {
     /// Story related to the play
     type Story: Story;
@@ -109,9 +109,9 @@ While creating a description you should try to explain
 "############;
 
 /// Story to show in the application
-/// 
+///
 /// # Why `Story` must implement `Copy`?
-/// 
+///
 /// Story should only by it's nature hold only the data like [Signal][leptos::prelude::Signal] required to manipulate the component via the control panel.
 pub trait Story: Default + Copy {
     /// Returns a view of the story
@@ -126,7 +126,7 @@ pub trait Story: Default + Copy {
     }
 
     /// Returns a list of plays for the story
-    fn plays(&self) -> Vec<Box<dyn Play<Story=Self>>> {
+    fn plays(&self) -> Vec<Box<dyn Play<Story = Self>>> {
         Vec::new()
     }
 

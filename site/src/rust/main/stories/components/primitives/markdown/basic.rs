@@ -938,17 +938,14 @@ Markdown provides backslash escapes for the following characters:
 #[derive(Clone, Copy, Debug)]
 pub struct MarkdownBaseStory {
     /// text of a markdown document
-    text: URwSignal<String>
+    text: URwSignal<String>,
 }
 
 impl Default for MarkdownBaseStory {
-    
     fn default() -> Self {
         let text: URwSignal<String> = URwSignal::new(MARKDOWN_DEMO.to_string());
 
-        Self{  
-            text
-        }
+        Self { text }
     }
 }
 
@@ -960,7 +957,7 @@ impl Story for MarkdownBaseStory {
     }
 
     fn controls(&self) -> impl IntoView {
-        view!{
+        view! {
             <Codearea id="leptos-forge-markdown-demo-textarea" text=self.text label={"Markdown document".to_string()} />
         }
     }

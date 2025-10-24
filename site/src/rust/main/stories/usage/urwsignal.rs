@@ -1,5 +1,5 @@
 //! Section describing URwSignal
-//! 
+//!
 
 use forge::Section;
 

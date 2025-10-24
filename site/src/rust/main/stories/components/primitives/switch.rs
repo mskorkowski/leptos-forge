@@ -25,7 +25,9 @@ pub struct BasicSwitchStory {
 
 impl Default for BasicSwitchStory {
     fn default() -> Self {
-        BasicSwitchStory { value: URwSignal::new(false) }
+        BasicSwitchStory {
+            value: URwSignal::new(false),
+        }
     }
 }
 
@@ -35,19 +37,18 @@ impl Story for BasicSwitchStory {
     }
 
     fn controls(&self) -> impl IntoView {
-        view!{ 
+        view! {
             <SwitchField
                 id="switch-control-item-1"
                 label={"Value".to_string()}
-                value={self.value}            
+                value={self.value}
             />
         }
     }
 
     fn view(&self) -> impl IntoView {
-        
-        view!{
-            <Switch 
+        view! {
+            <Switch
                 id="switch-basic"
                 value={self.value}
             />
@@ -55,9 +56,10 @@ impl Story for BasicSwitchStory {
     }
 
     fn subroutes(&self) -> Vec<RouteDef> {
-        vec![
-            RouteDef::story::<ToggledOnSwitchStory>("toggled-on", "Toggled on"),
-        ]
+        vec![RouteDef::story::<ToggledOnSwitchStory>(
+            "toggled-on",
+            "Toggled on",
+        )]
     }
 }
 
@@ -79,7 +81,9 @@ pub struct ToggledOnSwitchStory {
 
 impl Default for ToggledOnSwitchStory {
     fn default() -> Self {
-        ToggledOnSwitchStory{ value: URwSignal::new(true) }
+        ToggledOnSwitchStory {
+            value: URwSignal::new(true),
+        }
     }
 }
 
@@ -89,19 +93,18 @@ impl Story for ToggledOnSwitchStory {
     }
 
     fn controls(&self) -> impl IntoView {
-        view!{ 
+        view! {
             <SwitchField
                 id="switch-control-item-1"
                 label={"Value".to_string()}
-                value={self.value}            
+                value={self.value}
             />
         }
     }
 
     fn view(&self) -> impl IntoView {
-        
-        view!{
-            <Switch 
+        view! {
+            <Switch
                 id="switch-on"
                 value={self.value}
             />

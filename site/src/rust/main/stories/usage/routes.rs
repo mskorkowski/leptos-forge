@@ -1,8 +1,7 @@
 //! Module containing the section about `ROUTES` in the `leptos_forge` app.
-//! 
+//!
 
 use forge::Section;
-
 
 /// URwSignal description
 const ROUTING: &str = r############"
@@ -239,7 +238,6 @@ At the time of writing the `leptos_forge` site used
 ```
 
 "############;
-
 
 /// Section about `Routes` and [RouteDef][forge::RouteDef]
 #[derive(Debug, Default, Clone, Copy)]

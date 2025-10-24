@@ -1,18 +1,18 @@
 //! Component rendering a markdown text
-//! 
+//!
 
 use leptos::prelude::*;
-use pulldown_cmark::Parser;
 use pulldown_cmark::Options;
+use pulldown_cmark::Parser;
 
 /// Renders a static markdown text
-/// 
-/// 
+///
+///
 #[component]
 pub fn Markdown(
     /// raw markdown to be rendered
     #[prop(into)]
-    src: Signal<String>
+    src: Signal<String>,
 ) -> impl IntoView {
     let mut configuration = Options::empty();
     configuration.insert(Options::ENABLE_TABLES);
@@ -31,7 +31,7 @@ pub fn Markdown(
         inner_html
     };
 
-    view!{
+    view! {
         <div inner_html=inner_html />
     }
 }

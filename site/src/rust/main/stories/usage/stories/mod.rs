@@ -1,5 +1,5 @@
-//! This module documents how to use `Story` 
-//! 
+//! This module documents how to use `Story`
+//!
 
 pub mod testing;
 
@@ -250,9 +250,6 @@ impl Section for StorySection {
     }
 
     fn subroutes(&self) -> Vec<RouteDef> {
-        vec![
-            RouteDef::section::<TestingSection>("testing", "Testing"),
-        ]
+        vec![RouteDef::section::<TestingSection>("testing", "Testing")]
     }
 }
-

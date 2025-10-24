@@ -1,12 +1,11 @@
 //! Summary/details like widget
-//! 
+//!
 //! It has been created to go around the limitations of the html's `details` and `summary` tags
 
 use leptos::prelude::*;
 
 /// Allows to represent the structure as the details widget
-pub trait DetailsParts
- {
+pub trait DetailsParts {
     /// Header component of the details widget
     fn summary(&self) -> AnyView;
     /// Body component of the details widget
@@ -31,7 +30,7 @@ pub fn Details<'details, D: DetailsParts>(
 ) -> impl IntoView {
     let header = details.summary();
     let body = details.details();
-    view!{
+    view! {
         <div class="leptos-forge-details">
             <div class="leptos-forge-details-header">
                 {header}

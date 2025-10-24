@@ -9,7 +9,7 @@ use utils_leptos::signal::URwSignal;
 
 /// Common class for icons in input buttons
 pub fn input_button_icon_class() -> impl Attribute {
-    view!{
+    view! {
         <{..} class="leptos-forge-input-button-icon mx-[4px]" />
     }
 }
@@ -18,13 +18,13 @@ pub fn input_button_icon_class() -> impl Attribute {
 #[component]
 pub fn ClearInputButton(
     /// Signal to invoke when parent component should perform cleaning operation
-    /// 
+    ///
     /// Clear button will set `true` value if the clearing has been invoked
     /// You can use `false` value to prevent other code from clearing your input field
     /// For working example check
     /// - [TextField][crate::widgets::field::TextField]
     /// - [BlobFileInput][crate::widgets::field::BlobFile]
-    /// 
+    ///
     clear: SignalSetter<bool>,
     /// Signal which toggles the visibility of the `clear input button`
     #[prop(into)]
@@ -37,15 +37,10 @@ pub fn ClearInputButton(
     };
 
     let clear_button_display_style = move || {
-        if show.get() {
-            "inline-block"
-        }
-        else {
-            "none"
-        }
+        if show.get() { "inline-block" } else { "none" }
     };
 
-    view!{
+    view! {
         <button class="
                 hidden
                 absolute 
@@ -70,7 +65,7 @@ pub fn ClearInputButton(
                 active:text-forgeblue-100 
                 mt-[calc(var(--spacing)*6.7)]
             " 
-            on:click=on_click   
+            on:click=on_click
             style:display=clear_button_display_style
         ><Icon icon={icondata::MdiClose} {..input_button_icon_class()}/></button>
     }
@@ -88,7 +83,6 @@ pub trait Next {
     fn icon(&self) -> icondata::Icon;
 }
 
-
 /// Input button which allows toggling between different states
 #[component]
 pub fn ToggleInputButton<State>(
@@ -98,13 +92,11 @@ pub fn ToggleInputButton<State>(
     /// Wherever the button should be visible
     #[prop(into)]
     show: Signal<bool>,
-) -> impl IntoView 
+) -> impl IntoView
 where
     State: Next<State = State> + Default + Clone + ThreadSafe,
 {
-    let icon: Signal<icondata::Icon> = Signal::derive(move ||{
-        state.get().icon()
-    });
+    let icon: Signal<icondata::Icon> = Signal::derive(move || state.get().icon());
 
     let on_click = move |_| {
         let current_state = state.get();
@@ -113,15 +105,10 @@ where
     };
 
     let clear_button_display_style = move || {
-        if show.get() {
-            "inline-block"
-        }
-        else {
-            "none"
-        }
+        if show.get() { "inline-block" } else { "none" }
     };
 
-    view!{
+    view! {
         <button class="
                 hidden
                 absolute 
@@ -145,7 +132,7 @@ where
                 active:border-forgeblue-500
                 mt-[calc(var(--spacing)*6.7)]
             " 
-            on:click=on_click   
+            on:click=on_click
             style:display=clear_button_display_style
         >
             <Icon icon={icon} {..input_button_icon_class()}/>
@@ -154,8 +141,7 @@ where
 }
 
 /// List of states for a button which is shown in the password field
-#[derive(Debug, Clone, Copy)]
-#[derive(Default)]
+#[derive(Debug, Clone, Copy, Default)]
 pub enum PasswordButtonStates {
     /// The password should be visible as the `*` in the password field
     #[default]
@@ -168,7 +154,6 @@ impl Next for PasswordButtonStates {
     type State = Self;
 
     fn next(&self) -> Self::State {
-
         use PasswordButtonStates::*;
 
         match self {
@@ -178,7 +163,6 @@ impl Next for PasswordButtonStates {
     }
 
     fn icon(&self) -> icondata::Icon {
-        
         use PasswordButtonStates::*;
 
         match self {

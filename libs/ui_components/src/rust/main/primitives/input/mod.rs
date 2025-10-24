@@ -23,23 +23,21 @@ use button::PasswordButtonStates;
 
 /// Spread component which applies the class attribute to the element with classes specific for the input field element
 pub fn input_class() -> impl Attribute {
-    view!{
+    view! {
         <{..} class="leptos-forge-input block w-full forge-text-standard py-1 px-2 peer border-2 border-solid border-forgeblue-800 rounded-sm focus:border-2 focus:border-forgeblue-500 focus:outline-none" />
     }
 }
 
 /// Spread component which applies the class attribute to the element with classes specific for the textarea element
 pub fn textarea_class() -> impl Attribute {
-    view!{
+    view! {
         <{..} class="leptos-forge-textarea block peer py-1 px-2.5 w-full h-full min-h-80 forge-text-standard text-forgegray-900 bg-forgegray-50 rounded-sm border border-forgegray-300 focus:ring-forgeblue-500 focus:border-forgeblue-500" />
     }
 }
 
 /// Just a text `<input type=text>`
 #[component]
-pub fn TextInput<
-    IdValue
->(
+pub fn TextInput<IdValue>(
     /// the value of the input
     #[prop(into)]
     text: URwSignal<String>,
@@ -48,19 +46,19 @@ pub fn TextInput<
     /// node reference to the input element
     #[prop(into, default=AnyNodeRef::new())]
     node_ref: AnyNodeRef,
-) -> impl IntoView 
+) -> impl IntoView
 where
-    IdValue: ToString   
+    IdValue: ToString,
 {
     let id = id.to_string();
     view! {
-        <input 
+        <input
             node_ref=node_ref
-            type="text" 
-            placeholder=" " 
-            {..input_class()} 
-            id=id 
-            on:input:target=move |ev|{ text.set(ev.target().value()); } 
+            type="text"
+            placeholder=" "
+            {..input_class()}
+            id=id
+            on:input:target=move |ev|{ text.set(ev.target().value()); }
             prop:value=text
             draggable=false
         />
@@ -76,7 +74,7 @@ pub fn TextareaInput<IdValue>(
     id: IdValue,
 ) -> impl IntoView
 where
-    IdValue: ToString
+    IdValue: ToString,
 {
     let id = id.to_string();
     view! {
@@ -88,7 +86,7 @@ where
 
 /// Spread component which applies the class attribute to the element with classes specific for the textarea element
 pub fn codearea_class() -> impl Attribute {
-    view!{
+    view! {
         <{..} class="leptos-forge-textarea peer block py-1 px-2.5 w-full h-full min-h-80 forge-text-standard text-forgegray-900 bg-forgegray-50 rounded-sm border border-forgegray-300 focus:ring-forgeblue-500 focus:border-forgeblue-500 font-mono" />
     }
 }
@@ -102,7 +100,7 @@ pub fn CodeareaInput<IdValue>(
     id: IdValue,
 ) -> impl IntoView
 where
-    IdValue: ToString
+    IdValue: ToString,
 {
     let id = id.to_string();
     view! {
@@ -119,15 +117,14 @@ pub fn BlobFileInput<IdValue>(
     file: URwSignal<String>,
     /// id of the field
     id: IdValue,
-) -> impl IntoView 
+) -> impl IntoView
 where
-    IdValue: ToString
+    IdValue: ToString,
 {
     let id = id.to_string();
     let file_id = format!("{id}-file");
     let label_id = file_id.clone();
     let file_name_input: NodeRef<html::Input> = NodeRef::new();
-
 
     let text = URwSignal::new(String::default());
     let clear = URwSignal::new(false); // create a clear button signal
@@ -170,7 +167,8 @@ where
         );
     };
 
-    Effect::new(move || { // clear the file input
+    Effect::new(move || {
+        // clear the file input
         if clear.get() {
             file.set(String::default());
             text.set(String::default());
@@ -180,24 +178,23 @@ where
     Effect::new(move || {
         if text.get().is_empty() {
             show_clear_button.set(false);
-        }
-        else {
+        } else {
             show_clear_button.set(true);
         }
     });
-    
+
     view! {
-        <label 
-            for={label_id} 
+        <label
+            for={label_id}
             class="leptos-forge-file-blob-input-label block w-full forge-text-standard py-1 px-2 rounded-sm border-2 border-transparent cursor-pointer"
             on:click=label_clicked
         >
             <span inner_html=||{"&nbsp;"} />
-            <input 
-                type="file" 
-                class="hidden" 
-                id=file_id 
-                on:input:target=on_input 
+            <input
+                type="file"
+                class="hidden"
+                id=file_id
+                on:input:target=on_input
                 on:cancel=on_cancel
                 prop:value=file
                 aria-hidden
@@ -207,19 +204,17 @@ where
                 show={show_clear_button.read_only()}
             />
         </label>
-        <input 
-            type="text" 
+        <input
+            type="text"
             class="leptos-forge-input block w-full forge-text-standard py-1 px-2 rounded-sm peer absolute -z-10 top-8 forge-text-standard pl-2.5 border-2 border-solid border-forgeblue-800 outline-none"
             placeholder=" "
             node_ref=file_name_input
-            id=id on:input:target=move |ev| text.set(ev.target().value()) 
-            prop:value=text 
+            id=id on:input:target=move |ev| text.set(ev.target().value())
+            prop:value=text
             disabled
         />
-    }   
+    }
 }
-
-
 
 /// Just a text `<input type=password>`
 #[component]
@@ -232,9 +227,9 @@ pub fn PasswordInput<IdValue>(
     state: Signal<PasswordButtonStates>,
     /// id of the field
     id: IdValue,
-) -> impl IntoView 
+) -> impl IntoView
 where
-    IdValue: ToString
+    IdValue: ToString,
 {
     let id = id.to_string();
 
@@ -256,17 +251,17 @@ where
         use PasswordButtonStates::*;
         match state.get() {
             Hidden => "password",
-            Visible => "text"
+            Visible => "text",
         }
     });
 
     view! {
-        <input 
-            type=field_type 
-            placeholder=" " 
-            {..input_class()} 
-            id=id 
-            on:input:target=on_input 
+        <input
+            type=field_type
+            placeholder=" "
+            {..input_class()}
+            id=id
+            on:input:target=on_input
             prop:value=password_value
         />
     }

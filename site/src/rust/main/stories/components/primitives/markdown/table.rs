@@ -1,5 +1,5 @@
 //! Story about GitHub flavored tables
-//! 
+//!
 
 use leptos::prelude::*;
 
@@ -127,17 +127,14 @@ Tables documentation stolen from [GFM Tables](https://help.github.com/en/article
 #[derive(Clone, Copy, Debug)]
 pub struct MarkdownTableStory {
     /// text of a markdown document
-    text: URwSignal<String>
+    text: URwSignal<String>,
 }
 
 impl Default for MarkdownTableStory {
-    
     fn default() -> Self {
         let text: URwSignal<String> = URwSignal::new(MARKDOWN_DEMO.to_string());
 
-        Self{  
-            text
-        }
+        Self { text }
     }
 }
 
@@ -149,7 +146,7 @@ impl Story for MarkdownTableStory {
     }
 
     fn controls(&self) -> impl IntoView {
-        view!{
+        view! {
             <Codearea id="leptos-forge-markdown-demo-textarea" text=self.text label={"Markdown document".to_string()} />
         }
     }

@@ -4,9 +4,9 @@ mod primitives;
 mod widgets;
 
 use forge::Section;
+use forge::navigation::RouteDef;
 use primitives::Primitives;
 use widgets::Widgets;
-use forge::navigation::RouteDef;
 
 /// description of the [Components] section
 const COMPONENTS_DESCRIPTION: &str = r############"
@@ -39,7 +39,7 @@ to choose your preferred UI library elsewhere in your application.
 "############;
 
 /// Components section
-/// 
+///
 /// This section describes the embedded components from the `leptos_forge_ui_components` crate
 #[derive(Debug, Default, Clone, Copy)]
 pub struct Components;

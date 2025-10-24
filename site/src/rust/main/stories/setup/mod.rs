@@ -1,5 +1,5 @@
 //! Describes the setup process to create a new `leptos_forge` project
-//! 
+//!
 //! All setup guides should follow standard Cargo project structure and not the `leptos_forge`
 //! one.
 pub mod adding_tests;
@@ -300,7 +300,6 @@ target
 
 "############;
 
-
 /// Setup section
 #[derive(Debug, Default, Clone, Copy)]
 pub struct Setup;
@@ -312,5 +311,5 @@ impl Section for Setup {
 
     fn subroutes(&self) -> Vec<RouteDef> {
         vec![]
-   }
+    }
 }

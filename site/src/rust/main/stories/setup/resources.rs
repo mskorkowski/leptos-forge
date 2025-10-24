@@ -155,7 +155,6 @@ fn main() {
 
 "############;
 
-
 /// Setup section
 #[derive(Debug, Default, Clone, Copy)]
 pub struct Resources;
@@ -313,7 +312,6 @@ be slightly adjusted compared to the [create project](/guides/create_project)
 
 
 "############;
-
 
 /// How to setup tailwind
 #[derive(Debug, Default, Clone, Copy)]

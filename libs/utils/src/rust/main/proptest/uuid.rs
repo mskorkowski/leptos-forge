@@ -1,6 +1,7 @@
 //! Strategies for UUID generation
 
-use proptest::prelude::{any, Strategy};
+use proptest::prelude::Strategy;
+use proptest::prelude::any;
 use uuid::Uuid;
 
 /// Generates random uuid

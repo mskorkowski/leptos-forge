@@ -2,7 +2,11 @@
 name = "leptos_forge_utils_leptos"
 version.workspace = true
 edition.workspace = true
+license.workspace = true
 readme = "README.md"
+description = "Little utilities to use together with Leptos"
+repository.workspace = true
+homepage.workspace = true
 
 [lib]
 path = "src/rust/main/lib.rs"

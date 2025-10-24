@@ -4,17 +4,17 @@ use forge::RouteDef;
 use leptos::prelude::*;
 use leptos::web_sys::HtmlElement;
 
-use testing_library_dom::get_by_test_id;
 use testing_library_dom::MatcherOptions;
+use testing_library_dom::get_by_test_id;
 use ui_components::primitives::input::TextInput;
 use ui_components::primitives::label::InlineFieldLabel;
 use ui_components::primitives::label::TextFieldLabel;
 use ui_components::widgets::field::TextField;
 use utils_leptos::signal::URwSignal;
 
+use forge::Story;
 use forge::story::Play;
 use forge::story::Step;
-use forge::Story;
 
 /// Description of the label primitive
 const LABEL_DESC: &str = r############"
@@ -58,7 +58,7 @@ view!{
 "############;
 
 /// id of the input field
-const INPUT_ID: &str="basic-label-input";
+const INPUT_ID: &str = "basic-label-input";
 
 /// story describing the basic label behavior
 #[derive(Clone, Copy, Debug)]
@@ -73,10 +73,7 @@ impl Default for BasicLabelStory {
     fn default() -> Self {
         let label = URwSignal::new("Basic label".to_string());
         let text = URwSignal::new(String::new());
-        BasicLabelStory{
-            label,
-            text
-        }
+        BasicLabelStory { label, text }
     }
 }
 
@@ -86,7 +83,7 @@ impl Story for BasicLabelStory {
         let text: URwSignal<String> = self.text;
 
         view! {
-            <div class="relative pt-8"> 
+            <div class="relative pt-8">
                 <TextInput id=INPUT_ID text=text />
                 <TextFieldLabel for_id=INPUT_ID text=label data_testid="label" />
             </div>
@@ -107,16 +104,12 @@ impl Story for BasicLabelStory {
         LABEL_DESC
     }
 
-    fn plays(&self) -> Vec<Box<dyn forge::Play<Story=Self>>> {
-        vec![
-            Box::new(BasicLabelStoryPlayUpdateFromEmpty),
-        ]
+    fn plays(&self) -> Vec<Box<dyn forge::Play<Story = Self>>> {
+        vec![Box::new(BasicLabelStoryPlayUpdateFromEmpty)]
     }
 
     fn subroutes(&self) -> Vec<RouteDef> {
-        vec![
-            RouteDef::story::<InlineLabelStory>("inline", "InlineLabel"),
-        ]
+        vec![RouteDef::story::<InlineLabelStory>("inline", "InlineLabel")]
     }
 }
 
@@ -163,7 +156,7 @@ struct BasicLabelStoryPlayUpdateFromEmptyStep1;
 
 impl Step for BasicLabelStoryPlayUpdateFromEmptyStep1 {
     type Story = BasicLabelStory;
-    
+
     fn description(&self) -> &'static str {
         "Check initial condition of the label"
     }
@@ -186,7 +179,7 @@ impl Step for BasicLabelStoryPlayUpdateFromEmptyStep1 {
         if !inner_text.is_empty() {
             return Err("Label should not have any text");
         }
-        
+
         Ok(())
     }
 }
@@ -274,13 +267,13 @@ For elements like checkboxes, radio buttons and selectors the `Label` should alw
 "############;
 
 /// id of the input field 1
-const INLINE_INPUT_ID_1: &str="inline-label-input-1";
+const INLINE_INPUT_ID_1: &str = "inline-label-input-1";
 /// id of the input field 2
-const INLINE_INPUT_ID_2: &str="inline-label-input-2";
+const INLINE_INPUT_ID_2: &str = "inline-label-input-2";
 /// id of the input field 3
-const INLINE_INPUT_ID_3: &str="inline-label-input-3";
+const INLINE_INPUT_ID_3: &str = "inline-label-input-3";
 /// if of the input field 4
-const INLINE_INPUT_ID_4: &str="inline-level-input-4";
+const INLINE_INPUT_ID_4: &str = "inline-level-input-4";
 
 /// story describing the basic label behavior
 #[derive(Clone, Copy, Debug)]
@@ -292,9 +285,7 @@ pub struct InlineLabelStory {
 impl Default for InlineLabelStory {
     fn default() -> Self {
         let label = URwSignal::new("Inline label".to_string());
-        InlineLabelStory{
-            label,
-        }
+        InlineLabelStory { label }
     }
 }
 
@@ -302,8 +293,8 @@ impl Story for InlineLabelStory {
     fn view(&self) -> impl IntoView {
         let label: Signal<String> = self.label.into();
         let text = "sample text".to_string();
-        view!{
-            <div class="relative"> 
+        view! {
+            <div class="relative">
                 <InlineFieldLabel for_id=INLINE_INPUT_ID_1 text=label/> <input type="text" class="forge-text-standard border-1 border-solid border-gray-800 ml-1" id=INLINE_INPUT_ID_1 /><br/>
                 <InlineFieldLabel for_id=INLINE_INPUT_ID_2 text=label/> <input type="checkbox" class="forge-text-standard border-1 border-solid border-gray-800 ml-1" id=INLINE_INPUT_ID_2 /><br/>
                 <InlineFieldLabel for_id=INLINE_INPUT_ID_3 text=label/> <input type="radio" class="forge-text-standard border-1 border-solid border-gray-800 ml-1" id=INLINE_INPUT_ID_2 />

@@ -5,10 +5,8 @@ use std::fmt::Display;
 
 use uuid::Uuid;
 
-
-
 /// Password
-/// 
+///
 /// If you try to print or debug value it will print `********`
 #[derive(Clone)]
 pub struct Password(String);
@@ -32,9 +30,9 @@ impl Password {
     }
 
     /// Returns raw password value from the password struct
-    /// 
+    ///
     /// # Safety
-    /// 
+    ///
     /// This method is marked as unsafe because you are responsible to not leak the clear text password
     /// in irresponsible ways
     #[allow(unsafe_code)]
@@ -43,9 +41,9 @@ impl Password {
     }
 
     /// Updates a password with a new value
-    /// 
+    ///
     /// # Safety
-    /// 
+    ///
     /// This methods is marked as unsafe since you are responsible for validating the password before
     /// updating this instance of Passowrd
     #[allow(unsafe_code)]
@@ -55,12 +53,12 @@ impl Password {
 }
 
 /// Trait for items that have an unique identifier
-/// 
+///
 /// This trait is used to provide a way to uniquely identify items in a collection so the lists of items
 /// in the ui can be updated efficiently.
-/// 
+///
 /// It used for example by
-/// 
+///
 /// - [`SingleSelect`][crate::widgets::select::SingleSelect] so it can track the selected item
 pub trait Keyed {
     /// Returns a sable key for this instance

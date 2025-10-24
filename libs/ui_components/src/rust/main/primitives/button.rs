@@ -10,7 +10,7 @@ use leptos::prelude::*;
 pub enum ButtonClick {
     /// This state can be set to denote that the button is released and no action
     /// should be taken.
-    /// 
+    ///
     /// It is useful as the initial stream state.
     #[default]
     Released,
@@ -25,18 +25,17 @@ pub enum ButtonClick {
     MiddleClick,
 }
 
-
 /// Button primitive
-/// 
+///
 /// # Usage
-/// 
+///
 /// For usability you should always ignore double clicks. For rationale
 /// check this article about [double click](https://blog.codinghorror.com/double-click-must-die/)
-/// 
+///
 /// # Supported events
-/// 
+///
 /// Button supports clicks and double clicks on left, right and middle button using mouse and/or keyboard
-/// 
+///
 /// | # | Trigger | Value of `click` signal |
 /// |--:|:--------|:------------------------|
 /// |  1| Left mouse button click | [`ButtonClick::LeftClick`] |
@@ -50,19 +49,16 @@ pub enum ButtonClick {
 /// |  9| <kbd>alt</kbd> + <kbd>shift</kbd> + <kbd>space</kbd> press | [`ButtonClick::MiddleClick`] |
 /// | 10| <kbd>alt</kbd> + <kbd>shift</kbd> + <kbd>enter</kbd> press | [`ButtonClick::MiddleClick`] |
 /// | 11| <kbd>alt</kbd> + <kbd>shift</kbd> + left mouse button | [`ButtonClick::MiddleClick`] |
-/// 
+///
 /// > *Warning:*
 /// >
 /// > Some systems (mostly some Linux flavours) use <kbd>alt</kbd> + left mouse button to move windows around
 /// > which could prevent the button from being clicked. On other hand if you use Linux your mouse probably has
 /// > more then one button.
 /// >
-/// 
+///
 #[component]
-pub fn Button<
-    S1: ToString,
-    S2: ToString,
->(
+pub fn Button<S1: ToString, S2: ToString>(
     /// Id of the component
     id: S1,
     /// Css classes for the component
@@ -74,7 +70,6 @@ pub fn Button<
     #[prop(optional, default=Box::new(|| view!{"Press me!"}.into_any()))]
     children: Children,
 ) -> impl IntoView {
-
     let on_pointerdown = move |event: PointerEvent| {
         let alt = event.alt_key();
         let shift = event.shift_key();
@@ -85,10 +80,9 @@ pub fn Button<
 
         if (is_left && alt && shift) || is_middle {
             click.set(ButtonClick::MiddleClick);
-        } else if (is_left && alt) || is_right{
+        } else if (is_left && alt) || is_right {
             click.set(ButtonClick::RightClick);
-        }
-        else if is_left {
+        } else if is_left {
             click.set(ButtonClick::LeftClick);
         }
 
@@ -104,7 +98,7 @@ pub fn Button<
     };
 
     view! {
-        <button 
+        <button
             class={class.to_string()}
             id={id.to_string()}
             on:pointerdown=on_pointerdown

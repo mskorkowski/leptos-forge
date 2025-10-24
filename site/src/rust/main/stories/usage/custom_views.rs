@@ -1,6 +1,5 @@
 //! Section about going full custom on the view side
-//! 
-
+//!
 
 use forge::Section;
 

@@ -34,13 +34,11 @@
 // use crate::primitives::input::TextInput;
 // use crate::primitives::label::TextFieldLabel;
 
-
 // use utils_leptos::signal::URwSignal;
-
 
 // /// Item that can be selected in the single select widget
 // #[derive(Debug, Clone, Store, Patch)]
-// struct SingleSelectItem<Value> 
+// struct SingleSelectItem<Value>
 // where
 //     Value: Clone + PatchField,
 // {
@@ -51,8 +49,8 @@
 // }
 
 // impl<Value> Keyed for SingleSelectItem<Value>
-// where 
-//     Value: Clone + Keyed + PatchField, 
+// where
+//     Value: Clone + Keyed + PatchField,
 // {
 //     fn key(&self) -> &Uuid {
 //         self.value.key()
@@ -115,7 +113,7 @@
 
 // impl DropdownState {
 //     /// Returns the next state of the popover
-//     /// 
+//     ///
 //     /// | Current state | `click` | Result       |
 //     /// |:--------------|:-------:|:-------------|
 //     /// | ClickOpen     | any     | Open         |
@@ -153,14 +151,14 @@
 //         if *self != new {
 //             *self = new;
 //             notify(path);
-//         }    
+//         }
 //     }
 // }
 
 // /// Model for the single sel
 // #[derive(Store, Clone, Patch)]
-// struct SingleSelectModel<Value> 
-// where 
+// struct SingleSelectModel<Value>
+// where
 //     Value: Clone + Keyed + PatchField,
 // {
 //     /// id of the item with focus
@@ -175,7 +173,7 @@
 // }
 
 // /// Select field allowing the selection of the single item from a list of options
-// /// 
+// ///
 // #[component]
 // pub fn SingleSelect<
 //     Value: ThreadSafe + Clone + ToString + Keyed + PatchField,
@@ -187,7 +185,7 @@
 //     #[prop(into)]
 //     label: Signal<String>,
 //     /// value of the select
-//     /// 
+//     ///
 //     /// if this signal has a `None` value that means no value has been selected
 //     #[prop(into)]
 //     value: URwSignal<Option<Value>>,
@@ -203,7 +201,7 @@
 //         }).collect(),
 //         dropdown: DropdownState::ForceOpen,
 //     });
-    
+
 //     let reference_ref = AnyNodeRef::new();
 //     let floating_ref = AnyNodeRef::new();
 
@@ -247,7 +245,7 @@
 
 //         if resolved_state == DropdownState::Closed {
 //             store.dropdown().set(DropdownState::Open);
-//         } 
+//         }
 //     };
 
 //     // Firefox triggers the `mouseup` event on the `input` element if we focus the select
@@ -262,12 +260,12 @@
 //     //             let Some(element) = document.element_from_point(
 //     //                 e.client_x() as f32,
 //     //                 e.client_y() as f32,
-//     //             ) 
+//     //             )
 //     //         {
 //     //         console_log(&format!("target is {target:?}"));
 //     //         if element.class_list().contains("select-dropdown-item") {
 //     //             if let Ok(event) = CustomEvent::new("mouseup") {
-                    
+
 //     //                 console_log(&format!("element is {element:?}"));
 //     //                 match element.dispatch_event(&event) {
 //     //                     Ok(value) => {
@@ -415,7 +413,7 @@
 //                                 console_log("grab selection");
 //                                 let s = store.selection();
 //                                 console_log("grab write for selection");
-                                
+
 //                                 console_log("replace selection");
 //                                 s.patch(Some(Selection{
 //                                     index: selected.index - 1,
@@ -475,12 +473,12 @@
 
 //     view!{
 //         <div class="leptos-forge-field-box relative pt-8">
-//             <ClearInputButton 
-//                 clear={clear.write_only()} 
-//                 show={clear_button_visibility} 
+//             <ClearInputButton
+//                 clear={clear.write_only()}
+//                 show={clear_button_visibility}
 //             />
-//             <TextInput 
-//                 id={id.to_string()} 
+//             <TextInput
+//                 id={id.to_string()}
 //                 text=selected
 //                 node_ref=reference_ref
 //                 on:focus=focus
@@ -490,8 +488,8 @@
 //                 on:mousemove=mousemove
 //                 on:keydown=keydown
 //             />
-//             <TextFieldLabel 
-//                 for_id={id.to_string()} 
+//             <TextFieldLabel
+//                 for_id={id.to_string()}
 //                 text=label
 //             />
 //             <Show
@@ -537,7 +535,7 @@
 //     item: Field<SingleSelectItem<Value>>,
 //     /// store with a single select state
 //     store: Store<SingleSelectModel<Value>>,
-// ) -> impl IntoView 
+// ) -> impl IntoView
 // where
 //     Value: Clone + PatchField + Keyed + ThreadSafe + ToString,
 // {
@@ -599,7 +597,7 @@
 
 //     view!{
 //         <li>
-//             <button 
+//             <button
 //                 node_ref=node_ref
 //                 class="leptos-forge-select-dropdown-item border-2 border-fuchsia-500 mt-1 w-full text-left p-2 hover:bg-forgeblue-200 active:bg-forgeblue-300 pointer-events-auto"
 //                 // on:pointerdown=onpointerdown

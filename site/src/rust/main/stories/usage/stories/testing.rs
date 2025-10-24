@@ -111,13 +111,12 @@ To create a play we use function `leptos_forge::play`.
 
 "############;
 
-
 /// Section about [Play][forge::Play]
 #[derive(Debug, Default, Clone, Copy)]
 pub struct TestingSection;
 
 impl Section for TestingSection {
     fn description(&self) -> &'static str {
-        PLAY        
+        PLAY
     }
 }

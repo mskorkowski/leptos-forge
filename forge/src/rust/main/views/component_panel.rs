@@ -6,9 +6,9 @@ use leptos::prelude::*;
 #[component]
 pub fn ComponentPanel(
     /// elements in the component panel
-    children: Children
+    children: Children,
 ) -> impl IntoView {
-    view! { 
+    view! {
         <div class="leptos-forge-component-panel basis-2/3 flex flex-col pt-4 overflow-hidden print:basis-full print:flex-auto">
             {children()}
         </div>

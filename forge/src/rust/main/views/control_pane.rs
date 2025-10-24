@@ -8,14 +8,14 @@ use crate::Story;
 #[component]
 pub fn ControlPane<UiStory>(
     /// story to be controlled
-    story: UiStory
-) -> impl IntoView 
+    story: UiStory,
+) -> impl IntoView
 where
     UiStory: 'static + Story + Copy,
 {
     let view = story.controls().into_any();
 
-    view! { 
+    view! {
         <div class="leptos-forge-control-pane-box basis-1/3 scrollbox print:hidden">
             <div class="leptos-forge-control-pane p-4 scrollable">
                 { view }
@@ -28,14 +28,14 @@ where
 #[component]
 pub fn EmbeddedControlPane<UiStory>(
     /// story to be controlled
-    story: UiStory
-) -> impl IntoView 
+    story: UiStory,
+) -> impl IntoView
 where
     UiStory: 'static + Story + Copy,
 {
     let view = story.controls().into_any();
 
-    view! { 
+    view! {
         <div class="leptos-forge-control-pane p-4 relscrollable-100 min-h-30">
             { view }
         </div>
