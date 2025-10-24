@@ -48,6 +48,12 @@ fn main() {
 In your library crate `Cargo.toml` add (you don't need to depend on the `leptos_forge_build_script` here)
 
 ```toml
+[package]
+include=[
+  "src",
+  "assets"
+]
+
 [package.metadata.leptos_forge.tailwind]
 # Path to the main tailwind file for your crate
 #
