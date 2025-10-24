@@ -1,7 +1,4 @@
-//! `leptos_forge` helps you build a reliable web UI interfaces in Leptos.
-//!
-
-#![doc = document_features::document_features!()]
+//! Library with helpers to write a build scripts
 
 #![doc(test(attr(deny(unused))))]
 #![doc(test(attr(deny(dead_code))))]
@@ -14,13 +11,6 @@
 #![deny(clippy::undocumented_unsafe_blocks)]
 #![doc(test(attr(deny(unused))))]
 
-pub mod app;
-pub mod navigation;
-pub mod section;
-pub mod story;
-pub mod views;
+pub mod console;
+pub mod tailwind;
 
-pub use app::*;
-pub use navigation::*;
-pub use section::*;
-pub use story::*;

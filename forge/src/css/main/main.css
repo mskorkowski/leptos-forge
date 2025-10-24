@@ -1,6 +1,6 @@
 @import "tailwindcss";
 
-@source "../../";
+@import "./lib.css";
 
 @import "../../../target/resources/leptos_forge_ui_components/common.css";
 @import "../../../target/resources/leptos_forge_ui_components/main.css";

@@ -1,41 +1,21 @@
-# [[hooks]]
-# stage = "pre_build"    # When to run hook, must be one of "pre_build", "build", "post_build"
-# command = "clear"      # Command to run
-# command_arguments = [] # Arguments to pass to command
 
+
+
+# Forces the cargo to run the build script
+[[hooks]]
+stage = "pre_build"
+command = "touch"
+command_arguments = [  
+    "src/css/main/main.css"
+]
+
+# Ensures that resources are in place before bundling will take place
 [[hooks]]
 stage = "pre_build"    # When to run hook, must be one of "pre_build", "build", "post_build"
 command = "cargo"      # Command to run
 command_arguments = [  # Arguments to pass to command
     "check",
-    "--features",
-    "clean_resources"
-] 
-
-[[hooks]]
-stage = "pre_build"
-command = "sleep"
-command_arguments = [
-    "1"
 ]
-
-[[hooks]]
-stage = "build"    # When to run hook, must be one of "pre_build", "build", "post_build"
-command = "cargo"      # Command to run
-command_arguments = ["resources"] # Arguments to pass to command
-
-# [[hooks]]
-# stage = "pre_build"    # When to run hook, must be one of "pre_build", "build", "post_build"
-# command = "tailwindcss"
-# command_arguments = ["--input", "src/css/main/main.css", "--output", "src/resources/generated/leptos-forge.css"]
-
-# [[hooks]]
-# stage = "post_build"
-# command = "cp"
-# command_arguments = [
-#     "target/resources/leptos_forge_site/main.css",
-#     "dist/.stage/resources/leptos_forge_site/main.css"
-# ]
 
 [serve]
 port = 8000

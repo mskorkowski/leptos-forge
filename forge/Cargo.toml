@@ -1,4 +1,8 @@
 [package]
+# Name of the create
+#
+# If for some reason there is a need to change a crate name, then you also need
+# to update the build script, because we've hardcoded the crate name there
 name = "leptos_forge"
 license.workspace = true
 description = "Build and test your Leptos components"
@@ -7,7 +11,7 @@ edition.workspace = true
 readme = "../README.md"
 build="src/rust/build/build.rs"
 include = [
-    "target/resources/leptos_forge/main.css",
+    # "target/resources/leptos_forge/main.css",
     "src"
 ]
 repository.workspace = true
@@ -17,12 +21,12 @@ homepage.workspace = true
 path = "src/rust/main/lib.rs"
 
 [dependencies]
+document-features.workspace = true
 leptos = { workspace = true, features = ["csr"] }
 leptos_router.workspace = true
 reactive_stores.workspace = true
 utils.workspace = true
 utils_leptos.workspace = true 
-
 ui_components.workspace = true
 
 [build-dependencies]
@@ -30,23 +34,60 @@ cargo_metadata.workspace = true
 cargo-resources.workspace = true
 build-print.workspace = true
 chrono.workspace = true
+serde_json.workspace = true
 
 [features]
 default = []
-clean_resources = []
+
+#! Build features
+#!
+#! These features interact with build script and don't have any impact on the
+#! source code
+
+## Pulls the resources from the upstream crates using [`cargo resources`](https://github.com/PeteEvans/cargo-resources)
+resources = []
+
+## Enables regeneration of the `leptos_forge/main.css` resource file
+tailwind = [
+    "resources"
+]
+
+#! Experimental build features
+#!
+#! These features are experimental build time related flags
+
+## If enabled it will clean the files which can be generated
+##
+## ### Removes
+## 
+## - All css and tailwindcss files from the upstream crates
+## - Generated css file for downstream
+##
+## ### Enables
+##
+## Enables features
+##
+## - **tailwind** - so the `leptos_forge` css file will be regenerated after 
+##   clean up
+clean_resources = [
+    "tailwind"
+]
 
 [lints]
 workspace = true
 
 [package.metadata.cargo_resources]
-resource_root = "target/resources"
-requires = [
-    { resource_name = "leptos_forge_ui_components/common.css" },
-    { resource_name = "leptos_forge_ui_components/markdown.css" },
-    { resource_name = "leptos_forge_ui_components/typography.css" },
-    { resource_name = "leptos_forge_ui_components/main.css" }
-]
+# resource_root = "target/resources"
+# requires = [
+#     # { resource_name = "leptos_forge_ui_components/common.css" },
+#     # { resource_name = "leptos_forge_ui_components/markdown.css" },
+#     # { resource_name = "leptos_forge_ui_components/typography.css" },
+#     # { resource_name = "leptos_forge_ui_components/main.css" }
+# ]
 provides = [
-    { crate_path = "target/resources/leptos_forge/main.css", output_path="leptos_forge/main.css", resource_name="leptos_forge/main.css"},
+    # { crate_path = "target/resources/leptos_forge/main.css", output_path="leptos_forge/main.css", resource_name="leptos_forge/main.css"},
     { crate_path = "src/resources/logo/logo.svg", output_path="leptos_forge/logo/logo.svg", resource_name="leptos_forge/logo/logo.svg" },
 ]
+
+[package.metadata.leptos_forge]
+tailwind = { lib="src/css/main/lib.css" }

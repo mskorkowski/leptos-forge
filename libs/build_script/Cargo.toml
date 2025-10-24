@@ -1,0 +1,25 @@
+[package]
+name = "leptos_forge_build_script"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+description = "Small general purpose utility from leptos_forge project"
+repository.workspace = true
+homepage.workspace = true
+
+[lib]
+path = "src/rust/main/lib.rs"
+
+[dependencies]
+## This crate can't have any dependencies on the rest of the workspace
+build-print.workspace = true
+cargo_metadata.workspace = true
+cargo-resources.workspace = true
+chrono.workspace = true
+filetime.workspace = true
+indoc.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+soft-canonicalize.workspace = true
+[lints]
+workspace = true

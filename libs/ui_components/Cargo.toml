@@ -7,7 +7,6 @@ edition.workspace = true
 build="src/rust/build/build.rs"
 include = [
     "src",
-    "target/resources/leptos_forge_ui_components/main.css",
 ]
 repository.workspace = true
 homepage.workspace = true
@@ -36,11 +35,9 @@ default = []
 [lints]
 workspace = true
 
-[package.metadata.cargo_resources]
-resource_root = "target/resources"
-provides = [
-    { crate_path = "src/css/main/common.css", output_path="leptos_forge_ui_components/common.css", resource_name="leptos_forge_ui_components/common.css"},
-    { crate_path = "src/css/main/markdown.css", output_path="leptos_forge_ui_components/markdown.css", resource_name="leptos_forge_ui_components/markdown.css"},
-    { crate_path = "src/css/main/typography.css", output_path="leptos_forge_ui_components/typography.css", resource_name="leptos_forge_ui_components/typography.css"},
-    { crate_path = "target/resources/leptos_forge_ui_components/main.css", output_path="leptos_forge_ui_components/main.css", resource_name="leptos_forge_ui_components/main.css" },
-]
+[package.metadata.leptos_forge.tailwind]
+# Path to the main tailwind file for your crate
+#
+# Basically the tailwind `main.css` without `@import "tailwind"`. `@import "tailwind" 
+# will be added for you automatically by the `leptos_forge_build_script` tailwind integration
+lib="src/css/main/lib.css"
