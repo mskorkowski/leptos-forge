@@ -26,13 +26,12 @@ of the Leptos framework.
 
 ## Prerequisites
 
-Below is a list of prerequisites to run a project using `leptos_forge`. Some of the 
-dependencies are optional.
+Below is a list of prerequisites to run a project using `leptos_forge`.
 
 - Rust
 - Cargo
 - Trunk
-- Tailwind 4 (optional)
+- Tailwind 4
 
 Sample `nix` configuration can be found in the [`nix` section](/guides/nix).
 
@@ -67,7 +66,8 @@ configuration for Tailwind users. The Tailwind installation instructions can be 
 ## Setting up a new project
 
 My preferred way of setting up the project to use `leptos_forge` is to create a separate 
-Cargo project. This allows me to keep the `leptos_forge` related code away from my main project. 
+Cargo crate in the workspace. This allows me to keep the `leptos_forge` related code away 
+from my main project. 
 
 We start by creating a `Cargo.toml` file in the root of our new project:
 
@@ -83,9 +83,9 @@ path = "src/main.rs"
 
 [dependencies]
 leptos = { version = "0.8", features = ["csr"] }
-forge = { version = "0.5", package = "leptos_forge", git="https://github.com/mskorkowski/leptos-forge.git" }
+forge = { version = "0.6", package = "leptos_forge", git="https://github.com/mskorkowski/leptos-forge.git" }
 ui_components = { version = "0.5", package = "leptos_forge_ui_components", git="https://github.com/mskorkowski/leptos-forge.git"  }
-utils_leptos = { version = "0.5", package = "leptos_forge_utils_leptos", git="https://github.com/mskorkowski/leptos-forge.git"  }
+utils_leptos = { version = "0.6", package = "leptos_forge_utils_leptos" }
 testing-library-dom = { version = "0.0.1", git="https://github.com/RustForWeb/testing-library.git", rev="05c93b5" }
 
 console_error_panic_hook = "0.1.7"
@@ -93,11 +93,16 @@ console_log = "1.0.0"
 log = "0.4.20"
 
 [build-dependencies]
-cargo_metadata="0.22.0"
+cargo_metadata="0.23.0"
 cargo-resources="1.1.6"
+leptos_forge_build_script="0.6"
 
 [package.metadata.cargo_resources]
 resource_root = "target/resources"
+
+[package.metadata.leptos_forge.tailwind]
+lib="assets/css/lib.css"
+output="target/resources/css/main.css"
 ```
 
 Let's dissect the dependencies and their roles in this project:
@@ -113,18 +118,19 @@ Let's dissect the dependencies and their roles in this project:
 6. **`console_error_panic_hook`**, **`console_log`**, and **`log`**: These are used to 
    set up error handling in your `leptos_forge`-based application.
 
-There are also two build dependencies:
+There are also three build dependencies:
 
 1. **`cargo_metadata`**: This crate is used to read the `Cargo.toml` of this project so we can
   feed this information into `cargo-resources`.
 2. **`cargo-resources`**: This crate is used to pull resource files from your dependencies into
    your project.
+3. **`leptos_forge_build_script`** - is the library intended to be used as part of
+   Cargo build script. Provides a seamless tailwind integration.
 
 > [!NOTE]
 >
 > The version of `testing-library-dom` which supports core features required for testing 
-> components has not been released to crates.io yet. Until it is, `leptos_forge` cannot be
-> released either, and you will need to use the Git version of it.
+> components has not been released to crates.io yet.
 
 #### How project structure will look like
 
@@ -163,20 +169,52 @@ details about configuration options for the `cargo-resources` crate, please refe
 The `build.rs` script should look like this:
 
 ```rust
-use std::env::current_dir;
+use leptos_forge_build_script::console::Console;
+use leptos_forge_build_script::console::ConsoleConfiguration;
+use leptos_forge_build_script::tailwind::Tailwind;
+use leptos_forge_build_script::resources::Resources;
+use cargo_metadata::CargoOpt;
+use cargo_metadata::Metadata;
+use cargo_metadata::MetadataCommand;
 use cargo_metadata::camino::Utf8PathBuf;
-use cargo_resources::collate_resources;
+use std::env::current_dir;
 
 fn main() {
+    let console_configuration = ConsoleConfiguration::default();
+    let console = Console::new("site", &console_configuration);
+
     let cwd = current_dir().unwrap();
     let manifest_file = Utf8PathBuf::from_path_buf(cwd).unwrap().join("Cargo.toml");
 
-    // Collate resources from the crate's dependencies.
-    collate_resources(&manifest_file).expect("There was an error during bundling of the resources");
+    {
+        let mut metadata_cmd = MetadataCommand::new();
+        let metadata: Metadata = metadata_cmd
+            .manifest_path(&manifest_file)
+            .features(CargoOpt::AllFeatures)
+            .exec()
+            .unwrap();
+
+        let console = console.stage("tailwind");
+        let _output_path = Tailwind::new(metadata, &console, None, true).
+            run().
+            unwrap();
+    } 
+
+    {
+        let console = console.stage("resources");
+
+        let resources = Resources::all(
+            &console, 
+            // If set to `true` it will generate the `cargo::rerun-if-changed=`
+            // statements for all resources in local crates (same workspace)
+            true
+        );
+        resources.run().unwrap();
+    }
 }
 ```
 
-### Creating `index.html` for the `trunk`
+### Configuring Trunk
 
 `trunk` requires us to create an `index.html` file in the root of the project. This file will
 be used by `trunk` as the entrypoint to the application we are setting up.
@@ -192,13 +230,27 @@ Below is the basic `index.html` file you can use:
         <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, interactive-widget=overlays-content" />
         <link data-trunk rel="rust" href="Cargo.toml"/>
         <link data-trunk rel="copy-dir" href="target/resources" data-target-path="resources" />
-        <link data-trunk rel="css" href="target/resources/leptos_forge/leptos_forge.css" />
+        <link rel="stylesheet" href="/resources/css/main.css" />
     </head>
     <body></body>
 </html>
 ```
 
+Now we need to create `Trunk.toml` with content
+
+```toml
+# Ensures that resources are in place before bundling will take place
+# This is related to the limitation of the trunk
+[[hooks]]
+stage = "pre_build"    # When to run hook, must be one of "pre_build", "build", "post_build"
+command = "cargo"      # Command to run
+command_arguments = [  # Arguments to pass to command
+    "check",
+]
+```
+
 Using Tailwind in your `leptos_forge` application is described in [Tailwind chapter](/guides/tailwind).
+
 
 ### Creating the first story
 

@@ -23,7 +23,7 @@ We will start with creating a simple component. This component will have a singl
 button. Every time we click `+`, it will increase a value of the counter by one.
  Every time we click `-`, it will decrease a value of the counter by one.
 
-In the `src/stories.rs` file we will add the following leptos component:
+In the `src/main.rs` file we will add the following leptos component:
 
 ```rust
 use leptos::prelude::*;

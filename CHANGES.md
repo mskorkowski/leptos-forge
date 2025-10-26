@@ -1,5 +1,14 @@
 # `leptos_forge` Changes
 
+## 0.6.2
+
+### `leptos_forge_build_script`
+
+- Adds the reliable resource management wrapping `cargo_resources` crate
+- Makes `lib` in `Cargo.toml` configuration optional
+- Better documentation
+- Updated website related to the tailwind and resources bundling
+
 ## 0.6.1
 
 ### `leptos_forge_build_script`

@@ -7,7 +7,7 @@ members = [
 ]
 
 [workspace.package]
-version = "0.6.1"
+version = "0.6.2"
 edition = "2024"
 rust-version = "1.88"
 license = "MIT"
@@ -17,17 +17,16 @@ homepage = "https://mskorkowski.github.io/"
 [workspace.dependencies]
 # Internal dependencies
 
-forge =         { version = "0.6.1", path = "forge", package = "leptos_forge" }
-utils =         { version = "0.6.1", path = "libs/utils",  package = "leptos_forge_utils" }
-utils_leptos =  { version = "0.6.1", path = "libs/utils_leptos", package = "leptos_forge_utils_leptos" }
-ui_components = { version = "0.6.1", path = "libs/ui_components", package = "leptos_forge_ui_components" }
-build_script =  { version = "0.6.1", path = "libs/build_script", package = "leptos_forge_build_script" }
+forge =         { version = "0.6.2", path = "forge", package = "leptos_forge" }
+utils =         { version = "0.6.2", path = "libs/utils",  package = "leptos_forge_utils" }
+utils_leptos =  { version = "0.6.2", path = "libs/utils_leptos", package = "leptos_forge_utils_leptos" }
+ui_components = { version = "0.6.2", path = "libs/ui_components", package = "leptos_forge_ui_components" }
+build_script =  { version = "0.6.2", path = "libs/build_script", package = "leptos_forge_build_script" }
 
 # External dependencies
 console_error_panic_hook = "0.1.7"
 console_log = "1.0.0"
 document-features="0.2.11"
-filetime = "0.2.26"
 floating-ui-leptos = {version = "0.5.0" }
 icondata = { version = "0.6", default-features = false, features = ["material-design-icons"] }
 indoc = "2"
@@ -40,7 +39,7 @@ leptos-use = { version = "0.16" }
 log = "0.4.20"
 pulldown-cmark = "0.13.0"
 reactive_graph = { version = "0.2.5" }
-reactive_stores = { version = "0.2.5" }
+reactive_stores = { version = "0.3" }
 
 proptest = "1.5.0"
 send_wrapper="0.6.0"
@@ -51,10 +50,9 @@ uuid = { version = "1.11.1", features = ["serde", "v4", "fast-rng"] }
 web-sys = { version = "0.3.69" }
 
 # Build dependencies
-cargo_metadata="0.22.0"
+cargo_metadata="0.23.0"
 cargo-resources="1"
 build-print="1.0.1"
-chrono = "0.4"
 
 [workspace.lints.rustdoc]
 private_intra_doc_links = { level = "allow" }

@@ -13,4 +13,4 @@
 
 pub mod console;
 pub mod tailwind;
-
+pub mod resources;

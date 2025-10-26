@@ -22,7 +22,7 @@ We've chosen the `cargo-resource` because
 - it doesn't bloat wasm file
 - it nicely integrates with `cargo`
 - you can call it from build script
-- We found Manganis harder to integrate and currently requires `dx`
+- We found Manganis harder to integrate and it currently requires `dx`
 
 ## Using `cargo-resources`
 
@@ -41,10 +41,11 @@ Providing the resource has three steps.
    ```toml
    [package]
    name = "my-crate"
-   version = "0.6.0"
+   version = "0.1.0"
    edition = "2024"
    include = [
-     "assets/images/logo.png"
+     "assets",
+     "src"
    ]
    ```
 
@@ -96,6 +97,135 @@ In the case of `logo.png` file used in examples in this section it would be
 
 ### Running the application
 
+#### Using `leptos_forge_build_script`
+
+`leptos_forge_build_script` will give you the best experience, especially if you
+use a cargo workspace in your project.
+
+If you followed the [create project](/guides/create_project), this configuration
+was suggested to you. If not, you can follow the steps below
+
+To make the build script approach work, you need to make the following changes
+in the `Cargo.toml`:
+
+```toml
+[build-dependencies]
+leptos_forge_build_script.workspace = "0.6"
+cargo_metadata = "0.23"
+```
+
+This will add the necessary dependencies for the build script approach.
+
+Now beside the root of your crate you need to add the `build.rs` file:
+
+```rust
+use build_script::console::Console;
+use build_script::console::ConsoleConfiguration;
+use build_script::resources::Resources;
+
+fn main() {
+    let console_configuration = ConsoleConfiguration::default();
+    let console = Console::new("site", &console_configuration);
+    
+    // Uncomment the line below, if you depend on the default cargo behavior of
+    // rerunning the build script every time anything changes in your project
+    //std::println!("cargo::rerun-if-changed=.");
+
+    {
+        let console = console.stage("resources");
+        let resources = Resources::all(&console, true);
+        resources.run().unwrap();
+    }
+}
+```
+
+##### Integrating with Trunk
+
+> [!NOTE]
+> # Trunk limitations
+>
+> Trunk doesn't handle the well the resources which are generated during the 
+> build phase. Due to this limitation to have reliable integration with Trunk
+> you need to run an extra `cargo check` during the `pre_build` phase.
+>
+> If you followed `Create project` guide you already have it.
+
+In your `Trunk.toml` add the following hook:
+
+```toml
+[[hooks]]
+stage = "pre_build"
+command = "cargo"
+command_arguments = ["check"]
+```
+
+##### Using upstream resources to generate the resources for your crate
+
+Let's assume the crate in your upstream provides a sass stylesheets, which you
+need to compile together with your project sass files so you can generate the 
+final css.
+
+The steps needed
+
+1. Provide upstream resources
+2. Run sass compilation to get the final css
+3. Provide local resources to move the final css to correct place
+
+Solution
+
+```rust
+use std::env::current_dir;
+
+use cargo_metadata::CargoOpt;
+use cargo_metadata::Metadata;
+use cargo_metadata::MetadataCommand;
+use cargo_metadata::camino::Utf8PathBuf;
+
+use build_script::console::Console;
+use build_script::console::ConsoleConfiguration;
+use build_script::resources::Resources;
+
+
+fn main() {
+    let console_configuration = ConsoleConfiguration::default();
+    let console = Console::new("site", &console_configuration);
+    
+    // Uncomment the line below, if you depend on the default cargo behavior of
+    // rerunning the build script every time anything changes in your project
+    //std::println!("cargo::rerun-if-changed=.");
+
+    let cwd = current_dir().unwrap();
+    let manifest_file = Utf8PathBuf::from_path_buf(cwd).unwrap().join("Cargo.toml");
+    let mut metadata_cmd = MetadataCommand::new();
+        let metadata: Metadata = metadata_cmd
+            .manifest_path(&manifest_file)
+            .features(CargoOpt::AllFeatures)
+            .exec()
+            .unwrap();
+
+    {
+        // 1. Provide upstream resources
+        let console = console.stage("resources");
+        Resources::resources_without_root_crate(&metadata, &console, true).
+            run().
+            unwrap();
+
+        // 2. Run sass
+        let mut sass: Command = Command::new("sass");
+        sass
+            .args(vec![
+                "assets/saas/input.scss",
+                "target/resources/css/output.css",
+            ]);
+
+        // 3. Provide local resources to move the final css to correct place
+        Resources::resources_of_root_crate(&metadata, &console, true).
+            run().
+            unwrap();
+    }
+}
+```
+
 #### Manual bundling of the resources
 
 Every time you wish to run the application, after you build it you need to run the 
@@ -106,33 +236,19 @@ cargo resources
 
 So the running involves three steps
 
-1. build - build the application
-2. resources - bundle the resources
+1. resources - bundle the resources
+2. build - build the application
 3. run - run the app
 
-#### Using `trunk` to bundle the resources
-
-In your `Trunk.toml` add the following hook:
-
-```toml
-[[hooks]]
-stage = "build"
-command = "cargo"
-command_arguments = ["resources"]
-```
-
-#### Using build script
-
-If you followed the [create project](/guides/create_project), this configuration
-was suggested to you.
+#### Using `cargo_resources` from build script
 
 To make the build script approach work, you need to make the following changes
 in the `Cargo.toml`:
 
 ```toml
 [build-dependencies]
-cargo_metadata="0.22.0"
-cargo-resources="1.1.6"
+cargo_metadata="0.23.0"
+cargo-resources="1.4.1"
 ```
 
 This will add the necessary dependencies for the build script approach.
@@ -153,6 +269,10 @@ fn main() {
 }
 ```
 
+If you decide to use this approach, you can use code in `leptos_forge_build_script::resources`
+module as an example how to integrate with `cargo_resources`.
+
+
 "############;
 
 /// Setup section
@@ -167,133 +287,120 @@ impl Section for Resources {
 
 /// description of the [Tailwind] section
 const TAILWIND: &str = r############"
-# Tailwind
+# Integrating with tailwind
 
-`leptos_forge` uses Tailwind 4 to manage the CSS styles.
-
-To use the Tailwind within the `leptos_forge` based application you need to
-adjust the Tailwind `main.css` file to include the necessary files and make
-small changes to the `index.html` file used by the `trunk`.
-
-## Adding dependencies for the build script
-
-In your `Cargo.toml` in the build-dependencies section add
+To integrate with Tailwind, you can use `leptos_forge_build_script` crate. In your
+application crate add
 
 ```toml
 [build-dependencies]
-...
-build-print.workspace = true
+leptos_forge_build_script = 0.6
+
+[package.metadata.leptos_forge.tailwind]
+# Cargo.toml relative path to your tailwind file without `@import "tailwindcss"` statement
+lib="assets/css/lib.css"
+# Cargo.toml relative path where you would like to place the file build by tailwindcss 
+output="target/resources/css/main.css"
 ```
 
-> [!NOTE]
-> ##### `build-print`
->
-> `build-print` crate works around the `cargo` limitations on message formatting
-> and allows you to show more then `warning` and `error` (and hides the ugly syntax)
+In your build script add
 
-## Setting up `cargo-resources`
+```rust
+use std::env::current_dir;
 
-I assume you have `cargo-resources` set up and running. If not you can follow
-either [setup](/guides) or [resources](/guides/resources) chapter. For the rest
-of this chapter I will assume that in your `Cargo.toml` you have the following
-configuration
-
-```toml
-[package.metadata.cargo_resources]
-resource_root = "target/resources"
-```
-
-## Building css
-
-In your build script after collating the resource add
-
-```
-/// Description in case of tailwind execution failure
-const TAILWIND_FAILURE: &str = "Build script can't find the tailwindcss cli. Please check your tailwind installation";
-
-/// Simple helper function to print the multiline string to the cargo output
-fn error<S: ToString>(s: S) {
-    for line in s.to_string().split("\n") {
-            error!("{line}");
-    }
+use cargo_metadata::{
+  CargoOpt,
+  Metadata,
+  MetadataCommand,
+  camino::Utf8PathBuf,
 }
 
-/// Simple helper function to print the multiline string to the cargo output
-fn info<S: ToString>(s: S) {
-    for line in s.to_string().split("\n") {
-            info!("{line}");
-    }
-    
-}
-
-/// Simple helper function to print a normal multiline test to the cargo output
-fn println<S: ToString>(s: S) {
-    for line in s.to_string().split("\n") {
-            println!("{line}");
-    }
-}
+use leptos_forge_build_script::{
+  console::{
+    Console,
+    ConsoleConfiguration,
+  },
+  tailwind::Tailwind,
+};
 
 fn main() {
-    ...
+    // Setup printing messages to the console
+    let console_configuration = ConsoleConfiguration::default();
+    let console = Console::new("crate_name", &console_configuration);
 
-    // Collate resources from the crate's dependencies.
-    collate_resources(&manifest_file).expect("There was an error during bundling of the resources");
+    // Read the cargo manifest
+    let cwd = current_dir().unwrap();
+    let manifest_file = Utf8PathBuf::from_path_buf(cwd).unwrap().join("Cargo.toml");
+    let mut metadata_cmd = MetadataCommand::new();
+    let metadata: Metadata = metadata_cmd
+        .manifest_path(&manifest_file)
+        .features(CargoOpt::AllFeatures)
+        .exec()
+        .unwrap();
 
-    // After all dependencies are in place (inside of the `package.metadata.cargo_resources.resource_root`
-    // path we can run tailwind to build them
-
-    let output = Command::new("tailwindcss")
-        .args(vec![
-            "--input", "src/css/main/main.css",
-            "--output", "target/resources/leptos_forge_site/main.css",
-            "--optimize" // remove duplicated classes, ...
-        ])
-        .output()
-        .expect(TAILWIND_FAILURE);
-
-    if !output.status.success() {
-        println(format!("Tailwind Stopped with an {}", output.status));
-        error("");
-        error("--------[ STDOUT ]------------------------");
-        error("");
-        println(String::from_utf8_lossy(&output.stdout));
-        error("");
-        error("--------[ STDERR ]------------------------");
-        error("");
-        error(String::from_utf8_lossy(&output.stderr));
-
+      
+    { 
+        // All output from the tailwind integration will have a `[tailwind]` tag prepended
+        let console = console.stage("tailwind");
+      
+        // Run tailwind integration
+        // 
+        // 
+        let _output_path = Tailwind::new(
+            metadata, 
+            &console, 
+            // Override to any path you wish the main tailwind file should be generated
+            // by default it's placed under the path created using algorithm below
+            //
+            // 1. `OUT_DIR` env variable
+            // 2. To the path from `1` append `leptos_forge/build_script/tailwind`
+            //    to make it separate from the rest of the output
+            //
+            None, 
+            // If set to `true` it generates `cargo::rerun-if-changed=` statements
+            // for the local files (same workspace) scanned by tailwind.
+            //
+            // watching behavior can be fine tuned in your Cargo.toml
+            // `package.metadata.leptos_forge.tailwind.watch` configuration
+            true
+        ).
+            run().
+            unwrap();
     }
-    else {
-        info("[SITE] Tailwind run successfully");
-    }
-
 }
-
-
 ```
 
-## Setting up Tailwind
+## Using in ui libraries
 
-I assume you have installed Tailwind and have the `assets/css/main.css` file in
-your project as the entry point for your Tailwind. If your `main.css` is
-somewhere else you will need to adjust the paths accordingly.
+If you have a crate which will provide user interface and you use the tailwindcss
+to style it in the `Cargo.toml` of your UI lib add
 
-`leptos_forge` provides two files in for you to include in the `main.css` file. 
+```toml
+[package]
+# Add include directive to your crate, together with your tailwindcss assets
+include=[
+    "src",
+    "assets",
+]
 
-- **`leptos_forge.css`** - css file which has all the necessary styles to run the `leptos_forge`
-- **`common.css`** - tailwind css configuration and some animation related utilities.
-
-To integrate `leptos_forge` with your project's Tailwind setup you need to import both of the files in your `main.css` file by adding
-
-```css
-@import "../../target/resources/leptos_forge/common.css";
-@import "../../target/resources/leptos_forge/leptos_forge.css";
+[package.metadata.leptos_forge.tailwind]
+# Cargo.toml relative path to your tailwind file without `@import "tailwindcss"`
+# statement. Tailwind will use it to scan your source files.
+lib="assets/css/lib.css"
 ```
 
-## Setting up trunk
+Thats it.
 
-Trunk has built-in integration with Tailwind. Your `index.html` file needs to
-be slightly adjusted compared to the [create project](/guides/create_project)
+> [!NOTE]
+>
+> You don't need to add the dependency to the `leptos_forge_build_script` to the 
+> UI lib crate.
+
+## Using with Trunk
+
+Assuming that in your application Cargo.toml you have `package.metadata.leptos_forge.tailwind.output="target/resources/css/main.css"`
+
+Your `index.html` can look like this
 
 ```html
 <!doctype html>
@@ -302,14 +409,36 @@ be slightly adjusted compared to the [create project](/guides/create_project)
         <meta charset="UTF-8">
         <title>My leptos_forge site</title>
         <link data-trunk rel="copy-dir" href="target/resources" data-target-path="resources" />
-        <link rel="stylesheet" href="/resources/leptos_forge_site/main.css" />
+        <link rel="stylesheet" href="/resources/css/main.css" />
         <link data-trunk rel="rust" href="Cargo.toml"/>
     </head>
     <body></body>
 </html>
 ```
 
+Because of the limitation of the Trunk, you need to create a `Trunk.toml` file
+with content
 
+```toml
+# Ensures that resources are in place before bundling will take place
+# This is related to the limitation of the trunk
+[[hooks]]
+stage = "pre_build"    # When to run hook, must be one of "pre_build", "build", "post_build"
+command = "cargo"      # Command to run
+command_arguments = [  # Arguments to pass to command
+    "check",
+]
+```
+
+> [!INFO]
+> ##### Why `cargo check` is needed?
+>
+> Trunk runs the building of the application and bundling of the resources in
+> parallel. That means it's totally possible for the bundling to finish the process
+> before the build script finishes the execution and often it does.
+> 
+> As a workaround sample configurations contains the `cargo check` in pre_build
+> state. This ensures that all files are present before the build even starts.
 
 "############;
 

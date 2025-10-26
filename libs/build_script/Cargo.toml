@@ -16,11 +16,10 @@ path = "src/rust/main/lib.rs"
 build-print.workspace = true
 cargo_metadata.workspace = true
 cargo-resources.workspace = true
-chrono.workspace = true
-filetime.workspace = true
 indoc.workspace = true
 serde.workspace = true
 serde_json.workspace = true
 soft-canonicalize.workspace = true
+
 [lints]
 workspace = true
