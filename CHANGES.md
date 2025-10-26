@@ -5,6 +5,7 @@
 ### `leptos_forge_build_script`
 
 - Adds the reliable resource management wrapping `cargo_resources` crate
+- Makes `lib` in `Cargo.toml` configuration optional
 - Better documentation
 
 ## 0.6.1

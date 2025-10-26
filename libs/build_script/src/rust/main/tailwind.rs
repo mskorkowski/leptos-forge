@@ -44,7 +44,7 @@ pub struct TailwindConfiguration {
     /// 
     /// If path using `lib` contains `"` or `"` then Tailwind integration will
     /// return an error
-    lib: Utf8PathBuf,
+    lib: Option<Utf8PathBuf>,
     /// The path to the resulting css file
     /// 
     /// If more then one crate specifies the output path only the root crate
@@ -492,7 +492,7 @@ impl<'this> Tailwind<'this> {
                     output="relative/path/to/target/result.css"
                     watch=[]
 
-                    - lib - relative path to the tailwind configuration for this crate. This file will be imported from the generated tailwindcss file
+                    - lib - optional, relative path to the tailwind configuration for this crate. This file will be imported from the generated tailwindcss file
                     - output - optional, relative path to the output of the tailwindcss
                     - watch - optional, list of paths which will be passed to `cargo::rerun-if-changed=PATH` relative to the crate Cargo.toml
                 "#,
@@ -500,7 +500,8 @@ impl<'this> Tailwind<'this> {
             );
         };
 
-        if !config.lib.is_relative() {
+        if let Some(lib) = &config.lib &&
+            !lib.is_relative() {
             return Err(formatdoc!(r#"
                 Path provided as value of lib in leptos_forge metadata is invalid in crate {}
 
@@ -577,17 +578,22 @@ impl<'this> Tailwind<'this> {
             ));
         };
 
-        let lib_path = package_root.join(&configuration.lib);
+        if let Some(lib) = &configuration.lib {
+            let lib_path = package_root.join(lib);
 
-        Tailwind::is_valid_resource_path(details.package, package_root, &lib_path)?;
+            Tailwind::is_valid_resource_path(details.package, package_root, &lib_path)?;
 
-        Ok(formatdoc! {r#"
-            /* Crate {} */
-            @import "{lib_path}";
-            
-            "#,
-            details.package.name
-        })
+            return Ok(formatdoc! {r#"
+                /* Crate {} */
+                @import "{lib_path}";
+                
+                "#,
+                details.package.name
+            })
+        }
+        
+        Ok(String::new())
+        
     }
 
     /// Checks if `resource` is under the `root` path
@@ -685,8 +691,9 @@ impl<'this> Tailwind<'this> {
                     continue;
                 };
 
-                if config.watch.is_empty() {
-                    if let Some(lib_parent) = config.lib.parent() {
+                if config.watch.is_empty() &&
+                    let Some(lib) = &config.lib {
+                    if let Some(lib_parent) = lib.parent() {
                         let lib_parent = match package_root.join(lib_parent).canonicalize_utf8() {
                             Err(e) => {
                                 console.warn(&formatdoc!(r#"
@@ -713,7 +720,7 @@ impl<'this> Tailwind<'this> {
                                 Lib path: {}
                             "#,
                             details.package.name,
-                            config.lib,
+                            lib,
                         ));
                     }
 
