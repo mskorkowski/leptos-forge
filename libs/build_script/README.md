@@ -10,6 +10,10 @@ Library to be used in your build scripts for
   - Build your tailwind css file from source across dependencies
   - Ability to watch for changes in your whole workspace and automatically 
     recompile css when needed
+- Reliable resource provisioning
+  - Uses `cargo_resources` for pulling resources from upstream crates without `include_bytes!`
+  - Ability to watch for changes in your whole workspace and automatically refetch
+    the resources when needed
 
 ## How to use it
 
@@ -44,6 +48,9 @@ fn main() {
 ```
 
 ### Tailwind integration
+
+Assuming your tailwind css files are located in `assets/css/lib.css` (relative to
+respective `Cargo.toml`)
 
 In your library crate `Cargo.toml` add (you don't need to depend on the `leptos_forge_build_script` here)
 
@@ -93,9 +100,12 @@ use cargo_metadata::{
   camino::Utf8PathBuf,
 }
 
-use leptos_forge_build_script::console::{
-  Console,
-  ConsoleConfiguration,
+use leptos_forge_build_script::{
+  console::{
+    Console,
+    ConsoleConfiguration,
+  },
+  tailwind::Tailwind,
 };
 
 fn main() {
@@ -119,13 +129,119 @@ fn main() {
         let console = console.stage("tailwind");
       
         // Run tailwind integration
-        let _output_path = Tailwind::new(metadata, &console, None, true).
-            run().
-            unwrap();
+        // 
+        // 
+        let _output_path = Tailwind::new(
+          metadata, 
+          &console, 
+          // Override to any path you wish the main tailwind file should be generated
+          // by default it's placed under the path created using algorithm below
+          //
+          // 1. `OUT_DIR` env variable
+          // 2. To the path from `1` append `leptos_forge/build_script/tailwind`
+          //    to make it separate from the rest of the output
+          //
+          None, 
+          // If set to `true` it generates `cargo::rerun-if-changed=` statements
+          // for the local files (same workspace) scanned by tailwind.
+          //
+          // watching behavior can be fine tuned in your Cargo.toml
+          // `package.metadata.leptos_forge.tailwind.watch` configuration
+          true
+        ).
+          run().
+          unwrap();
     }
 
 }
 ```
+
+> [!NOTE]
+>
+> Setting the fourth argument of `Tailwind::new` to `true` makes the `leptos_forge_build_script`
+> generate [`cargo::rerun-if-changed=`](https://doc.rust-lang.org/cargo/reference/build-scripts.html#rerun-if-changed) 
+> statements, which disables the default build script behavior. Depending on 
+> your other use cases it might require to adjust your build script behavior.
+>
+> Cargo defaults can be brought back by adding
+>
+> ```rust
+> std::println!("cargo::rerun-if-changed=.")
+> ```
+
+#### Cargo toml configuration options for tailwind integration
+
+```toml
+[package.metadata.leptos_forge.tailwind]
+lib="relative/path/to/lib.css"
+output="relative/path/to/target/result.css"
+watch=[]
+```
+- **lib** - relative path to the tailwind configuration for this crate. This 
+  file will be imported from the generated tailwindcss file
+- **output** - optional, relative path to the output of the tailwindcss
+- **watch** - optional, list of paths which will be passed to 
+  `cargo::rerun-if-changed=PATH` relative to the crate Cargo.toml. If nonempty 
+  it will override the automatic path discovery.
+
+  By default two paths are added:
+
+  - parent folder of the `lib.rs` of the upstream crate
+  - parent folder of the file pointed at in `lib` tailwind configuration option
+
+  The defaults are conservative and probably overly broad.
+
+### Resource provisioning
+
+Resource provisioning in the `build_script` is a thin convenience wrapper around
+the `cargo_resources` itself.
+
+First step is to setup your crates `Cargo.toml` as described in the [`cargo-resources` documentation](https://github.com/PeteEvans/cargo-resources).
+
+In your build script
+
+```rust
+use leptos_forge_build_script::{
+  console::{
+    Console,
+    ConsoleConfiguration,
+  },
+  resources::Resources,
+};
+
+fn main() {
+    // Setup printing messages to the console
+    let console_configuration = ConsoleConfiguration::default();
+    let console = Console::new("crate_name", &console_configuration);
+
+    { 
+        // All output from the tailwind integration will have a `[tailwind]` tag prepended
+        let console = console.stage("resources");
+ 
+        // provide all resources
+        let resources = Resources::all(
+          &console, 
+          // If set to `true` it will generate the `cargo::rerun-if-changed=`
+          // statements for all resources in local crates (same workspace)
+          true
+        );
+        resources.run().unwrap();
+    }
+}
+```
+
+> [!NOTE]
+>
+> Setting the second argument of `Resources::all` to `true` makes the `leptos_forge_build_script`
+> generate [`cargo::rerun-if-changed=`](https://doc.rust-lang.org/cargo/reference/build-scripts.html#rerun-if-changed) 
+> statements, which disables the default build script behavior. Depending on 
+> your other use cases it might require to adjust your build script behavior. 
+>
+> Cargo defaults can be brought back by adding
+>
+> ```rust
+> std::println!("cargo::rerun-if-changed=.")
+> ```
 
 ## Acknowledgement
 

@@ -1,5 +1,12 @@
 # `leptos_forge` Changes
 
+## 0.6.2
+
+### `leptos_forge_build_script`
+
+- Adds the reliable resource management wrapping `cargo_resources` crate
+- Better documentation
+
 ## 0.6.1
 
 ### `leptos_forge_build_script`

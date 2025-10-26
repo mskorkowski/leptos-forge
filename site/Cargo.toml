@@ -35,12 +35,8 @@ uuid.workspace = true
 testing-library-dom = { version = "0.0.1", git="https://github.com/RustForWeb/testing-library.git", rev="05c93b5" }
 
 [build-dependencies]
-build-print.workspace = true
 build_script.workspace = true
 cargo_metadata.workspace = true
-cargo-resources.workspace = true
-indoc.workspace = true
-serde_json.workspace = true
 
 [features]
 default = []
@@ -69,5 +65,6 @@ provides = [
     { crate_path = "src/resources/images/guides/adding_tests/04-completed.png", output_path="leptos_forge_site/images/guides/adding_tests/04-completed.png", encoding="Bin" },
 ]
 
-[package.metadata.leptos_forge]
-tailwind = { lib="src/css/main/lib.css", output="target/resources/leptos_forge_site/css/main.css" }
+[package.metadata.leptos_forge.tailwind]
+lib="src/css/main/lib.css"
+output="target/resources/leptos_forge_site/css/main.css"

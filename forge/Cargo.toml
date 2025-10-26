@@ -30,11 +30,7 @@ utils_leptos.workspace = true
 ui_components.workspace = true
 
 [build-dependencies]
-cargo_metadata.workspace = true
-cargo-resources.workspace = true
 build-print.workspace = true
-chrono.workspace = true
-serde_json.workspace = true
 
 [features]
 default = []

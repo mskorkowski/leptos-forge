@@ -22,7 +22,7 @@ We've chosen the `cargo-resource` because
 - it doesn't bloat wasm file
 - it nicely integrates with `cargo`
 - you can call it from build script
-- We found Manganis harder to integrate and currently requires `dx`
+- We found Manganis harder to integrate and it currently requires `dx`
 
 ## Using `cargo-resources`
 
@@ -44,7 +44,8 @@ Providing the resource has three steps.
    version = "0.6.0"
    edition = "2024"
    include = [
-     "assets/images/logo.png"
+     "assets",
+     "src"
    ]
    ```
 
@@ -106,11 +107,24 @@ cargo resources
 
 So the running involves three steps
 
-1. build - build the application
-2. resources - bundle the resources
+1. resources - bundle the resources
+2. build - build the application
 3. run - run the app
 
 #### Using `trunk` to bundle the resources
+
+> [!NOTE]
+> # Trunk and cargo-resources limitations 
+>
+> Due to limitations in Trunk and cargo-resources (mostly the second one) there 
+> are two solutions
+> 
+> 1. Use trivial hack to always rerun the `build_script`
+> 2. Accept that if you update the resources the cargo build script caching algorithm
+>    will prevent the build script to rerun
+>
+> There is an open ticket which will allow us to remove the issue:
+> [
 
 In your `Trunk.toml` add the following hook:
 
