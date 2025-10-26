@@ -93,7 +93,7 @@ console_log = "1.0.0"
 log = "0.4.20"
 
 [build-dependencies]
-cargo_metadata="0.22.0"
+cargo_metadata="0.23.0"
 cargo-resources="1.1.6"
 leptos_forge_build_script="0.6"
 
@@ -172,12 +172,11 @@ The `build.rs` script should look like this:
 use leptos_forge_build_script::console::Console;
 use leptos_forge_build_script::console::ConsoleConfiguration;
 use leptos_forge_build_script::tailwind::Tailwind;
+use leptos_forge_build_script::resources::Resources;
 use cargo_metadata::CargoOpt;
 use cargo_metadata::Metadata;
 use cargo_metadata::MetadataCommand;
 use cargo_metadata::camino::Utf8PathBuf;
-use cargo_resources::collate_resources_with_reporting;
-use cargo_resources::reporting::ReportingTrait;
 use std::env::current_dir;
 
 fn main() {
@@ -201,12 +200,21 @@ fn main() {
             unwrap();
     } 
 
-    // Collate resources from the crate's dependencies.
-    collate_resources(&manifest_file).expect("There was an error during bundling of the resources");
+    {
+        let console = console.stage("resources");
+
+        let resources = Resources::all(
+            &console, 
+            // If set to `true` it will generate the `cargo::rerun-if-changed=`
+            // statements for all resources in local crates (same workspace)
+            true
+        );
+        resources.run().unwrap();
+    }
 }
 ```
 
-### Creating `index.html` for the `trunk`
+### Configuring Trunk
 
 `trunk` requires us to create an `index.html` file in the root of the project. This file will
 be used by `trunk` as the entrypoint to the application we are setting up.
@@ -228,7 +236,21 @@ Below is the basic `index.html` file you can use:
 </html>
 ```
 
+Now we need to create `Trunk.toml` with content
+
+```toml
+# Ensures that resources are in place before bundling will take place
+# This is related to the limitation of the trunk
+[[hooks]]
+stage = "pre_build"    # When to run hook, must be one of "pre_build", "build", "post_build"
+command = "cargo"      # Command to run
+command_arguments = [  # Arguments to pass to command
+    "check",
+]
+```
+
 Using Tailwind in your `leptos_forge` application is described in [Tailwind chapter](/guides/tailwind).
+
 
 ### Creating the first story
 

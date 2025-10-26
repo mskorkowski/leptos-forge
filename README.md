@@ -25,6 +25,16 @@ Parts released to `crates.io` are considered as good enough for others to use
 - `leptos_forge_utils`
   Probably useless outside of the `leptos_forge` codebase
 
+## Compatibility with leptos
+
+Below there is table of Leptos versions with which `leptos_forge` is compatible
+with
+
+| `leptos_forge` version | Leptos version |
+|:-----------------------|:---------------|
+| 0.6.0-                 | 0.8            |
+
+
 ## Features
 
 - **Trivial integration with Leptos** - You can use Leptos components directly in your Forge stories without any additional setup

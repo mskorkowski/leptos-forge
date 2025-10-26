@@ -1,14 +1,3 @@
-
-
-
-# Forces the cargo to run the build script
-[[hooks]]
-stage = "pre_build"
-command = "touch"
-command_arguments = [  
-    "src/css/main/main.css"
-]
-
 # Ensures that resources are in place before bundling will take place
 [[hooks]]
 stage = "pre_build"    # When to run hook, must be one of "pre_build", "build", "post_build"

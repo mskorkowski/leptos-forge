@@ -351,7 +351,6 @@ impl<'this> Tailwind<'this> {
         self.console.info(&format!("Canonical tailwindcss output path is: {output_path}"));
 
         let mut tailwind: Command = Command::new("tailwindcss");
-         // let mut tailwind: Command = Command::new("tailwindcss");
         tailwind
             // .env("DEBUG", "*")
             .args(vec![

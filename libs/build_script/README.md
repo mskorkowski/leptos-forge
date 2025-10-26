@@ -132,25 +132,25 @@ fn main() {
         // 
         // 
         let _output_path = Tailwind::new(
-          metadata, 
-          &console, 
-          // Override to any path you wish the main tailwind file should be generated
-          // by default it's placed under the path created using algorithm below
-          //
-          // 1. `OUT_DIR` env variable
-          // 2. To the path from `1` append `leptos_forge/build_script/tailwind`
-          //    to make it separate from the rest of the output
-          //
-          None, 
-          // If set to `true` it generates `cargo::rerun-if-changed=` statements
-          // for the local files (same workspace) scanned by tailwind.
-          //
-          // watching behavior can be fine tuned in your Cargo.toml
-          // `package.metadata.leptos_forge.tailwind.watch` configuration
-          true
+            metadata, 
+            &console, 
+            // Override to any path you wish the main tailwind file should be generated
+            // by default it's placed under the path created using algorithm below
+            //
+            // 1. `OUT_DIR` env variable
+            // 2. To the path from `1` append `leptos_forge/build_script/tailwind`
+            //    to make it separate from the rest of the output
+            //
+            None, 
+            // If set to `true` it generates `cargo::rerun-if-changed=` statements
+            // for the local files (same workspace) scanned by tailwind.
+            //
+            // watching behavior can be fine tuned in your Cargo.toml
+            // `package.metadata.leptos_forge.tailwind.watch` configuration
+            true
         ).
-          run().
-          unwrap();
+            run().
+            unwrap();
     }
 
 }

@@ -7,6 +7,7 @@
 - Adds the reliable resource management wrapping `cargo_resources` crate
 - Makes `lib` in `Cargo.toml` configuration optional
 - Better documentation
+- Updated website related to the tailwind and resources bundling
 
 ## 0.6.1
 
