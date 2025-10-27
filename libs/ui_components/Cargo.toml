@@ -4,7 +4,6 @@ description = "Components you can use in your leptos_forge application"
 license.workspace = true
 version.workspace = true
 edition.workspace = true
-build="src/rust/build/build.rs"
 include = [
     "src",
 ]
