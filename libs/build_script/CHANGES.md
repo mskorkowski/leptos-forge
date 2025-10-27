@@ -1,5 +1,9 @@
 # Changelog for `leptos_forge_build_script`
 
+## 0.6.3
+
+Rust doc updates
+
 ## 0.6.2
 
 - Adds the `leptos_forge_build_script::Resources` to help manage the static resources.

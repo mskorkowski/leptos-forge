@@ -142,7 +142,7 @@ fn main() {
 ##### Integrating with Trunk
 
 > [!NOTE]
-> # Trunk limitations
+> ##### Trunk limitations
 >
 > Trunk doesn't handle the well the resources which are generated during the 
 > build phase. Due to this limitation to have reliable integration with Trunk
@@ -430,7 +430,7 @@ command_arguments = [  # Arguments to pass to command
 ]
 ```
 
-> [!INFO]
+> [!NOTE]
 > ##### Why `cargo check` is needed?
 >
 > Trunk runs the building of the application and bundling of the resources in

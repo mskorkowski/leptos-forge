@@ -1,5 +1,22 @@
 # `leptos_forge` Changes
 
+## 0.6.3
+
+### `leptos_forge_ui_components`
+
+- Removed build script, as it's unnecessary after moving to `leptos_forge_build_script`
+- First crate.io release of the `leptos_forge_ui_components`
+- Early pre alpha release in terms of feature coverage
+
+### `leptos_forge`
+
+- Removed build script, as it's unnecessary after moving to `leptos_forge_build_script`
+- First crate.io release of the `leptos_forge`
+
+### Other
+
+- Updated a lot of documentation across the whole project
+
 ## 0.6.2
 
 ### `leptos_forge_build_script`

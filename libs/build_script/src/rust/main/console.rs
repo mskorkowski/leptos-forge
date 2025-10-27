@@ -1,5 +1,39 @@
-//! Handles formatted output for the build scripts
+//! Handles output for the build scripts
 //! 
+//! # Basic usage
+//! 
+//! ```toml
+//! [build-dependencies]
+//! leptos_forge_build_script = "0.6"
+//! ```
+//! 
+//! In your build script:
+//! 
+//! ```rust,no_run
+//! # #[allow(clippy::needless_doctest_main)]
+//! use leptos_forge_build_script::console::{
+//!   Console,
+//!   ConsoleConfiguration,
+//! };
+//! 
+//! 
+//! fn main() {
+//! 
+//!   let console_configuration = ConsoleConfiguration::default();
+//!   let console = Console::new("crate_name", &console_configuration);
+//! 
+//!   console.info(&"This is an info message"); // Prints
+//!                                             // info:  [crate_name]  This is an info message
+//! 
+//!   let x = 3;
+//!   console.warn(&format!("The x = {x}"));    // Prints
+//!                                             // warning:  [crate_name]  The x = 3
+//! 
+//! }
+//! ```
+//! 
+//! For printing colorful messages uses [`build_print`] crate.
+
 
 use std::marker::PhantomData;
 

@@ -1,4 +1,12 @@
 //! Library with helpers to write a build scripts
+//! 
+//! | Module | Description |
+//! |:-------|:------------|
+//! | [console] | Contains the code related to printing messages during the `cargo build`. Has support for multiline text and message tagging |
+//! | [resources] | Reliable static resource management across dependencies |
+//! | [tailwind] | Reliable tailwind integration for cargo projects |
+//! 
+//! Detailed documentation and usage can be found at the module level
 
 #![doc(test(attr(deny(unused))))]
 #![doc(test(attr(deny(dead_code))))]

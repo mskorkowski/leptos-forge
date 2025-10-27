@@ -1,4 +1,61 @@
-//! Handles the resource gathering across the dependency tree of the crate
+//! Reliable resource management for your crate based on [cargo-resources](https://github.com/PeteEvans/cargo-resources)
+//! 
+//! - Works with crate.io
+//! - Has ability to make cargo aware of changes in local dependencies 
+//! 
+//! # Basic usage
+//! 
+//! Resource provisioning in the `build_script` is a thin wrapper around the `cargo_resources`
+//! itself.
+//! 
+//! 
+//! First step is to setup your crates `Cargo.toml` as described in the [`cargo-resources` documentation](https://github.com/PeteEvans/cargo-resources).
+//! 
+//! In your build script
+//! 
+//! ```rust,no_run
+//! # #[allow(clippy::needless_doctest_main)]
+//! use leptos_forge_build_script::{
+//!   console::{
+//!     Console,
+//!     ConsoleConfiguration,
+//!   },
+//!   resources::Resources,
+//! };
+//! 
+//! fn main() {
+//!     // Setup printing messages to the console
+//!     let console_configuration = ConsoleConfiguration::default();
+//!     let console = Console::new("crate_name", &console_configuration);
+//! 
+//!     { 
+//!         // All output from the tailwind integration will have a `[tailwind]` tag prepended
+//!         let console = console.stage("resources");
+//! 
+//!         // provide all resources
+//!         let resources = Resources::all(
+//!             &console, 
+//!             // If set to `true` it will generate the `cargo::rerun-if-changed=`
+//!             // statements for all resources in local crates (same workspace)
+//!             true
+//!         );
+//!         resources.run().unwrap();
+//!     }
+//! }
+//! ```
+//! 
+//! > **Note**:
+//! >
+//! > Setting the second argument of `Resources::all` to `true` makes the `leptos_forge_build_script`
+//! > generate [`cargo::rerun-if-changed=`](https://doc.rust-lang.org/cargo/reference/build-scripts.html#rerun-if-changed) 
+//! > statements, which disables the default build script behavior. Depending on 
+//! > your other use cases it might require to adjust your build script behavior. 
+//! >
+//! > Cargo defaults can be brought back by adding
+//! >
+//! > ```rust
+//! > std::println!("cargo::rerun-if-changed=.")
+//! > ```
 //! 
 
 use std::env::current_dir;

@@ -71,8 +71,6 @@ lib="assets/css/lib.css"
 
 In your application `Cargo.toml` add
 
-In your `Cargo.toml` add 
-
 ```toml
 [build-dependencies]
 cargo_metadata="0.22.0"
@@ -193,8 +191,8 @@ watch=[]
 
 ### Resource provisioning
 
-Resource provisioning in the `build_script` is a thin convenience wrapper around
-the `cargo_resources` itself.
+Resource provisioning in the `build_script` is a thin wrapper around the `cargo_resources`
+itself.
 
 First step is to setup your crates `Cargo.toml` as described in the [`cargo-resources` documentation](https://github.com/PeteEvans/cargo-resources).
 

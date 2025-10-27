@@ -4,3 +4,7 @@ Crate contains components used by the Leptos Forge which are not specific to any
 
 You might use these components when defining controls for your components/stories. You should never use
 them in your application code.
+
+> [!WARNING]
+>
+> Currently only really basic use cases and components are covered.
