@@ -8,6 +8,7 @@ use leptos::attr::Attribute;
 use leptos::html::Div;
 use leptos::prelude::*;
 use reactive_stores::Field;
+use reactive_stores::KeyMap;
 use reactive_stores::Patch;
 use reactive_stores::PatchField;
 use reactive_stores::Store;
@@ -41,7 +42,13 @@ enum ExecutionMode {
 }
 
 impl PatchField for ExecutionMode {
-    fn patch_field(&mut self, new: Self, path: &StorePath, notify: &mut dyn FnMut(&StorePath)) {
+    fn patch_field(
+        &mut self, 
+        new: Self, 
+        path: &StorePath, 
+        notify: &mut dyn FnMut(&StorePath), 
+        _keys: Option<&KeyMap>
+    ) {
         if *self != new {
             *self = new;
             notify(path);
@@ -80,7 +87,13 @@ impl TestResult {
 }
 
 impl PatchField for TestResult {
-    fn patch_field(&mut self, new: Self, path: &StorePath, notify: &mut dyn FnMut(&StorePath)) {
+    fn patch_field(
+        &mut self, 
+        new: Self, 
+        path: &StorePath, 
+        notify: &mut dyn FnMut(&StorePath),
+        _keys: Option<&KeyMap>
+    ) {
         if *self != new {
             *self = new;
             notify(path);
@@ -412,3 +425,4 @@ fn StepView<S: ToString>(
         <li>{test_state} - {description}</li>
     }
 }
+

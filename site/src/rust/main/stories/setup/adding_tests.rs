@@ -346,6 +346,7 @@ fn Counter(
     }
 }
 
+/// Basic counter story
 const COUNTER_STORY: &str = r############"
 # Counter
 
