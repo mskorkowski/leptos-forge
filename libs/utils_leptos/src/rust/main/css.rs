@@ -101,7 +101,7 @@ impl ToClassDef for (&str, &str, &str, &str, &str) {
 pub fn use_swap_class<E, M, C1, C2>(target: E, remove_class: C1, add_class: C2)
 where
     E: IntoElementMaybeSignal<Element, M>,
-    M: ?Sized,
+    M: Sized,
     C1: ToClassDef,
     C2: ToClassDef,
 {
@@ -117,7 +117,7 @@ where
 pub fn use_add_class<E, M, C>(target: E, add_class: C)
 where
     E: IntoElementMaybeSignal<Element, M>,
-    M: ?Sized,
+    M: Sized,
     C: ToClassDef,
 {
     let target = target.into_element_maybe_signal();
@@ -134,7 +134,7 @@ where
 pub fn use_remove_class<E, M, C>(target: E, remove_class: C)
 where
     E: IntoElementMaybeSignal<Element, M>,
-    M: ?Sized,
+    M: Sized,
     C: ToClassDef,
 {
     let target = target.into_element_maybe_signal();

@@ -178,7 +178,13 @@ struct LastSelectedItem {
 }
 
 impl PatchField for LastSelectedItem {
-    fn patch_field(&mut self, new: Self, path: &StorePath, notify: &mut dyn FnMut(&StorePath)) {
+    fn patch_field(
+        &mut self,
+        new: Self,
+        path: &StorePath,
+        notify: &mut dyn FnMut(&StorePath),
+        _keys: Option<&reactive_stores::KeyMap>,
+    ) {
         if self.to != new.to || self.menu_item == StoredRef::Empty {
             *self = new;
             notify(path);

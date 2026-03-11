@@ -3,7 +3,6 @@
 use leptos::leptos_dom::logging::console_error;
 use leptos::prelude::GetUntracked;
 use leptos::prelude::LocalStorage;
-use leptos::prelude::StoredValue;
 use leptos::tachys::renderer::dom::Element;
 use leptos_node_ref::AnyNodeRef;
 use leptos_use::core::ElementMaybeSignalType;
@@ -72,19 +71,57 @@ impl StoredRef {
             Ok(true)
         }
     }
+
+    /// Takes the value out of the stored reference, leaving a [Empty][StoredRef::Empty] in its place.
+    /// 
+    /// **Examples**
+    /// ```rust
+    /// 
+    /// ```
+    /// 
+    pub fn take(&mut self) -> StoredRef {
+        std::mem::take(self)
+    }
 }
 
 impl PatchField for StoredRef {
+    // fn patch_field(
+    //     &mut self,
+    //     new: Self,
+    //     path: &reactive_stores::StorePath,
+    //     notify: &mut dyn FnMut(&reactive_stores::StorePath),
+    // ) {
+    //     if new != *self {
+    //         *self = new;
+    //         notify(path);
+    //     }
+    // }
     fn patch_field(
-        &mut self,
-        new: Self,
-        path: &reactive_stores::StorePath,
-        notify: &mut dyn FnMut(&reactive_stores::StorePath),
-    ) {
-        if new != *self {
-            *self = new;
-            notify(path);
-        }
+            &mut self,
+            new: Self,
+            path: &reactive_stores::StorePath,
+            notify: &mut dyn FnMut(&reactive_stores::StorePath),
+            _keys: Option<&reactive_stores::KeyMap>,
+        ) {           
+            use StoredRef::*;
+
+            match (self, new) {
+                (Empty, Empty) => {}
+                (old @ Some(_), Empty) => {
+                    old.take();
+                    notify(path);
+                }
+                (old @ Empty, new @ Some(_)) => {
+                    *old = new;
+                    notify(path);
+                }
+                (Some(old), Some(new)) => {
+                    // we are at the leaf of the store by StoredRef definition, 
+                    // so we can't go any lower
+                    *old = new;
+                    notify(path);
+                }
+            }
     }
 }
 
@@ -104,12 +141,13 @@ impl PartialEq for StoredRef {
 
 impl IntoElementMaybeSignalType<Element, LocalStorage> for StoredRef {
     fn into_element_maybe_signal_type(self) -> ElementMaybeSignalType<Element> {
-        let inner = match self {
+        let inner: Option<Element> = match self {
             StoredRef::Empty => None,
             StoredRef::Some(node) => {
                 if node.valid() {
                     Some(node.take())
-                } else {
+                }
+                else {
                     console_error(
                         "Accessing the StoredRef from a different thread then it was created. That is not allowed.",
                     );
@@ -118,7 +156,7 @@ impl IntoElementMaybeSignalType<Element, LocalStorage> for StoredRef {
             }
         };
 
-        ElementMaybeSignalType::Static(StoredValue::new_local(inner))
+        inner.into_element_maybe_signal_type()
     }
 }
 
@@ -138,7 +176,7 @@ impl IntoElementMaybeSignalType<Element, LocalStorage> for &StoredRef {
             }
         };
 
-        ElementMaybeSignalType::Static(StoredValue::new_local(inner))
+        inner.into_element_maybe_signal_type()
     }
 }
 

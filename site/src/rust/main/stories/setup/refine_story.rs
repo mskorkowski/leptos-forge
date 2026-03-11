@@ -516,6 +516,7 @@ fn Counter(
     }
 }
 
+/// Refined counter example
 const COUNTER_STORY: &str = r############"
 # Counter
 
