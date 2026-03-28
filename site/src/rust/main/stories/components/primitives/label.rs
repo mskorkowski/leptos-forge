@@ -4,6 +4,7 @@ use forge::RouteDef;
 use leptos::prelude::*;
 use leptos::web_sys::HtmlElement;
 
+use reactive_stores::Store;
 use testing_library_dom::MatcherOptions;
 use testing_library_dom::get_by_test_id;
 use ui_components::primitives::input::TextInput;
@@ -15,6 +16,8 @@ use utils_leptos::signal::URwSignal;
 use forge::Story;
 use forge::story::Play;
 use forge::story::Step;
+
+use crate::State;
 
 /// Description of the label primitive
 const LABEL_DESC: &str = r############"
@@ -78,7 +81,9 @@ impl Default for BasicLabelStory {
 }
 
 impl Story for BasicLabelStory {
-    fn view(&self) -> impl IntoView {
+    type Data = State;
+
+    fn view(&self, _: Store<Self::Data>) -> impl IntoView {
         let label: Signal<String> = self.label.into();
         let text: URwSignal<String> = self.text;
 
@@ -90,7 +95,7 @@ impl Story for BasicLabelStory {
         }
     }
 
-    fn controls(&self) -> impl IntoView {
+    fn controls(&self, _: Store<Self::Data>) -> impl IntoView {
         let label: URwSignal<String> = self.label;
         let text: URwSignal<String> = self.text;
 
@@ -108,7 +113,7 @@ impl Story for BasicLabelStory {
         vec![Box::new(BasicLabelStoryPlayUpdateFromEmpty)]
     }
 
-    fn subroutes(&self) -> Vec<RouteDef> {
+    fn subroutes(&self) -> Vec<RouteDef<Self::Data>> {
         vec![RouteDef::story::<InlineLabelStory>("inline", "InlineLabel")]
     }
 }
@@ -290,7 +295,9 @@ impl Default for InlineLabelStory {
 }
 
 impl Story for InlineLabelStory {
-    fn view(&self) -> impl IntoView {
+    type Data = State;
+
+    fn view(&self, _: Store<Self::Data>) -> impl IntoView {
         let label: Signal<String> = self.label.into();
         let text = "sample text".to_string();
         view! {
@@ -303,7 +310,7 @@ impl Story for InlineLabelStory {
         }
     }
 
-    fn controls(&self) -> impl IntoView {
+    fn controls(&self, _: Store<Self::Data>) -> impl IntoView {
         let label: URwSignal<String> = self.label;
 
         view! {

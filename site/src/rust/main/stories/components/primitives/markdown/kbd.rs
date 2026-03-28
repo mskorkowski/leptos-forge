@@ -2,11 +2,14 @@
 
 use forge::Story;
 use leptos::prelude::*;
+use reactive_stores::Store;
 use ui_components::primitives::markdown::Markdown;
 use ui_components::widgets::field::Codearea;
 use utils_leptos::signal::URwSignal;
 
-/// Description of the [KdbStory] for Markdown
+use crate::State;
+
+/// Description of the [KbdStory] for Markdown
 const KBD: &str = r############"
 # Markdown
 # `<kbd>` tag
@@ -43,7 +46,9 @@ impl Default for KbdStory {
 }
 
 impl Story for KbdStory {
-    fn controls(&self) -> impl IntoView {
+    type Data = State;
+
+    fn controls(&self, _: Store<Self::Data>) -> impl IntoView {
         view! {
             <Codearea id="leptos-forge-markdown-demo-textarea" text=self.markdown label={"Markdown document".to_string()} />
         }
@@ -53,7 +58,7 @@ impl Story for KbdStory {
         KBD
     }
 
-    fn view(&self) -> impl IntoView {
+    fn view(&self, _: Store<Self::Data>) -> impl IntoView {
         view! {
             <Markdown src=self.markdown/>
         }

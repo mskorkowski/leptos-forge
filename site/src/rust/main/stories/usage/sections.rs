@@ -2,6 +2,8 @@
 
 use forge::Section;
 
+use crate::State;
+
 /// Content of the Sections section
 const SECTIONS: &str = r############"
 # Sections
@@ -169,6 +171,8 @@ impl Section for MySection {
 pub struct SectionsSection;
 
 impl Section for SectionsSection {
+    type Data = State;
+
     fn description(&self) -> &'static str {
         SECTIONS
     }

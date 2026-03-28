@@ -10,7 +10,9 @@ pub mod resources;
 use forge::RouteDef;
 use forge::Section;
 
-/// description of the [Components] section
+use crate::State;
+
+/// description of the [Setup] section
 const SETUP: &str = r############"
 # Setup
 # leptos_forge
@@ -357,11 +359,13 @@ target
 pub struct Setup;
 
 impl Section for Setup {
+    type Data = State;
+
     fn description(&self) -> &'static str {
         SETUP
     }
 
-    fn subroutes(&self) -> Vec<RouteDef> {
+    fn subroutes(&self) -> Vec<RouteDef<Self::Data>> {
         vec![]
     }
 }

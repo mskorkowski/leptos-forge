@@ -1,15 +1,16 @@
 //! Base component of the application
 
-mod state;
+use std::fmt::Debug;
 
 use leptos::leptos_dom::logging::console_log;
 use leptos::prelude::*;
 use leptos::tachys::view::iterators::StaticVec;
 use leptos_router::components::Router;
 use leptos_router::components::Routes;
+use reactive_stores::PatchField;
 use reactive_stores::Store;
-use state::State;
 use ui_components::menu::MenuState;
+use utils::prelude::ThreadSafe;
 
 use super::navigation::PathSpec;
 use super::navigation::RouteDef;
@@ -22,14 +23,20 @@ use super::views::content::Content;
 
 /// Main application component
 #[component]
-pub fn App(
+pub fn App<Data>(
     /// The routing information for the Leptos Forge
-    routes: Vec<RouteDef>,
+    routes: Vec<RouteDef<Data>>,
     /// Path to image to be used as a logo
     #[prop(default=Option::<&'static str>::None,optional)]
     logo: Option<&'static str>,
-) -> impl IntoView {
-    let _store = Store::new(State::new());
+    #[prop(default=Data::default(),optional)]
+    /// Initial state of the application store
+    initial_state: Data,
+) -> impl IntoView 
+where 
+    Data: PatchField + Debug + Default + ThreadSafe
+{
+    let store = Store::new(initial_state);
 
     let menu_defs = {
         let routes = routes.clone();
@@ -54,7 +61,7 @@ pub fn App(
             StaticVec::from(
                 routes
                     .iter()
-                    .flat_map(|route| route.as_routes(PathSpec::Root).into_iter())
+                    .flat_map(|route| route.as_routes(PathSpec::Root, store).into_iter())
                     .collect::<Vec<_>>(),
             )
         }

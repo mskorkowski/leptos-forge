@@ -14,12 +14,12 @@ use web_sys::wasm_bindgen::JsValue;
 
 ///  NodeRef like value which can be used inside the Store
 ///
-/// Differences between this and the `NodeRef` (or [AnyNodeRef][leptos_node_ref::AnyNodeRef])
+/// Differences between this and the `NodeRef` (or [AnyNodeRef])
 ///
 /// - that this type is not reactive by itself and for reactive part it depends on the
-///   [`Store`][reactive_stores::Store].
-/// - this value can be set to be empty ([`StoredRef::None`]) which is impossible in the case of the
-///   [`NodeRef`][leptos::prelude::NodeRef] or [`AnyNodeRef`][leptos_node_ref::AnyNodeRef].
+///   [`Store`][struct@reactive_stores::Store].
+/// - this value can be set to be empty ([`StoredRef::Empty`]) which is impossible in the case of the
+///   [`NodeRef`][leptos::prelude::NodeRef] or [`AnyNodeRef`].
 /// - this value doesn't implement [`NodeRefContainer`][leptos::tachys::html::node_ref::NodeRefContainer]
 ///   trait because it's not a `copyable` and `NodeRefContainer` api requires that by using `self` instead
 ///   of `&self` as the first argument.
@@ -45,7 +45,7 @@ impl StoredRef {
         self
     }
 
-    /// Create new instance of the [Node] initialized with a DOM node
+    /// Create new instance of the [web_sys::Node] initialized with a DOM node
     pub fn new(node: Element) -> Self {
         StoredRef::Some(SendWrapper::new(node))
     }
@@ -74,28 +74,12 @@ impl StoredRef {
 
     /// Takes the value out of the stored reference, leaving a [Empty][StoredRef::Empty] in its place.
     /// 
-    /// **Examples**
-    /// ```rust
-    /// 
-    /// ```
-    /// 
     pub fn take(&mut self) -> StoredRef {
         std::mem::take(self)
     }
 }
 
 impl PatchField for StoredRef {
-    // fn patch_field(
-    //     &mut self,
-    //     new: Self,
-    //     path: &reactive_stores::StorePath,
-    //     notify: &mut dyn FnMut(&reactive_stores::StorePath),
-    // ) {
-    //     if new != *self {
-    //         *self = new;
-    //         notify(path);
-    //     }
-    // }
     fn patch_field(
             &mut self,
             new: Self,
@@ -125,10 +109,10 @@ impl PatchField for StoredRef {
     }
 }
 
-/// Equality for [Node] is defined as `strict` equality (both [Nodes][Node] must point to the
+/// Equality for [Node][web_sys::Node] is defined as `strict` equality (both [Nodes][web_sys::Node] must point to the
 /// exactly same instance of the html node).
 ///
-/// Internally we are using the [`is_same_node`][https://developer.mozilla.org/en-US/docs/Web/API/Node/isSameNode].
+/// Internally we are using the [`is_same_node`][web_sys::Node::is_same_node].
 impl PartialEq for StoredRef {
     fn eq(&self, other: &Self) -> bool {
         match (self, other) {

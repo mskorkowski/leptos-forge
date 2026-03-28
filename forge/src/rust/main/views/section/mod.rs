@@ -1,4 +1,4 @@
-//! Implements a view for the [app::Section]
+//! Implements a view for the [crate::section::Section]
 //!
 
 mod markdown;
@@ -8,6 +8,8 @@ use std::str::Split;
 
 use leptos::leptos_dom::logging::console_log;
 use leptos::prelude::*;
+use reactive_stores::Store;
+
 use markdown::MarkdownParser;
 use markdown::MarkdownToken;
 use ui_components::primitives::markdown::Markdown;
@@ -15,12 +17,14 @@ use ui_components::primitives::markdown::Markdown;
 use crate::RouteDef;
 use crate::Section;
 
-/// Displays a [Section] in the
+/// Component which can display a [section][crate::section::Section]
 #[component]
 pub fn Section<S: 'static + Section + Default + Copy + Send>(
     /// Section to be shown
     #[prop(optional)]
     _section: PhantomData<S>,
+    /// data store
+    data: Store<S::Data>,
 ) -> impl IntoView {
     let section = S::default();
     let description = section.description();
@@ -36,7 +40,7 @@ pub fn Section<S: 'static + Section + Default + Copy + Send>(
         .into_iter()
         .map(|token| {
             view! {
-                <MarkdownTokenView<S> token />
+                <MarkdownTokenView<S> token data />
             }
         })
         .collect_view();
@@ -53,10 +57,10 @@ pub fn Section<S: 'static + Section + Default + Copy + Send>(
 }
 
 /// Finds a story in the subroutes tree
-fn navigate_subtree<'a>(
+fn navigate_subtree<'a, Data: 'static>(
     mut path: Split<'a, &'static str>,
-    subroutes: &'a Vec<RouteDef>,
-) -> Option<&'a RouteDef> {
+    subroutes: &'a Vec<RouteDef<Data>>,
+) -> Option<&'a RouteDef<Data>> {
     let mut next = path.next();
     let mut subroutes = subroutes;
 
@@ -87,6 +91,8 @@ fn MarkdownTokenView<S: 'static + Section + Default + Copy + Send>(
     /// Section to be shown
     #[prop(optional)]
     _section: PhantomData<S>,
+    /// data store
+    data: Store<S::Data>,
 ) -> impl IntoView {
     use MarkdownToken::*;
 
@@ -106,7 +112,7 @@ fn MarkdownTokenView<S: 'static + Section + Default + Copy + Send>(
                         view!{<Markdown src="> Expected story, but header was found" /> }.into_any()
                     }
                     RouteDef::Route { embedded, .. } => {
-                        embedded(true, controls, false)
+                        embedded(data, true, controls, false)
                     }
                 }
             }

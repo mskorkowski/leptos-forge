@@ -3,6 +3,7 @@
 use forge::RouteDef;
 use leptos::prelude::*;
 
+use reactive_stores::Store;
 use ui_components::model::Password;
 use ui_components::primitives::input::button::PasswordButtonStates;
 use ui_components::widgets::field::PasswordField;
@@ -10,6 +11,8 @@ use ui_components::widgets::field::TextField;
 use utils_leptos::signal::URwSignal;
 
 use forge::Story;
+
+use crate::State;
 
 /// Description of the empty password field widget story
 const PASSWORD_FIELD_EMPTY_DESC: &str = r############"
@@ -52,7 +55,9 @@ impl Default for BasicPasswordFieldStory {
 }
 
 impl Story for BasicPasswordFieldStory {
-    fn view(&self) -> impl IntoView {
+    type Data = State;
+
+    fn view(&self, _: Store<Self::Data>) -> impl IntoView {
         let label: Signal<String> = self.label.into();
         let text: URwSignal<Password> = self.text;
 
@@ -62,7 +67,7 @@ impl Story for BasicPasswordFieldStory {
     }
 
     #[allow(unsafe_code)]
-    fn controls(&self) -> impl IntoView {
+    fn controls(&self, _: Store<Self::Data>) -> impl IntoView {
         let label: URwSignal<String> = self.label;
         let text: URwSignal<String> = self.text.map(
             |password| {
@@ -85,7 +90,7 @@ impl Story for BasicPasswordFieldStory {
         PASSWORD_FIELD_EMPTY_DESC
     }
 
-    fn subroutes(&self) -> Vec<RouteDef> {
+    fn subroutes(&self) -> Vec<RouteDef<Self::Data>> {
         vec![
             RouteDef::story::<NonemptyPasswordFieldStory>("nonempty", "Nonempty"),
             RouteDef::story::<NonemptyVisiblePasswordFieldStory>("visible", "Visible"),
@@ -136,7 +141,9 @@ impl Default for NonemptyPasswordFieldStory {
 }
 
 impl Story for NonemptyPasswordFieldStory {
-    fn view(&self) -> impl IntoView {
+    type Data = State;
+
+    fn view(&self, _: Store<Self::Data>) -> impl IntoView {
         let label: Signal<String> = self.label.into();
         let text: URwSignal<Password> = self.text;
 
@@ -146,7 +153,7 @@ impl Story for NonemptyPasswordFieldStory {
     }
 
     #[allow(unsafe_code)]
-    fn controls(&self) -> impl IntoView {
+    fn controls(&self, _: Store<Self::Data>) -> impl IntoView {
         let label: URwSignal<String> = self.label;
         let text: URwSignal<String> = self.text.map(
             |password| {
@@ -213,7 +220,9 @@ impl Default for NonemptyVisiblePasswordFieldStory {
 }
 
 impl Story for NonemptyVisiblePasswordFieldStory {
-    fn view(&self) -> impl IntoView {
+    type Data = State;
+
+    fn view(&self, _: Store<Self::Data>) -> impl IntoView {
         let label: Signal<String> = self.label.into();
         let text: URwSignal<Password> = self.text;
         let state = PasswordButtonStates::Visible;
@@ -223,7 +232,7 @@ impl Story for NonemptyVisiblePasswordFieldStory {
     }
 
     #[allow(unsafe_code)]
-    fn controls(&self) -> impl IntoView {
+    fn controls(&self, _: Store<Self::Data>) -> impl IntoView {
         let label: URwSignal<String> = self.label;
         let text: URwSignal<String> = self.text.map(
             |password| {

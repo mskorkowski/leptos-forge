@@ -3,6 +3,8 @@
 
 use forge::Section;
 
+use crate::State;
+
 /// URwSignal description
 const ROUTING: &str = r############"
 # Routing
@@ -244,6 +246,8 @@ At the time of writing the `leptos_forge` site used
 pub struct RoutesSection;
 
 impl Section for RoutesSection {
+    type Data = State;
+
     fn description(&self) -> &'static str {
         ROUTING
     }

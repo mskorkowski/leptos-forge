@@ -8,3 +8,12 @@
 @utility forge-text-small {
     @apply text-xs;
 }
+
+@utility forge-text-big {
+    @apply text-base;
+}
+
+@utility forge-text-outline-* {
+    -webkit-text-stroke-width: calc(--value([line-width]));
+    -webkit-text-stroke-color: --value(--color-*);
+}

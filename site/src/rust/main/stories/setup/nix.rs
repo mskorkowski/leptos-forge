@@ -3,7 +3,9 @@
 
 use forge::Section;
 
-/// description of the [Resources] section
+use crate::State;
+
+/// description of the [Nix] section
 const NIX: &str = r############"
 # Nix
 
@@ -75,6 +77,8 @@ code.
 pub struct Nix;
 
 impl Section for Nix {
+    type Data = State;
+
     fn description(&self) -> &'static str {
         NIX
     }

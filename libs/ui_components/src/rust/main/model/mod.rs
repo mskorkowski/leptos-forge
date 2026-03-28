@@ -59,7 +59,7 @@ impl Password {
 ///
 /// It used for example by
 ///
-/// - [`SingleSelect`][crate::widgets::select::SingleSelect] so it can track the selected item
+/// - [`SingleSelect`][crate::widgets::single_select::SingleSelect] so it can track the selected item
 pub trait Keyed {
     /// Returns a sable key for this instance
     fn key(&self) -> &Uuid;

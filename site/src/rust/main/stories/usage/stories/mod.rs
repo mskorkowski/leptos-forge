@@ -7,6 +7,8 @@ use forge::RouteDef;
 use forge::Section;
 use testing::TestingSection;
 
+use crate::State;
+
 /// Description of the [StorySection]
 const STORY: &str = r############"
 # Story
@@ -245,11 +247,13 @@ To make your stories better you should add [interaction tests](/documentation/st
 pub struct StorySection;
 
 impl Section for StorySection {
+    type Data = State;
+
     fn description(&self) -> &'static str {
         STORY
     }
 
-    fn subroutes(&self) -> Vec<RouteDef> {
+    fn subroutes(&self) -> Vec<RouteDef<Self::Data>> {
         vec![RouteDef::section::<TestingSection>("testing", "Testing")]
     }
 }

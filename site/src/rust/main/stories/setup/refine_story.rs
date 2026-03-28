@@ -3,11 +3,14 @@
 use forge::RouteDef;
 use leptos::prelude::*;
 
+use reactive_stores::Store;
 use ui_components::widgets::field::TextField;
 use utils_leptos::signal::URwSignal;
 
 use forge::Section;
 use forge::Story;
+
+use crate::State;
 
 /// description of the [Implement the first story][RefineCounterStory] section
 const REFINE_COUNTER_STORY: &str = r#############"
@@ -360,11 +363,13 @@ We've just implemented a basic story for our counter component. The next step is
 pub struct RefineCounterStory;
 
 impl Section for RefineCounterStory {
+    type Data = State;
+
     fn description(&self) -> &'static str {
         REFINE_COUNTER_STORY
     }
 
-    fn subroutes(&self) -> Vec<RouteDef> {
+    fn subroutes(&self) -> Vec<RouteDef<Self::Data>> {
         vec![
             RouteDef::private::<SimpleCounterStory<0>>("simple_counter_story", "Simple Counter"),
             RouteDef::private::<SimpleCounterStory<3>>("simple_counter_story_3", "Simple Counter"),
@@ -443,13 +448,15 @@ impl<const D: i32> Default for SimpleCounterStory<D> {
 }
 
 impl<const D: i32> Story for SimpleCounterStory<D> {
-    fn view(&self) -> impl IntoView {
+    type Data = State;
+
+    fn view(&self, _: Store<Self::Data>) -> impl IntoView {
         view! {
             <SimpleCounter value={self.value} />
         }
     }
 
-    fn controls(&self) -> impl IntoView {
+    fn controls(&self, _: Store<Self::Data>) -> impl IntoView {
         let value = self.value.map(
             |v| v.to_string(),
             |v, text| {
@@ -555,13 +562,15 @@ impl<const D: i32> Default for CounterStory<D> {
 }
 
 impl<const D: i32> Story for CounterStory<D> {
-    fn view(&self) -> impl IntoView {
+    type Data = State;
+
+    fn view(&self, _: Store<Self::Data>) -> impl IntoView {
         view! {
             <Counter value={self.value} message={self.message} threshold={self.threshold} />  // <- added missing properties
         }
     }
 
-    fn controls(&self) -> impl IntoView {
+    fn controls(&self, _: Store<Self::Data>) -> impl IntoView {
         let value = self.value.map(
             |v| v.to_string(),
             |v, text| {

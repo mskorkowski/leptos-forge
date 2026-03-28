@@ -6,7 +6,9 @@ pub mod usage;
 use forge::RouteDef;
 use forge::Section;
 
-/// description of the [Components] section
+use crate::State;
+
+/// description of the [Main] section
 const MAIN_DESCRIPTION: &str = r############"
 # Leptos_forge
 
@@ -108,11 +110,13 @@ And here we are.
 pub struct Main;
 
 impl Section for Main {
+    type Data = State;
+
     fn description(&self) -> &'static str {
         MAIN_DESCRIPTION
     }
 
-    fn subroutes(&self) -> Vec<RouteDef> {
+    fn subroutes(&self) -> Vec<RouteDef<State>> {
         vec![]
     }
 }

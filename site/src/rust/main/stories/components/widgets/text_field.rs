@@ -4,10 +4,13 @@
 use forge::RouteDef;
 use leptos::prelude::*;
 
+use reactive_stores::Store;
 use ui_components::widgets::field::TextField;
 use utils_leptos::signal::URwSignal;
 
 use forge::Story;
+
+use crate::State;
 
 /// Description of the empty text field widget story
 const TEXT_FIELD_EMPTY_DESC: &str = r############"
@@ -50,7 +53,9 @@ impl Default for BasicTextFieldStory {
 }
 
 impl Story for BasicTextFieldStory {
-    fn view(&self) -> impl IntoView {
+    type Data = State;
+
+    fn view(&self, _: Store<Self::Data>) -> impl IntoView {
         let label: Signal<String> = self.label.into();
         let text: URwSignal<String> = self.text;
 
@@ -59,7 +64,7 @@ impl Story for BasicTextFieldStory {
         }
     }
 
-    fn controls(&self) -> impl IntoView {
+    fn controls(&self, _: Store<Self::Data>) -> impl IntoView {
         let label: URwSignal<String> = self.label;
         let text: URwSignal<String> = self.text;
 
@@ -73,7 +78,7 @@ impl Story for BasicTextFieldStory {
         TEXT_FIELD_EMPTY_DESC
     }
 
-    fn subroutes(&self) -> Vec<RouteDef> {
+    fn subroutes(&self) -> Vec<RouteDef<Self::Data>> {
         vec![RouteDef::story::<NonemptyTextFieldStory>(
             "nonempty", "Nonempty",
         )]
@@ -122,7 +127,9 @@ impl Default for NonemptyTextFieldStory {
 }
 
 impl Story for NonemptyTextFieldStory {
-    fn view(&self) -> impl IntoView {
+    type Data = State;
+
+    fn view(&self, _: Store<Self::Data>) -> impl IntoView {
         let label: Signal<String> = self.label.into();
         let text: URwSignal<String> = self.text;
 
@@ -131,7 +138,7 @@ impl Story for NonemptyTextFieldStory {
         }
     }
 
-    fn controls(&self) -> impl IntoView {
+    fn controls(&self, _: Store<Self::Data>) -> impl IntoView {
         let label: URwSignal<String> = self.label;
         let text: URwSignal<String> = self.text;
 

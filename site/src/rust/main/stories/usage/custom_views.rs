@@ -3,6 +3,8 @@
 
 use forge::Section;
 
+use crate::State;
+
 /// Describes customizing views
 const CUSTOM_VIEWS: &str = r############"
 # Customizing `leptos_forge`
@@ -101,6 +103,8 @@ Now just add as any other route in your application.
 pub struct CustomViews;
 
 impl Section for CustomViews {
+    type Data = State;
+
     fn description(&self) -> &'static str {
         CUSTOM_VIEWS
     }

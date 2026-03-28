@@ -17,6 +17,7 @@
 #![deny(clippy::undocumented_unsafe_blocks)]
 #![doc(test(attr(deny(unused))))]
 
+mod state;
 mod stories;
 
 use forge::RouteDef;
@@ -38,6 +39,8 @@ use stories::usage::stories::StorySection;
 use stories::usage::urwsignal::URwSignalSection;
 
 use crate::stories::usage::custom_views::CustomViews;
+
+pub(crate) use state::State;
 
 /// Entrypoint of the application
 pub fn main() {

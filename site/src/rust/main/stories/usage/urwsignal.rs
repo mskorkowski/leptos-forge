@@ -3,6 +3,8 @@
 
 use forge::Section;
 
+use crate::State;
+
 /// URwSignal description
 const URW_SIGNAL: &str = r############"
 # URwSignal
@@ -49,12 +51,15 @@ URwSignal supports
 
 "############;
 
-/// Section describing [URwSignal]
+/// Section describing [URwSignal][utils_leptos::signal::URwSignal]
 #[derive(Debug, Default, Copy, Clone)]
 pub struct URwSignalSection;
 
 impl Section for URwSignalSection {
+    type Data = State;
+
     fn description(&self) -> &'static str {
         URW_SIGNAL
     }
 }
+

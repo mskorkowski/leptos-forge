@@ -2,6 +2,7 @@
 //! [setup process][super::SETUP] and it's later refinement [`CounterStory`][super::refine_story::CounterStory]
 //!
 
+use reactive_stores::Store;
 use testing_library_dom::MatcherOptions;
 use testing_library_dom::SelectorMatcherOptions;
 use testing_library_dom::fire_event;
@@ -22,7 +23,9 @@ use forge::Story;
 use forge::play;
 use forge::test_id;
 
-/// description of the [Implement the first story][RefineCounterStory] section
+use crate::State;
+
+/// description of the [adding tests][AddingTests] section
 const ADDING_TESTS: &str = r#############"
 # Adding tests
 
@@ -271,11 +274,13 @@ After you press `Play`, the test will complete and you will see
 pub struct AddingTests;
 
 impl Section for AddingTests {
+    type Data = State;
+
     fn description(&self) -> &'static str {
         ADDING_TESTS
     }
 
-    fn subroutes(&self) -> Vec<RouteDef> {
+    fn subroutes(&self) -> Vec<RouteDef<Self::Data>> {
         vec![RouteDef::story::<TestedCounterStory>(
             "tested_counter_story",
             "Counter with tests",
@@ -285,7 +290,7 @@ impl Section for AddingTests {
 
 //----------------------------------------------------------------------------------------------------------------
 //
-// Below is implementation of the Counter component and CounterStory described in the `RefineCounterStory` section
+// Below is implementation of the Counter component and CounterStory described in the `Adding tests` section
 //
 //----------------------------------------------------------------------------------------------------------------
 
@@ -294,7 +299,7 @@ const COUNTER_INCREASE_BUTTON_TEST_ID: &str = "counter_increase_button";
 /// Test id of the message span
 const COUNTER_MESSAGE_TEST_ID: &str = "counter_message";
 
-/// Counter component described in [RefineCounterStory] section of the site
+/// Counter component described in [adding tests][AddingTests] section of the site
 #[component]
 fn Counter(
     /// Value of the counter
@@ -360,7 +365,7 @@ The default message is "You are working hard".
 
 "############;
 
-/// Counter story created as part of the [RefineCounterStory] section of the site
+/// Counter story created as part of the [adding tests][AddingTests] section of the site
 ///
 /// This way user can compare the result he got and the one he is expected to get
 /// alongside doing a tutorial
@@ -385,13 +390,15 @@ impl Default for TestedCounterStory {
 }
 
 impl Story for TestedCounterStory {
-    fn view(&self) -> impl IntoView {
+    type Data = State;
+
+    fn view(&self, _: Store<Self::Data>) -> impl IntoView {
         view! {
             <Counter value={self.value} message={self.message} threshold={self.threshold} />  // <- added missing properties
         }
     }
 
-    fn controls(&self) -> impl IntoView {
+    fn controls(&self, _: Store<Self::Data>) -> impl IntoView {
         let value = self.value.map(
             |v| v.to_string(),
             |v, text| {

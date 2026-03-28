@@ -53,6 +53,7 @@ pub fn InlineFieldLabel<S: ToString>(
     /// Id of the labeled element
     for_id: S,
     /// Text to be displayed on the label
+    #[prop(into)]
     text: Signal<String>,
 ) -> impl IntoView {
     view! {

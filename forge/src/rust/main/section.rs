@@ -1,5 +1,8 @@
-//! Trait for grouping the [stories][Story] together
-//!
+//! Trait for grouping the [stories][crate::story::Story] and subsections together
+//! into the meaningful part.
+//! 
+//! Section should describe a component, it's goals and non goals. It should also
+//! allow provide information about expected usage and interaction patterns.
 
 use crate::RouteDef;
 
@@ -61,8 +64,11 @@ impl Section for MySection {
 
 /// Section describing big chunk of the UI components
 ///
-/// Sections contain only Markdown text.
+/// Sections contain only Markdown text and stories embedded inside of it
 pub trait Section: Default {
+    /// Data held in the state store
+    type Data;
+
     //
     //  Things to update when changing the API
     //
@@ -75,7 +81,7 @@ pub trait Section: Default {
     }
 
     /// Returns a list of subroutes for the Section
-    fn subroutes(&self) -> Vec<RouteDef> {
+    fn subroutes(&self) -> Vec<RouteDef<Self::Data>> {
         vec![]
     }
 }

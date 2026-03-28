@@ -3,6 +3,8 @@
 use leptos::html::Div;
 use leptos::prelude::*;
 
+use reactive_stores::Store;
+
 use crate::Story;
 
 /// Canvas showing a component
@@ -12,11 +14,13 @@ pub fn Canvas<UiStory>(
     story: UiStory,
     /// reference to canvas
     node_ref: NodeRef<Div>,
+    /// store with user data
+    data: Store<UiStory::Data>,
 ) -> impl IntoView
 where
     UiStory: 'static + Story + Copy,
 {
-    let view = story.view().into_any();
+    let view = story.view(data).into_any();
 
     view! {
         <div class="leptos-forge-canvas-box basis-2/3 justify-items-start scrollbox print:basis-full print:flex-auto print:overflow-visible print:w-auto print:h-auto">
@@ -34,11 +38,13 @@ pub fn EmbeddedCanvas<UiStory>(
     story: UiStory,
     /// reference to canvas
     node_ref: NodeRef<Div>,
+    /// store with user data
+    data: Store<UiStory::Data>
 ) -> impl IntoView
 where
     UiStory: 'static + Story + Copy,
 {
-    let view = story.view().into_any();
+    let view = story.view(data).into_any();
 
     view! {
         <div class="leptos-forge-canvas relscrollable-100 m-4 bg-forgegray-100 min-h-25 h-max print:bg-white print:overflow-visible print:w-auto print:h-auto print:relative" node_ref=node_ref>

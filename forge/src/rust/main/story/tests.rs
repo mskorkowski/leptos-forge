@@ -1,4 +1,4 @@
-//! Provides a builder for creating tests in the [stories][Story::]
+//! Provides a builder for creating tests in the [stories][crate::story::Story]
 //!
 
 use super::Play;

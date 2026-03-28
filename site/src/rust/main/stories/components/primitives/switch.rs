@@ -2,11 +2,14 @@
 
 use forge::RouteDef;
 use leptos::prelude::*;
+use reactive_stores::Store;
 use ui_components::primitives::switch::Switch;
 use ui_components::widgets::field::SwitchField;
 use utils_leptos::signal::URwSignal;
 
 use forge::Story;
+
+use crate::State;
 
 /// Description of the switch primitive when toggled of
 const SWITCH_DESC: &str = r############"
@@ -32,11 +35,13 @@ impl Default for BasicSwitchStory {
 }
 
 impl Story for BasicSwitchStory {
+    type Data = State; 
+
     fn description(&self) -> &'static str {
         SWITCH_DESC
     }
 
-    fn controls(&self) -> impl IntoView {
+    fn controls(&self, _: Store<Self::Data>) -> impl IntoView {
         view! {
             <SwitchField
                 id="switch-control-item-1"
@@ -46,7 +51,7 @@ impl Story for BasicSwitchStory {
         }
     }
 
-    fn view(&self) -> impl IntoView {
+    fn view(&self, _: Store<Self::Data>) -> impl IntoView {
         view! {
             <Switch
                 id="switch-basic"
@@ -55,7 +60,7 @@ impl Story for BasicSwitchStory {
         }
     }
 
-    fn subroutes(&self) -> Vec<RouteDef> {
+    fn subroutes(&self) -> Vec<RouteDef<Self::Data>> {
         vec![RouteDef::story::<ToggledOnSwitchStory>(
             "toggled-on",
             "Toggled on",
@@ -88,11 +93,13 @@ impl Default for ToggledOnSwitchStory {
 }
 
 impl Story for ToggledOnSwitchStory {
+    type Data = State;
+
     fn description(&self) -> &'static str {
         SWITCH_DESC_TOGGLE_ON
     }
 
-    fn controls(&self) -> impl IntoView {
+    fn controls(&self, _: Store<Self::Data>) -> impl IntoView {
         view! {
             <SwitchField
                 id="switch-control-item-1"
@@ -102,7 +109,7 @@ impl Story for ToggledOnSwitchStory {
         }
     }
 
-    fn view(&self) -> impl IntoView {
+    fn view(&self, _: Store<Self::Data>) -> impl IntoView {
         view! {
             <Switch
                 id="switch-on"

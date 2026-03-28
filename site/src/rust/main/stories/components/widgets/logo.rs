@@ -3,12 +3,15 @@
 
 use leptos::prelude::*;
 
+use reactive_stores::Store;
 use ui_components::widgets::field::BlobFile;
 use ui_components::widgets::field::TextField;
 use ui_components::widgets::logo::Logo;
 use utils_leptos::signal::URwSignal;
 
 use forge::Story;
+
+use crate::State;
 
 /// Description of the label primitive
 const LABEL_DESC: &str = r############"
@@ -36,7 +39,9 @@ impl Default for BasicLogoStory {
 }
 
 impl Story for BasicLogoStory {
-    fn view(&self) -> impl IntoView {
+    type Data = State;
+
+    fn view(&self, _: Store<Self::Data>) -> impl IntoView {
         let label: Signal<String> = self.label.into();
         let file: Signal<String> = self.file.into();
 
@@ -47,7 +52,7 @@ impl Story for BasicLogoStory {
         }
     }
 
-    fn controls(&self) -> impl IntoView {
+    fn controls(&self, _: Store<Self::Data>) -> impl IntoView {
         let label: URwSignal<String> = self.label;
         let file: URwSignal<String> = self.file;
 

@@ -8,6 +8,8 @@ use forge::navigation::RouteDef;
 use primitives::Primitives;
 use widgets::Widgets;
 
+use crate::State;
+
 /// description of the [Components] section
 const COMPONENTS_DESCRIPTION: &str = r############"
 # Components
@@ -45,11 +47,13 @@ to choose your preferred UI library elsewhere in your application.
 pub struct Components;
 
 impl Section for Components {
+    type Data = State;
+
     fn description(&self) -> &'static str {
         COMPONENTS_DESCRIPTION
     }
 
-    fn subroutes(&self) -> Vec<RouteDef> {
+    fn subroutes(&self) -> Vec<RouteDef<Self::Data>> {
         vec![
             RouteDef::section::<Primitives>("primitives", "Primitives"),
             RouteDef::section::<Widgets>("widgets", "Widgets"),

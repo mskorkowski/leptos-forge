@@ -6,6 +6,7 @@ mod tests;
 use leptos::web_sys::HtmlElement;
 
 use leptos::IntoView;
+use reactive_stores::Store;
 pub use tests::play;
 pub use tests::test_id;
 use utils::prelude::ThreadSafe;
@@ -114,11 +115,14 @@ While creating a description you should try to explain
 ///
 /// Story should only by it's nature hold only the data like [Signal][leptos::prelude::Signal] required to manipulate the component via the control panel.
 pub trait Story: Default + Copy {
+    /// Data held in the state store
+    type Data;
+
     /// Returns a view of the story
-    fn view(&self) -> impl IntoView {}
+    fn view(&self, _data: Store<Self::Data>) -> impl IntoView {}
 
     /// List of controls for the story
-    fn controls(&self) -> impl IntoView {}
+    fn controls(&self, _data: Store<Self::Data>) -> impl IntoView {}
 
     /// Description of the story
     fn description(&self) -> &'static str {
@@ -131,22 +135,26 @@ pub trait Story: Default + Copy {
     }
 
     /// Returns the list of subroutes for the story
-    fn subroutes(&self) -> Vec<RouteDef> {
+    fn subroutes(&self) -> Vec<RouteDef<Self::Data>> {
         vec![]
     }
 }
 
 /// Converts a type to a story
 pub trait IntoStory: Default + Copy {
+    /// Data in the state
+    type Data;
+
     /// Story we will be constructing
-    type Story: Story + ThreadSafe;
+    type Story: Story<Data = Self::Data> + ThreadSafe;
 
     /// Converts value to story
     fn into_story(self) -> Self::Story;
 }
 
 /// Carpet implementation of [IntoStory] for [Story]
-impl<T: Story + ThreadSafe> IntoStory for T {
+impl<Data, T: Story<Data = Data> + ThreadSafe> IntoStory for T {
+    type Data = Data;
     type Story = T;
 
     fn into_story(self) -> Self::Story {

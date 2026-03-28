@@ -2,6 +2,7 @@
 //!
 
 use leptos::prelude::*;
+use reactive_stores::Store;
 use ui_components::primitives::button::Button;
 use ui_components::primitives::button::ButtonClick;
 use ui_components::widgets::field::ReadonlyField;
@@ -9,6 +10,8 @@ use ui_components::widgets::field::TextField;
 use utils_leptos::signal::URwSignal;
 
 use forge::Story;
+
+use crate::State;
 
 /// Description of the switch primitive when toggled of
 const BUTTON_DESC: &str = r############"
@@ -65,11 +68,13 @@ impl Default for BasicButtonStory {
 }
 
 impl Story for BasicButtonStory {
+    type Data = State;
+
     fn description(&self) -> &'static str {
         BUTTON_DESC
     }
 
-    fn controls(&self) -> impl IntoView {
+    fn controls(&self, _: Store<State>) -> impl IntoView {
         let click = self.click;
         let state = Signal::derive(move || {
             let state = click.get();
@@ -84,7 +89,7 @@ impl Story for BasicButtonStory {
         }
     }
 
-    fn view(&self) -> impl IntoView {
+    fn view(&self, _: Store<State>) -> impl IntoView {
         let text: URwSignal<String> = self.text;
 
         view! {

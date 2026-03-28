@@ -3,12 +3,14 @@
 use forge::RouteDef;
 use leptos::prelude::*;
 
+use reactive_stores::Store;
 use ui_components::primitives::markdown::Markdown;
 use ui_components::widgets::field::Codearea;
 use utils_leptos::signal::URwSignal;
 
 use forge::Story;
 
+use crate::State;
 use crate::stories::components::primitives::markdown::KbdStory;
 use crate::stories::components::primitives::markdown::MarkdownAdmonishStory;
 use crate::stories::components::primitives::markdown::MarkdownTableStory;
@@ -950,13 +952,15 @@ impl Default for MarkdownBaseStory {
 }
 
 impl Story for MarkdownBaseStory {
-    fn view(&self) -> impl IntoView {
+    type Data = State;
+
+    fn view(&self, _: Store<Self::Data>) -> impl IntoView {
         view! {
             <Markdown src=self.text/>
         }
     }
 
-    fn controls(&self) -> impl IntoView {
+    fn controls(&self, _: Store<Self::Data>) -> impl IntoView {
         view! {
             <Codearea id="leptos-forge-markdown-demo-textarea" text=self.text label={"Markdown document".to_string()} />
         }
@@ -966,7 +970,7 @@ impl Story for MarkdownBaseStory {
         MARKDOWN_DESC
     }
 
-    fn subroutes(&self) -> Vec<forge::RouteDef> {
+    fn subroutes(&self) -> Vec<forge::RouteDef<Self::Data>> {
         vec![
             RouteDef::story::<MarkdownAdmonishStory>("admonishes", "Admonishes"),
             RouteDef::story::<MarkdownTableStory>("tables", "Tables"),

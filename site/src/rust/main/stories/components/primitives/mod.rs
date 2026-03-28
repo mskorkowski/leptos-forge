@@ -16,6 +16,8 @@ use label::BasicLabelStory;
 use markdown::MarkdownBaseStory;
 use switch::BasicSwitchStory;
 
+use crate::State;
+
 /// description of the primitives
 const PRIMITIVES_DESC: &str = r############"
 # Primitives
@@ -33,11 +35,13 @@ in the applications. Rarely do they exist independently of other components.
 pub struct Primitives;
 
 impl Section for Primitives {
+    type Data = State;
+
     fn description(&self) -> &'static str {
         PRIMITIVES_DESC
     }
 
-    fn subroutes(&self) -> Vec<RouteDef> {
+    fn subroutes(&self) -> Vec<RouteDef<State>> {
         vec![
             RouteDef::story::<BasicButtonStory>("button", "Button"),
             RouteDef::story::<BasicLabelStory>("label", "Label"),
@@ -45,8 +49,8 @@ impl Section for Primitives {
             RouteDef::Route {
                 path: "menu",
                 label: "Menu",
-                component: || view! {"Menu"}.into_any(),
-                embedded: |_, _, _| view! {"Embedded menu"}.into_any(),
+                component: |_,| view! {"Menu"}.into_any(),
+                embedded: |_, _, _, _| view! {"Embedded menu"}.into_any(),
                 subroutes: vec![],
                 private: false,
             },

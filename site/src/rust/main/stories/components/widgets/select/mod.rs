@@ -5,8 +5,10 @@ pub mod store_failure;
 
 use std::fmt::Display;
 
+use forge::RouteDef;
 use leptos::prelude::*;
 use reactive_stores::PatchField;
+use reactive_stores::Store;
 use ui_components::model::Keyed;
 use ui_components::widgets::single_select::SingleSelect;
 use ui_components::widgets::field::TextField;
@@ -14,6 +16,9 @@ use utils_leptos::signal::URwSignal;
 use uuid::Uuid;
 
 use forge::Story;
+
+use crate::State;
+use crate::stories::components::widgets::select::store_failure::ComponentWithAStoreStory;
 
 /// Description of the label primitive
 const WIDGET_DESC: &str = r############"
@@ -38,6 +43,7 @@ impl PatchField for Item {
         new: Self,
         path: &reactive_stores::StorePath,
         notify: &mut dyn FnMut(&reactive_stores::StorePath),
+        _keys: std::option::Option<&reactive_stores::KeyMap>
     ) {
         if *self != new{
             *self = new;
@@ -104,7 +110,9 @@ impl Default for BasicSingleSelectStory {
 
 
 impl Story for BasicSingleSelectStory {
-    fn view(&self) -> impl IntoView {
+    type Data = State;
+
+    fn view(&self, _state: Store<Self::Data>) -> impl IntoView {
         view! {
             <div class="relative">
                 <SingleSelect
@@ -119,7 +127,7 @@ impl Story for BasicSingleSelectStory {
         }
     }
 
-    fn controls(&self) -> impl IntoView {
+    fn controls(&self, _state: Store<Self::Data>) -> impl IntoView {
         let label: URwSignal<String> = self.label;
 
         view! {
@@ -129,6 +137,13 @@ impl Story for BasicSingleSelectStory {
 
     fn description(&self) -> &'static str {
         WIDGET_DESC
+    }
+
+    fn subroutes(&self) -> Vec<RouteDef<Self::Data>> {
+        vec![
+            RouteDef::story::<ForceOpenSingleSelectStory>("force_open", "Force open"),
+            RouteDef::story::<ComponentWithAStoreStory>("store_failure", "Store failure"),
+        ]
     }
 }
 
@@ -154,7 +169,9 @@ impl Default for ForceOpenSingleSelectStory {
 
 
 impl Story for ForceOpenSingleSelectStory {
-    fn view(&self) -> impl IntoView {
+    type Data = State;
+
+    fn view(&self, _state: Store<Self::Data>) -> impl IntoView {
         view! {
             <div class="relative">
                 <SingleSelect
@@ -169,7 +186,7 @@ impl Story for ForceOpenSingleSelectStory {
         }
     }
 
-    fn controls(&self) -> impl IntoView {
+    fn controls(&self, _state: Store<Self::Data>) -> impl IntoView {
         let label: URwSignal<String> = self.label;
 
         view! {

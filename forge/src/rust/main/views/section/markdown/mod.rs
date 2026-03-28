@@ -415,7 +415,7 @@ struct OfAttribute<'source> {
     subpath: &'source str,
 }
 
-/// Methods checks if at source[index] is the start of `of` attribute
+/// Methods checks if at source\[index\] is the start of `of` attribute
 fn parse_of_attribute(source: &'_ str) -> Option<OfAttribute<'_>> {
     if source[..2].to_ascii_lowercase().starts_with("of") {
         let mut rest = source[2..].chars().enumerate();

@@ -16,11 +16,14 @@ path = "src/rust/main/lib.rs"
 
 [dependencies]
 icondata.workspace = true
+floating-ui-leptos.workspace = true
 leptos.workspace = true
 leptos_router.workspace = true
 leptos_icons.workspace = true
 leptos-node-ref.workspace = true
+leptos-use.workspace = true
 pulldown-cmark.workspace = true
+reactive_graph.workspace = true
 reactive_stores.workspace =true
 utils.workspace = true
 utils_leptos.workspace = true

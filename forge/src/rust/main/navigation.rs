@@ -302,8 +302,8 @@ impl PathSpec {
 }
 
 /// Define routes in the application
-#[derive(Debug, Clone)]
-pub enum RouteDef {
+#[derive(Debug)]
+pub enum RouteDef<Data> {
     /// Menu entry which can be navigated
     Route {
         /// path segment in the url
@@ -311,9 +311,9 @@ pub enum RouteDef {
         /// Label in the menu
         label: &'static str,
         /// component to render when the route is matched
-        component: fn() -> AnyView,
+        component: fn(Store<Data>,) -> AnyView,
         /// optional children for nested routes
-        subroutes: Vec<RouteDef>,
+        subroutes: Vec<RouteDef<Data>>,
         /// Returns the view embedded in the section
         ///
         /// # Arguments
@@ -347,7 +347,7 @@ pub enum RouteDef {
         /// ```
         ///
         ///
-        embedded: fn(view: bool, controls: bool, description: bool) -> AnyView,
+        embedded: fn(data: Store<Data>, view: bool, controls: bool, description: bool) -> AnyView,
         /// Wherever this route should be hidden from the menu/router but still
         /// provide to the story embedding resolution
         ///
@@ -361,11 +361,41 @@ pub enum RouteDef {
         /// Header label in the menu
         label: &'static str,
         /// optional children for nested routes
-        subroutes: Vec<RouteDef>,
+        subroutes: Vec< RouteDef<Data> >,
     },
 }
 
-impl RouteDef {
+impl<Data> Clone for RouteDef<Data> {
+    fn clone(&self) -> Self {
+        match self {
+            Self::Header { path, label, subroutes } => {
+                Self::Header{ 
+                    path, 
+                    label, 
+                    subroutes: subroutes.clone(), 
+                }
+            },
+            Self::Route{ 
+                path, 
+                label, 
+                component, 
+                subroutes, 
+                embedded, private 
+            } => {
+                Self::Route{ 
+                    path, 
+                    label, 
+                    component: *component, 
+                    subroutes: subroutes.clone(), 
+                    embedded: *embedded, 
+                    private: *private, 
+                }
+            }
+        }
+    }
+}
+
+impl<Data: 'static> RouteDef<Data> {
     /// Returns the path of the route
     pub fn path(&self) -> &'static str {
         use RouteDef::*;
@@ -375,7 +405,7 @@ impl RouteDef {
     }
 
     /// Returns a list of subroutes for this route
-    pub fn subroutes(&self) -> &Vec<RouteDef> {
+    pub fn subroutes(&self) -> &Vec< RouteDef<Data> > {
         use RouteDef::*;
         match self {
             Route { subroutes, .. } | Header { subroutes, .. } => subroutes,
@@ -409,7 +439,7 @@ impl RouteDef {
     }
 
     /// Converts the route to list of routes that can be used in `leptos_router`
-    pub fn as_routes(&self, prefix: PathSpec) -> Vec<AnyNestedRoute> {
+    pub fn as_routes(&self, prefix: PathSpec, data: Store<Data>) -> Vec<AnyNestedRoute> {
         use RouteDef::*;
         match self {
             Route {
@@ -418,8 +448,12 @@ impl RouteDef {
                 ..
             } => {
                 let my_path: PathSpec = self.extend(prefix);
-
-                let mut routes: Vec<AnyNestedRoute> = vec![my_path.as_route(*component)];
+                let c = *component;
+                let mut routes: Vec<AnyNestedRoute> = vec![
+                    my_path.as_route(
+                        move || c(data)
+                    )
+                ];
 
                 routes.extend(
                     subroutes
@@ -430,7 +464,7 @@ impl RouteDef {
                                 _ => true, // I seriously don't understand what is should mean, but hey
                             }
                         })
-                        .flat_map(|r| r.as_routes(my_path)),
+                        .flat_map(|r| r.as_routes(my_path, data)),
                 );
 
                 routes
@@ -448,7 +482,7 @@ impl RouteDef {
                                 _ => true, // I seriously don't understand what is should mean, but hey
                             }
                         })
-                        .flat_map(|r| r.as_routes(my_path)),
+                        .flat_map(|r| r.as_routes(my_path, data)),
                 );
 
                 routes
@@ -461,7 +495,7 @@ impl RouteDef {
         &self,
         prefix: PathSpec,
         location: &str,
-        store: Store<MenuState>,
+        menu_state: Store<MenuState>,
     ) -> Vec<AnyView> {
         use RouteDef::*;
         match self {
@@ -470,7 +504,7 @@ impl RouteDef {
             } => {
                 let my_path: PathSpec = self.extend(prefix);
 
-                let mut views = vec![my_path.as_navigation_view(label, location, store)];
+                let mut views = vec![my_path.as_navigation_view(label, location, menu_state)];
 
                 views.extend(
                     subroutes
@@ -481,7 +515,7 @@ impl RouteDef {
                                 _ => true, // I seriously don't understand what is should mean, but hey
                             }
                         })
-                        .flat_map(|r| r.as_menu_items(my_path, location, store)),
+                        .flat_map(|r| r.as_menu_items(my_path, location, menu_state)),
                 );
 
                 views
@@ -507,7 +541,7 @@ impl RouteDef {
                                 _ => true, // I seriously don't understand what is should mean, but hey
                             }
                         })
-                        .flat_map(|r| r.as_menu_items(my_path, location, store)),
+                        .flat_map(|r| r.as_menu_items(my_path, location, menu_state)),
                 );
 
                 views
@@ -516,17 +550,20 @@ impl RouteDef {
     }
 
     /// Creates a new page route with a story and it's related sub-stories
-    pub fn story<S: 'static + IntoStory + Default + Copy + ThreadSafe>(
+    pub fn story<S>(
         path: &'static str,
         label: &'static str,
-    ) -> RouteDef {
+    ) -> RouteDef<Data> 
+    where
+        S: 'static + IntoStory<Data = Data> + Default + Copy + ThreadSafe,
+    {
         RouteDef::Route {
             path,
             label,
-            component: || view! { <Story<S> /> }.into_any(),
-            embedded: |view, controls, description| {
+            component: |data| view! { <Story<S> data /> }.into_any(),
+            embedded: |data, view, controls, description| {
                 view! {
-                    <EmbeddedStory<S> view  controls description />
+                    <EmbeddedStory<S> view  controls description data />
                 }
                 .into_any()
             },
@@ -546,17 +583,20 @@ impl RouteDef {
     ///
     /// You can also use it to add custom features for your documentation
     /// which are not supported by the `leptos_forge`.
-    pub fn private<S: 'static + IntoStory + Default + Copy + ThreadSafe>(
+    pub fn private<S>(
         path: &'static str,
         label: &'static str,
-    ) -> RouteDef {
+    ) -> RouteDef<Data> 
+    where
+        S: 'static + IntoStory<Data = Data> + Default + Copy + ThreadSafe,
+    {
         RouteDef::Route {
             path,
             label,
-            component: || view! { <Story<S> /> }.into_any(),
-            embedded: |view, controls, description| {
+            component: |data| view! { <Story<S> data /> }.into_any(),
+            embedded: |data, view, controls, description| {
                 view! {
-                    <EmbeddedStory<S> view  controls description />
+                    <EmbeddedStory<S> view  controls description data />
                 }
                 .into_any()
             },
@@ -568,13 +608,16 @@ impl RouteDef {
     /// Creates a new section route
     ///
     /// Section creates a new Markdown only page, It's intended use is
-    /// to group a bunch of related [pages][RouteDef::page]
-    /// and [story][RouteDef::story]
+    /// to group a bunch of related [sections][RouteDef::section]
+    /// and [stories][RouteDef::story]
     /// together
-    pub fn section<S: 'static + Section + Default + Copy + Send>(
+    pub fn section<S>(
         path: &'static str,
         label: &'static str,
-    ) -> RouteDef {
+    ) -> RouteDef<Data> 
+    where
+        S: 'static + Section<Data=Data> + Default + Copy + Send
+    {
         //
         // Remember to update when changed
         //
@@ -585,8 +628,8 @@ impl RouteDef {
         RouteDef::Route {
             path,
             label,
-            component: || view! { <section::Section<S> /> }.into_any(),
-            embedded: |_, _, _| {
+            component: |data| view! { <section::Section<S> data /> }.into_any(),
+            embedded: |_, _, _, _| {
                 view! { <Markdown src="> Embedding sections is not allowed"  /> }.into_any()
             },
             subroutes: S::default().subroutes(),
@@ -599,7 +642,7 @@ impl RouteDef {
     /// Header doesn't contribute to the routing path but provides
     /// a visual named separator and header for parts of the group
     /// of routes in the left hand side menu
-    pub fn header(path: &'static str, label: &'static str, subroutes: Vec<RouteDef>) -> RouteDef {
+    pub fn header(path: &'static str, label: &'static str, subroutes: Vec<RouteDef<Data>>) -> RouteDef<Data> {
         RouteDef::Header {
             path,
             label,

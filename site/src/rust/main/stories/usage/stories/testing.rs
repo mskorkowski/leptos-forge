@@ -3,7 +3,9 @@
 
 use forge::Section;
 
-/// Description of the [PlaysSection]
+use crate::State;
+
+/// Description of the [TestingSection]
 const PLAY: &str = r############"
 # Testing
 
@@ -116,6 +118,8 @@ To create a play we use function `leptos_forge::play`.
 pub struct TestingSection;
 
 impl Section for TestingSection {
+    type Data = State;
+
     fn description(&self) -> &'static str {
         PLAY
     }

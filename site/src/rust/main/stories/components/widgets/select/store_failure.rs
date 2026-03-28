@@ -16,6 +16,8 @@ use utils_leptos::stores::stored_ref::StoredRef;
 
 use forge::Story;
 
+use crate::State;
+
 /// Description of the [ComponentWithAStoreStory]
 const WIDGET_DESC: &str = r############"
 # Component state
@@ -44,6 +46,7 @@ const BUTTON_CLASS: &str = "
     active:bg-forgeblue-500
     active:border-forgeblue-500
     pointer-events-auto
+    select-none
 ";
 
 /// state of the counter itself
@@ -103,47 +106,45 @@ fn ComponentWithAStore() -> impl IntoView {
     let on_mousemove = move |event: MouseEvent| {
         let x = event.client_x();
         let y = event.client_y();
-        if let Some(document) = &(*use_document()) {
+        if let Some(document) = &(*use_document()) && 
+           let Some(element) = document.element_from_point(
+                x as f32,
+                y as f32,
+            ) {
 
-            if let Some(element) = document.element_from_point(
-                    x as f32,
-                    y as f32,
-                ) {
+            console_log(&format!("found element {} at the position ({x},{y})", element.tag_name()));
+            let class_list = element.class_list();
+            console_log(&format!("class list {:?}", class_list.entries().into_iter().map(|entry| {
+                match entry {
+                    Ok(value) => {
+                        let arr: Array = Array::from(&value);
+                        let class_name: JsValue = arr.get(1);
+                        let str: JsString = JsString::from(class_name);
+                        format!("{str}")
+                    }
+                    Err(_) => "error".to_string(),
+                }
+            }).collect::<Vec<String>>()));
 
-                console_log(&format!("found element {} at the position ({x},{y})", element.tag_name()));
-                let class_list = element.class_list();
-                console_log(&format!("class list {:?}", class_list.entries().into_iter().map(|entry| {
-                    match entry {
+            if element.class_list().contains("mouse-move-target") {
+                console_log("is the mouse-move-target");
+                if let Ok(event) = CustomEvent::new("click") {
+                    console_log(&format!("element is {element:?}"));
+                    match element.dispatch_event(&event) {
                         Ok(value) => {
-                            let arr: Array = Array::from(&value);
-                            let class_name: JsValue = arr.get(1);
-                            let str: JsString = JsString::from(class_name);
-                            format!("{str}")
+                            console_log(&format!("dispatch event value is {value:?}"));
                         }
-                        Err(_) => "error".to_string(),
-                    }
-                }).collect::<Vec<String>>()));
-
-                if element.class_list().contains("mouse-move-target") {
-                    console_log("is the mouse-move-target");
-                    if let Ok(event) = CustomEvent::new("click") {
-                        console_log(&format!("element is {element:?}"));
-                        match element.dispatch_event(&event) {
-                            Ok(value) => {
-                                console_log(&format!("dispatch event value is {value:?}"));
-                            }
-                            Err(err) => {
-                                console_log(&format!("dispatch event error is {err:?}"));
-                            }
+                        Err(err) => {
+                            console_log(&format!("dispatch event error is {err:?}"));
                         }
-                    }
-                    else {
-                        console_log("cant create an event");
                     }
                 }
                 else {
-                    console_log("not a mouse-move-target");
+                    console_log("cant create an event");
                 }
+            }
+            else {
+                console_log("not a mouse-move-target");
             }
         }
     };
@@ -226,15 +227,15 @@ pub struct ComponentWithAStoreStory {}
 
 
 impl Story for ComponentWithAStoreStory {
+    type Data = State;
+
     fn description(&self) -> &'static str {
         WIDGET_DESC
     }   
 
-    fn controls(&self) -> impl IntoView {
-        ()
-    }
+    fn controls(&self, _state: Store<Self::Data>) -> impl IntoView {}
 
-    fn view(&self) -> impl IntoView {
+    fn view(&self, _state: Store<Self::Data>) -> impl IntoView {
         view!{
             <ComponentWithAStore/>
         }

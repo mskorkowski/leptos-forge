@@ -1,4 +1,5 @@
-//! Module contains the [Page] component
+//! Module contains the [Story()] component which is used  to display stories
+//! in side the `leptos_forge` application
 
 #![allow(clippy::missing_docs_in_private_items)]
 
@@ -6,6 +7,7 @@ use std::marker::PhantomData;
 
 use leptos::html::Div;
 use leptos::prelude::*;
+use reactive_stores::Store;
 use ui_components::widgets::details::Details;
 use utils::prelude::ThreadSafe;
 use utils_leptos::signal::URwSignal;
@@ -29,6 +31,8 @@ pub fn Story<S: 'static + IntoStory + Default + Copy + ThreadSafe>(
     /// Phantom data of the story
     #[prop(optional)]
     _story: PhantomData<S>,
+    /// Store with data
+    data: Store<<S::Story as Story>::Data>,
 ) -> impl IntoView {
     let story = S::default().into_story();
     let canvas = NodeRef::new();
@@ -45,7 +49,7 @@ pub fn Story<S: 'static + IntoStory + Default + Copy + ThreadSafe>(
     view! {
         <>
             <ComponentPanel>
-                <Canvas story=story node_ref=canvas />
+                <Canvas story=story node_ref=canvas data />
                 <TabPanel
                     id="side-panel"
                     tabs
@@ -53,7 +57,7 @@ pub fn Story<S: 'static + IntoStory + Default + Copy + ThreadSafe>(
                 />
             </ComponentPanel>
             <div class="flex flex-col basis-1/3 first:basis-1/1 px-4 py-4 overflow-auto print:hidden print:basis-0 min-w-xs w-xs shrink-0 @md:shrink-1">
-                <ControlPane story=story />
+                <ControlPane story=story data />
             </div>
         </>
     }
@@ -160,6 +164,8 @@ where
     }
 }
 
+/// This is the story component used when showing the story inside the 
+/// [section][crate::section::Section]
 #[component]
 pub fn EmbeddedStory<S: 'static + IntoStory + Default + Copy + ThreadSafe>(
     /// If set to `true` embedded story will show the canvas with component
@@ -180,13 +186,15 @@ pub fn EmbeddedStory<S: 'static + IntoStory + Default + Copy + ThreadSafe>(
     /// Phantom data of the story
     #[prop(optional)]
     _story: PhantomData<S>,
+    /// store with user data
+    data: Store<<S::Story as Story>::Data>
 ) -> impl IntoView {
     let canvas_ref = NodeRef::new();
     let story = S::default().into_story();
     let canvas = if view {
         // let v = story.view().into_any();
         Some(view! {
-            <EmbeddedCanvas story node_ref=canvas_ref />
+            <EmbeddedCanvas story node_ref=canvas_ref data/>
         })
     } else {
         None
@@ -194,7 +202,7 @@ pub fn EmbeddedStory<S: 'static + IntoStory + Default + Copy + ThreadSafe>(
 
     let control_pane = if controls {
         Some(view! {
-            <EmbeddedControlPane story />
+            <EmbeddedControlPane story data/>
         })
     } else {
         None

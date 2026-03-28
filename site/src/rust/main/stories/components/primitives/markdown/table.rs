@@ -3,11 +3,14 @@
 
 use leptos::prelude::*;
 
+use reactive_stores::Store;
 use ui_components::primitives::markdown::Markdown;
 use ui_components::widgets::field::Codearea;
 use utils_leptos::signal::URwSignal;
 
 use forge::Story;
+
+use crate::State;
 
 /// Description of the label primitive
 const MARKDOWN_DESC: &str = r############"
@@ -139,13 +142,15 @@ impl Default for MarkdownTableStory {
 }
 
 impl Story for MarkdownTableStory {
-    fn view(&self) -> impl IntoView {
+    type Data = State;
+
+    fn view(&self, _: Store<Self::Data>) -> impl IntoView {
         view! {
             <Markdown src=self.text/>
         }
     }
 
-    fn controls(&self) -> impl IntoView {
+    fn controls(&self, _: Store<Self::Data>) -> impl IntoView {
         view! {
             <Codearea id="leptos-forge-markdown-demo-textarea" text=self.text label={"Markdown document".to_string()} />
         }

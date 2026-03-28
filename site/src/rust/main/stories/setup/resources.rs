@@ -2,6 +2,8 @@
 
 use forge::Section;
 
+use crate::State;
+
 /// description of the [Resources] section
 const RESOURCES: &str = r############"
 # Resources
@@ -280,6 +282,8 @@ module as an example how to integrate with `cargo_resources`.
 pub struct Resources;
 
 impl Section for Resources {
+    type Data = State;
+
     fn description(&self) -> &'static str {
         RESOURCES
     }
@@ -447,6 +451,8 @@ command_arguments = [  # Arguments to pass to command
 pub struct Tailwind;
 
 impl Section for Tailwind {
+    type Data = State;
+
     fn description(&self) -> &'static str {
         TAILWIND
     }
