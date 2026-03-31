@@ -107,9 +107,13 @@ where
 {
     let target: ElementMaybeSignal<Element> = target.into_element_maybe_signal();
     if let Some(node) = target.get_untracked() {
+        console_log("\tSwapping classes");
         let class_list = node.class_list();
         remove_class.remove(&class_list);
         add_class.add(&class_list);
+    }
+    else {
+        console_log("Empty signal");
     }
 }
 
@@ -122,11 +126,8 @@ where
 {
     let target = target.into_element_maybe_signal();
     if let Some(node) = target.get_untracked() {
-        console_log(&format!("Adding classes {add_class:#?} to the element"));
         let class_list = node.class_list();
         add_class.add(&class_list);
-    } else {
-        console_log("Adding class skipped, no element in reference");
     }
 }
 
@@ -139,9 +140,6 @@ where
 {
     let target = target.into_element_maybe_signal();
     if let Some(node) = target.get_untracked() {
-        console_log(&format!(
-            "Removing classes {remove_class:#?} to the element"
-        ));
         let class_list = node.class_list();
         remove_class.remove(&class_list);
     }

@@ -1,7 +1,9 @@
 //! Single select widget
 
+mod float;
 mod keyboard;
 mod model;
+mod selection;
 
 use leptos::ev::CustomEvent;
 use leptos::ev::FocusEvent;
@@ -34,7 +36,9 @@ use crate::model::Keyed;
 use crate::primitives::input::button::ClearInputButton;
 use crate::primitives::input::TextInput;
 use crate::primitives::label::TextFieldLabel;
-use crate::widgets::single_select::model::DropdownState;
+use crate::widgets::single_select::float::FloatingController;
+use crate::widgets::single_select::keyboard::KeyboardController;
+pub use crate::widgets::single_select::model::DropdownState;
 use crate::widgets::single_select::model::Selection;
 use crate::widgets::single_select::model::SingleSelectItem;
 use crate::widgets::single_select::model::SingleSelectItemStoreFields;
@@ -43,14 +47,24 @@ use crate::widgets::single_select::model::SingleSelectModelStoreFields;
 
 use utils_leptos::signal::URwSignal;
 
+/// This trait groups all required traits which value type must implement for
+/// single select to work.
+/// 
+/// - [ThreadSafe]
+/// - Clone 
+/// - ToString 
+/// - [Keyed] 
+/// - [PatchField] - if possible you should derive [Patch] to implement
+pub trait SingleSelectValue: ThreadSafe + Clone + ToString + Keyed + PatchField {}
 
+impl<V: ThreadSafe + Clone + ToString + Keyed + PatchField> SingleSelectValue for V {}
 
 
 /// Select field allowing the selection of the single item from a list of options
 ///
 #[component]
 pub fn SingleSelect<
-    Value: ThreadSafe + Clone + ToString + Keyed + PatchField,
+    Value: SingleSelectValue,
     S1: ToString,
 >(
     /// id of the select field
@@ -65,6 +79,9 @@ pub fn SingleSelect<
     value: URwSignal<Option<Value>>,
     /// possible values for the select
     items: Vec<Value>,
+    /// Initial state of the selection menu
+    #[prop(default=DropdownState::Closed)]
+    initial_state: DropdownState
 ) -> impl IntoView {
     let store: Store<SingleSelectModel<Value>> = Store::new(SingleSelectModel{
         selection: None,
@@ -73,7 +90,7 @@ pub fn SingleSelect<
             value: item,
             node_ref: StoredRef::Empty,
         }).collect(),
-        dropdown: DropdownState::ForceOpen,
+        dropdown: initial_state,
     });
 
     let reference_ref = AnyNodeRef::new();
@@ -99,27 +116,20 @@ pub fn SingleSelect<
         }
     });
 
-    // let hide_dropdown = move |_event: FocusEvent| {
-    //     match store.dropdown().get_untracked() {
-    //         DropdownState::ForceOpen => {},
-    //         _ => store.dropdown().set(DropdownState::Closed)
-    //     };
-    // };
-
-    // let toggle_dropdown = move |_event: MouseEvent| {
-    //     match store.dropdown().get() {
-    //         DropdownState::Closed => store.dropdown().set(DropdownState::ClickOpen),
-    //         DropdownState::Open | DropdownState::ClickOpen => store.dropdown().set(DropdownState::Closed),
-    //         DropdownState::ForceOpen => {},
-    //     }
-    // };
+    let toggle_dropdown = move |_event: MouseEvent| {
+        match store.dropdown().get_untracked() {
+            DropdownState::Closed => FloatingController.show(store),
+            DropdownState::Open | DropdownState::ClickOpen => FloatingController.hide(store),
+            DropdownState::ForceOpen => {},
+        }
+    };
 
     let focus = move |_event: FocusEvent| {
-        let resolved_state = store.dropdown().get_untracked();
+        FloatingController.show(store);
+    };
 
-        if resolved_state == DropdownState::Closed {
-            store.dropdown().set(DropdownState::Open);
-        }
+    let blur = move | _event: FocusEvent| {
+        FloatingController.hide(store);
     };
 
     // Firefox triggers the `mouseup` event on the `input` element if we focus the select
@@ -251,92 +261,16 @@ pub fn SingleSelect<
         event.cancel_bubble();
         match event.key().as_str() {
             "Enter" | "Space" | "ArrowLeft" | "ArrowRight" => {
-                console_log("Confirm selected");
-                let model = store.get_untracked();
-                let selection_field = store.selection();
-                if let Some(selection) = model.selection &&
-                   let Some(item) = model.items.get(selection.index)
-                {
-                    value.set(Some(item.value.clone()));
-                    selection_field.set(None);
-                    match store.dropdown().get_untracked() {
-                        DropdownState::ForceOpen => {},
-                        _ => {
-                            store.dropdown().set(DropdownState::Closed);
-                        }
-                    }
-
-                }
-                else {
-                    value.set(None);
-                }
+                KeyboardController.enter(store, value);
             }
             "ArrowUp" => {
-                console_log("ArrowUp selected");
-                // let selection_field = store.selection();
-                store.with(|model| {
-                    if let Some(selected) = &model.selection {
-                        console_log(&format!("selection {selected:?}"));
-                        if selected.index > 0 {
-                            console_log("selection index > 0");
-                            if let Some(item) = model.items.get(selected.index - 1) {
-                                console_log(&format!("model has value for index {}", selected.index - 1));
-                                let node_ref = &item.node_ref;
-                                use_swap_class(node_ref, "bg-forgeblue-200", "bg-forgeblue-300");
-                                console_log("grab selection");
-                                let s = store.selection();
-                                console_log("grab write for selection");
-
-                                console_log("replace selection");
-                                s.patch(Some(Selection{
-                                    index: selected.index - 1,
-                                    node_ref: item.node_ref.clone(),
-                                    key: *item.key()
-                                }));
-                                console_log("remove classes");
-                                // use_remove_class(selected.node_ref.0.into(), ("bg-forgeblue-300", "bg-forgeblue-200"));
-                                console_log("ArrowUp is done");
-                            }
-                            else {
-                                console_log("item not found");
-                            }
-                        }
-                        else {
-                            console_log("selection index == 0");
-                        }
-                    }
-                });
+                KeyboardController.arrow_up(store, value.into());
             }
             "ArrowDown" => {
-                console_log("ArrowDown selected");
-                store.with(|model| {
-                    match &model.selection {
-                        Some(selected) => {
-                            if selected.index + 1 < model.items.len() &&
-                               let Ok(event) = CustomEvent::new("mouseover") {
-                                let _ = model.items[selected.index + 1].node_ref.dispatch_event(&event);
-                            }
-                            // else we are already at the end of the list
-                        }
-                        None => {
-                            console_log("ArrowDown no selection yet");
-                            if !model.items.is_empty() &&
-                               let Ok(event) = CustomEvent::new("mouseover") {
-                                let _ = model.items[0].node_ref.dispatch_event(&event);
-                            }
-                        }
-                    }
-                });
-
+                KeyboardController.arrow_down(store, value.into());
             }
             "Escape" => {
-                let state = store.dropdown().get_untracked();
-                match state {
-                    DropdownState::ForceOpen => {},
-                    _ => {
-                        store.dropdown().set(DropdownState::Closed);
-                    }
-                }
+                KeyboardController.escape(store);
             }
             _ => {
                 console_log("Other key");
@@ -355,8 +289,8 @@ pub fn SingleSelect<
                 text=selected
                 node_ref=reference_ref
                 on:focus=focus
-                // on:blur=hide_dropdown
-                // on:mousedown=toggle_dropdown
+                on:blur=blur
+                on:mousedown=toggle_dropdown
                 // on:mouseup=mouseup
                 on:mousemove=mousemove
                 on:keydown=keydown
@@ -420,6 +354,15 @@ where
         }
     });
 
+    let css_classes = if let Some(selection) = store.selection().get_untracked() &&
+        selection.index == index.get_untracked()    
+    {
+        "leptos-forge-select-dropdown-item border-2 border-fuchsia-500 mt-1 w-full text-left p-2 hover:bg-forgeblue-200 active:bg-forgeblue-300 pointer-events-auto bg-forgeblue-300"
+    }
+    else {
+        "leptos-forge-select-dropdown-item border-2 border-fuchsia-500 mt-1 w-full text-left p-2 hover:bg-forgeblue-200 active:bg-forgeblue-300 pointer-events-auto"
+    };
+
     // let onpointerdown = {
     //     // again we must move the ownership into the Fn()
     //     let item = item.clone();
@@ -437,7 +380,7 @@ where
     //         value.set(Some(item.value.clone()));
     //         store.dropdown().set(DropdownState::Closed);
     //     }
-    // };
+    // };   
 
     let mouseover = move |_: MouseEvent| {
         console_log(&format!("item mouseover {}", index.get_untracked()));
@@ -472,7 +415,7 @@ where
         <li>
             <button
                 node_ref=node_ref
-                class="leptos-forge-select-dropdown-item border-2 border-fuchsia-500 mt-1 w-full text-left p-2 hover:bg-forgeblue-200 active:bg-forgeblue-300 pointer-events-auto"
+                class={css_classes}
                 // on:pointerdown=onpointerdown
                 // on:mouseup=mouseup
                 on:mouseover=mouseover
@@ -484,3 +427,5 @@ where
         </li>
     }
 }
+
+

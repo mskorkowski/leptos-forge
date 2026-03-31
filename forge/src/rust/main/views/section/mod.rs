@@ -30,11 +30,7 @@ pub fn Section<S: 'static + Section + Default + Copy + Send>(
     let description = section.description();
     let parser = MarkdownParser::new();
 
-    console_log("parsing description");
-
     let tokens = parser.parse(description);
-
-    console_log("rendering tokens");
 
     let views = tokens
         .into_iter()
@@ -44,8 +40,6 @@ pub fn Section<S: 'static + Section + Default + Copy + Send>(
             }
         })
         .collect_view();
-
-    console_log("rendering <Section>");
 
     view! {
         <div class="leptos-forge-section-container scrollbox w-full flex flex-col">

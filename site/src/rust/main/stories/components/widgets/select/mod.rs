@@ -1,8 +1,6 @@
 //! Stories for select widget
 //! 
 
-pub mod store_failure;
-
 use std::fmt::Display;
 
 use forge::RouteDef;
@@ -11,6 +9,7 @@ use reactive_stores::PatchField;
 use reactive_stores::Store;
 use ui_components::model::Keyed;
 use ui_components::widgets::single_select::SingleSelect;
+use ui_components::widgets::single_select::DropdownState;
 use ui_components::widgets::field::TextField;
 use utils_leptos::signal::URwSignal;
 use uuid::Uuid;
@@ -18,7 +17,6 @@ use uuid::Uuid;
 use forge::Story;
 
 use crate::State;
-use crate::stories::components::widgets::select::store_failure::ComponentWithAStoreStory;
 
 /// Description of the label primitive
 const WIDGET_DESC: &str = r############"
@@ -142,7 +140,6 @@ impl Story for BasicSingleSelectStory {
     fn subroutes(&self) -> Vec<RouteDef<Self::Data>> {
         vec![
             RouteDef::story::<ForceOpenSingleSelectStory>("force_open", "Force open"),
-            RouteDef::story::<ComponentWithAStoreStory>("store_failure", "Store failure"),
         ]
     }
 }
@@ -181,6 +178,7 @@ impl Story for ForceOpenSingleSelectStory {
                     items={
                         Item::data_set()
                     }
+                    initial_state={DropdownState::ForceOpen}
                 />
             </div>
         }

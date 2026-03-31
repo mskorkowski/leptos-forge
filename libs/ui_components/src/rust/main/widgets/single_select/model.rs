@@ -77,7 +77,7 @@ impl PatchField for Selection {
 
 /// State of the dropdown menu
 #[derive(Debug, Clone, Copy, Default, PartialEq, Eq, Store)]
-pub(super) enum DropdownState {
+pub enum DropdownState {
     /// Opened by mouse event
     ClickOpen,
     /// Opened by other means that mouse event

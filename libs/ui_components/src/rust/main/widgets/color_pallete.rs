@@ -90,7 +90,6 @@ impl<'grid> Iterator for GridCols<'grid> {
             Some(&ColorCode::Skip)
         }
         else {
-            console_log("END OF COLS");
             // End of iterator
             None
         }
@@ -122,7 +121,6 @@ impl<'grid> Iterator for GridRows<'grid> {
             })
         }
         else {
-            console_log("END OF ROWS");
             None
         }
     }

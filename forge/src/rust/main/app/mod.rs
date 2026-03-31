@@ -67,8 +67,6 @@ where
         }
     };
 
-    console_log("Rendering <App>");
-
     view! {
         <Router>
             <Root>
