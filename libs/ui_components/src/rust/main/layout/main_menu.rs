@@ -1,6 +1,5 @@
 //! Module contains the code of the menu
 
-use leptos::leptos_dom::logging::console_log;
 use leptos::prelude::*;
 
 /// Vertical main menu component on the left hand side

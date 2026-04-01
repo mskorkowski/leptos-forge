@@ -2,7 +2,6 @@
 
 use std::fmt::Debug;
 
-use leptos::leptos_dom::logging::console_log;
 use leptos::prelude::*;
 use leptos::tachys::view::iterators::StaticVec;
 use leptos_router::components::Router;

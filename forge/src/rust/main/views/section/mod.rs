@@ -6,7 +6,6 @@ mod markdown;
 use std::marker::PhantomData;
 use std::str::Split;
 
-use leptos::leptos_dom::logging::console_log;
 use leptos::prelude::*;
 use reactive_stores::Store;
 

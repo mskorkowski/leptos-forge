@@ -150,12 +150,12 @@ impl SelectionController {
     }
 
     /// Apply the style of unselected element
-    fn mark_unselected(&self, node_ref: &StoredRef) {
+    pub(super) fn mark_unselected(&self, node_ref: &StoredRef) {
         use_remove_class(node_ref, ("bg-forgeblue-300", "bg-forgeblue-200"));
     }
     
     /// Apply the style of selected element
-    fn mark_selected(&self, node_ref: &StoredRef) {
-        use_swap_class(node_ref, "bg-forgeblue-200", "bg-forgeblue-300");
+    pub(super) fn mark_selected(&self, node_ref: &StoredRef) {
+        use_swap_class(node_ref, "bg-forgeblue-300", "bg-forgeblue-200");
     }
 }

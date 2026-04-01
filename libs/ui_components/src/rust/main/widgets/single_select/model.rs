@@ -99,7 +99,7 @@ impl DropdownState {
     /// | Closed        | true    | ClickOpen    |
     /// | Closed        | false   | Open         |
     /// | ForceOpen     | any     | ForceOpen    |
-    fn toggle(self, click: bool) -> Self {
+    pub fn toggle(self, click: bool) -> Self {
         match self {
             DropdownState::ClickOpen => DropdownState::Open,
             DropdownState::Open => DropdownState::Closed,
@@ -114,7 +114,7 @@ impl DropdownState {
 
     /// If this method returns `true` it means that popover
     /// should be visible
-    fn is_open(&self) -> bool {
+    pub fn is_open(&self) -> bool {
         *self != DropdownState::Closed
     }
 }
