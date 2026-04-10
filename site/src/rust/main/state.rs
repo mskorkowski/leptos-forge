@@ -1,5 +1,4 @@
 //! Application state
-#![allow(missing_docs)]
 
 use reactive_stores::Patch;
 use reactive_stores::Store;

@@ -58,17 +58,34 @@ use utils_leptos::signal::URwSignal;
 /// - ToString 
 /// - [Keyed] 
 /// - [PatchField] - if possible you should derive [Patch] to implement
-pub trait SingleSelectValue: ThreadSafe + Clone + ToString + Keyed + PatchField {}
+pub trait SingleSelectValue: ThreadSafe + Clone + Keyed + PatchField + SingleSelectItemView {}
 
-impl<V: ThreadSafe + Clone + ToString + Keyed + PatchField> SingleSelectValue for V {}
 
+impl<V: ThreadSafe + Clone + Keyed + PatchField + SingleSelectItemView> SingleSelectValue for V {}
+
+/// Trait which needs to be implemented by the `Value` type so it can be displayed 
+/// using the [SingleSelect]
+pub trait SingleSelectItemView{
+    /// Function is called for every item, so it can display itself on the selection
+    /// list
+    fn selection_list_view(self) -> impl IntoView;
+
+    /// Function is called to show the selected item
+    fn selected_item_view(self) -> impl IntoView;
+}
 
 /// Select field allowing the selection of the single item from a list of options
 ///
+/// # Type arguments
+/// 
+/// - **Value** - Type of an element in the single select view
+/// - **S1** - Type of unique id attribute of the single select
+/// - **ChildViewFn** - Function taking a an instance of the Value and returning the view for the child
+/// - **ChildView** - Type of the concrete view
 #[component]
 pub fn SingleSelect<
-    Value: SingleSelectValue,
-    S1: ToString,
+    Value,
+    S1,
 >(
     /// id of the select field
     id: S1,
@@ -84,8 +101,12 @@ pub fn SingleSelect<
     items: Vec<Value>,
     /// Initial state of the selection menu
     #[prop(default=DropdownState::Closed)]
-    initial_state: DropdownState
-) -> impl IntoView {
+    initial_state: DropdownState,
+) -> impl IntoView 
+where
+    Value: SingleSelectValue,
+    S1: ToString,
+{
     let store: Store<SingleSelectModel<Value>> = Store::new(SingleSelectModel{
         selection: None,
         count: items.len(),
@@ -192,7 +213,7 @@ pub fn SingleSelect<
         |v| {
             console_log("value selected");
             if let Some(value) = v {
-                console_log(&format!("selected value is {}", value.to_string()));
+                console_log(&format!("selected value is {}", value.key()));
                 value.to_string()
             }
             else {
@@ -335,6 +356,11 @@ pub fn SingleSelect<
 }
 
 /// Item which can be selected in the single select item list
+/// 
+/// # Type arguments
+/// 
+/// - **Value** - Type of element in the single select
+///
 #[component]
 fn SingleSelectItemComponent<Value>(
     /// index of the item on the list
@@ -350,7 +376,7 @@ fn SingleSelectItemComponent<Value>(
     value: URwSignal<Option<Value>>,
 ) -> impl IntoView
 where
-    Value: Clone + PatchField + Keyed + ThreadSafe + ToString,
+    Value: SingleSelectValue,
 {
     let node_ref = AnyNodeRef::new();
 
@@ -425,7 +451,11 @@ where
                 on:mouseover=mouseover
             >
                 <div class="w-full pointer-events-none">
-                    {move || item.get().to_string()}
+                    {
+                        let selection_item = item.get();
+                        let value = selection_item.value;
+                        value.selection_list_view()
+                    }
                 </div>
             </button>
         </li>

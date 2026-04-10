@@ -11,6 +11,7 @@ use ui_components::model::Keyed;
 use ui_components::widgets::single_select::SingleSelect;
 use ui_components::widgets::single_select::DropdownState;
 use ui_components::widgets::field::TextField;
+use ui_components::widgets::single_select::SingleSelectItemView;
 use utils_leptos::signal::URwSignal;
 use uuid::Uuid;
 
@@ -33,6 +34,14 @@ struct Item {
     value: u32,
     /// key of an item
     key: Uuid,
+}
+
+impl SingleSelectItemView for Item {
+    fn selection_list_view(self) -> impl IntoView {
+        view!{
+            {self.value.to_string()}
+        }
+    }
 }
 
 impl PatchField for Item {

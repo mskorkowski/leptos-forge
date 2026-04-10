@@ -1,8 +1,6 @@
 //! Module contains the [Story()] component which is used  to display stories
 //! in side the `leptos_forge` application
 
-#![allow(clippy::missing_docs_in_private_items)]
-
 use std::marker::PhantomData;
 
 use leptos::html::Div;
@@ -63,9 +61,12 @@ pub fn Story<S: 'static + IntoStory + Default + Copy + ThreadSafe>(
     }
 }
 
+/// Kinds of tabs in the side panel
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 enum SidePanelTabs {
+    /// Tab with the description of the story
     Description,
+    /// Tab with tests
     Tests,
 }
 
@@ -96,7 +97,9 @@ impl TabName for SidePanelTabs {
     }
 }
 
+/// Tab with description of the story
 struct DescriptionTab {
+    /// Description of the story
     text: &'static str,
 }
 
@@ -113,8 +116,11 @@ impl Tab<SidePanelTabs> for DescriptionTab {
     }
 }
 
+/// Tab with tests for the story
 struct TestsTabs<StoryImpl: Story> {
+    /// Story to be tested
     story: StoryImpl,
+    /// Canvas upon which story is rendered
     canvas: NodeRef<Div>,
 }
 

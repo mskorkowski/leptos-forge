@@ -69,7 +69,7 @@ impl Story for ColorPaletteGridStory {
     type Data = State;
 
     fn description(&self) -> &'static str {
-        COLOR_PALETTE_DESC
+        COLOR_PALETTE_GRID_DESC
     }
 
     

@@ -252,6 +252,6 @@ impl Story for NonemptyVisiblePasswordFieldStory {
     }
 
     fn description(&self) -> &'static str {
-        PASSWORD_FIELD_NONEMPTY_DESC
+        PASSWORD_FIELD_NONEMPTY_VISIBLE_DESC
     }
 }

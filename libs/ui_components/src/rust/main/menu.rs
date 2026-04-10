@@ -1,7 +1,5 @@
 //! Contains the components related to creating menus
 
-#![allow(missing_docs)] // Waiting for https://github.com/leptos-rs/leptos/issues/4261
-
 use std::mem::MaybeUninit;
 
 use leptos::ev::MouseEvent;
@@ -154,7 +152,12 @@ pub fn Navigate<'a, S: ToString + ThreadSafe + Clone>(
 
 /// The header in the menu
 #[component]
-pub fn MenuHeader(label: &'static str, class: &'static str) -> impl IntoView {
+pub fn MenuHeader(
+    /// Label of the header
+    label: &'static str,
+    /// Extra classes for the header
+    class: &'static str
+) -> impl IntoView {
     let class = format!("{class} ml-6 pb-2 pt-8 font-bold text-forgegray-400");
 
     view! {
