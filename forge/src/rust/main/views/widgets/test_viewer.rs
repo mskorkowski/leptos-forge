@@ -16,7 +16,11 @@ use reactive_stores::StoreFieldIterator;
 use reactive_stores::StorePath;
 use ui_components::widgets::details::DetailsParts;
 
+use crate::FunctionalConfigurationStoreFields;
+use crate::LeptosForgeConfiguration;
+use crate::LeptosForgeConfigurationStoreFields;
 use crate::Story;
+use crate::TestRunnerConfigurationStoreFields;
 use crate::story::Play;
 use crate::story::Step;
 
@@ -186,6 +190,8 @@ where
     play: usize,
     /// state of the test
     state: Store<TestViewModel>,
+    /// Leptos forge configuration
+    configuration: Store<LeptosForgeConfiguration>,
     /// canvas where elements are drawn
     canvas: NodeRef<Div>,
 }
@@ -199,7 +205,7 @@ where
     /// # Panics
     ///
     /// Will panic if the `play` is out of bounds for the `story.plays()`.
-    pub fn new(story: S, play: usize, canvas: NodeRef<Div>) -> Self {
+    pub fn new(story: S, play: usize, canvas: NodeRef<Div>, configuration: Store<LeptosForgeConfiguration>) -> Self {
         let plays = story.plays();
         let play_to_run = plays.get(play).unwrap();
 
@@ -209,6 +215,7 @@ where
             story,
             play,
             state,
+            configuration,
             canvas,
         }
     }
@@ -334,6 +341,7 @@ impl<S: 'static + Story> DetailsParts for TestView<S> {
             mut story,
             play,
             state,
+            configuration,
             canvas,
         } = *self;
 
@@ -342,7 +350,8 @@ impl<S: 'static + Story> DetailsParts for TestView<S> {
         let steps: Vec<Box<dyn Step<Story = S> + 'static>> = play_to_run.steps();
 
         let play_test = move |_| {
-            play_steps(500, state, story, play, canvas);
+            let step_delay = configuration.functional().tests_runner().step_delay().get();
+            play_steps(step_delay, state, story, play, canvas);
         };
 
         let run_one_step = move |_| {

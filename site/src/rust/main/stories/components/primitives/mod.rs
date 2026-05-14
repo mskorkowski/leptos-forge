@@ -43,13 +43,14 @@ impl Section for Primitives {
 
     fn subroutes(&self) -> Vec<RouteDef<State>> {
         vec![
-            RouteDef::story::<BasicButtonStory>("button", "Button"),
+            RouteDef::story::<BasicButtonStory>("button", "Button").with_aria_label("Button primitive story"),
             RouteDef::story::<BasicLabelStory>("label", "Label"),
             RouteDef::story::<MarkdownBaseStory>("markdown", "Markdown"),
             RouteDef::Route {
                 path: "menu",
                 label: "Menu",
-                component: |_,| view! {"Menu"}.into_any(),
+                aria_label: None,
+                component: |_, _| view! {"Menu"}.into_any(),
                 embedded: |_, _, _, _| view! {"Embedded menu"}.into_any(),
                 subroutes: vec![],
                 private: false,

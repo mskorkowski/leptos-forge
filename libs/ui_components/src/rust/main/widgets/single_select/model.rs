@@ -11,6 +11,7 @@ use reactive_stores::StorePath;
 use utils_leptos::stores::stored_ref::StoredRef;
 use uuid::Uuid;
 
+use crate::model::Key;
 use crate::model::Keyed;
 
 /// Item that can be selected in the single select widget
@@ -23,13 +24,17 @@ where
     pub(super) value: Value,
     /// reference to the node that represents the item
     pub(super) node_ref: StoredRef,
+    /// id of the node 
+    ///
+    /// This value is used mainly by the accesibility part of the implementation
+    pub(super) id: String,
 }
 
 impl<Value> Keyed for SingleSelectItem<Value>
 where
     Value: Clone + Keyed + PatchField,
 {
-    fn key(&self) -> &Uuid {
+    fn key(&self) -> &Key {
         self.value.key()
     }
 }
@@ -48,11 +53,15 @@ where
 #[derive(Debug, Clone, Store)]
 pub(super) struct Selection{
     /// key of the selected element
-    pub(super) key: Uuid,
+    pub(super) key: Key,
     /// index in values
     pub(super) index: usize,
     /// node_ref of last selected element
     pub(super) node_ref: StoredRef,
+    /// id of the last selected element
+    /// 
+    /// It's required for assistive technologies
+    pub(super) id: String,
 }
 
 impl PatchField for Selection {
@@ -143,7 +152,7 @@ where
     /// id of the item with focus
     pub(super) selection: Option<Selection>,
     /// list of items to choose from
-    #[store(key: Uuid = |counter| *counter.value.key())]
+    #[store(key: Key = |counter| *counter.value.key())]
     pub(super) items: Vec<SingleSelectItem<Value>>,
     /// how many items are in the list
     pub(super) count: usize,

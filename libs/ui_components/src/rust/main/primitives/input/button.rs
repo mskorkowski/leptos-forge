@@ -42,7 +42,6 @@ pub fn ClearInputButton(
 
     view! {
         <button class="
-                hidden
                 absolute 
                 forge-text-standard
                 text-forgegray-800
@@ -67,6 +66,7 @@ pub fn ClearInputButton(
             " 
             on:click=on_click
             style:display=clear_button_display_style
+            aria-label="clear"
         ><Icon icon={icondata::MdiClose} {..input_button_icon_class()}/></button>
     }
 }

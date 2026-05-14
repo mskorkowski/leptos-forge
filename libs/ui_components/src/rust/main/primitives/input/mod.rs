@@ -21,10 +21,17 @@ use crate::model::Password;
 use button::ClearInputButton;
 use button::PasswordButtonStates;
 
+/// List of css classes for inputs
+/// 
+/// # Also used by
+/// 
+/// This css classes are also used by the `SingleSelect`, unfortunately it was impossible to reuse this classes 
+pub const INPUT_CSS_CLASSES: &str = "leptos-forge-input block w-full forge-text-standard py-1 px-2 peer border-2 border-solid border-forgeblue-800 rounded-sm focus:border-2 focus:border-forgeblue-500 focus:outline-none";
+
 /// Spread component which applies the class attribute to the element with classes specific for the input field element
 pub fn input_class() -> impl Attribute {
     view! {
-        <{..} class="leptos-forge-input block w-full forge-text-standard py-1 px-2 peer border-2 border-solid border-forgeblue-800 rounded-sm focus:border-2 focus:border-forgeblue-500 focus:outline-none" />
+        <{..} class=INPUT_CSS_CLASSES />
     }
 }
 

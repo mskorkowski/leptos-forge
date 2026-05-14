@@ -150,3 +150,7 @@
 @utility forge-animate-keep-both {
   animation-fill-mode: both;
 }
+
+.z-popup {
+  z-index: 20;
+}

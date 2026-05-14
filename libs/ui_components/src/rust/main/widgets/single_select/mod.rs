@@ -36,8 +36,6 @@ use utils_leptos::stores::stored_ref::StoredRef;
 
 use crate::model::Keyed;
 use crate::primitives::input::button::ClearInputButton;
-use crate::primitives::input::TextInput;
-use crate::primitives::label::TextFieldLabel;
 use crate::widgets::single_select::float::FloatingController;
 use crate::widgets::single_select::keyboard::KeyboardController;
 pub use crate::widgets::single_select::model::DropdownState;
@@ -50,8 +48,8 @@ use crate::widgets::single_select::selection::SelectionController;
 
 use utils_leptos::signal::URwSignal;
 
-/// This trait groups all required traits which value type must implement for
-/// single select to work.
+/// This trait groups all required traits which value type must implement by 
+/// values for [SingleSelect] to work.
 /// 
 /// - [ThreadSafe]
 /// - Clone 
@@ -65,13 +63,19 @@ impl<V: ThreadSafe + Clone + Keyed + PatchField + SingleSelectItemView> SingleSe
 
 /// Trait which needs to be implemented by the `Value` type so it can be displayed 
 /// using the [SingleSelect]
-pub trait SingleSelectItemView{
-    /// Function is called for every item, so it can display itself on the selection
+pub trait SingleSelectItemView: Sized{
+    /// Method is called for every item, so it can display itself on the selection
     /// list
     fn selection_list_view(self) -> impl IntoView;
 
-    /// Function is called to show the selected item
-    fn selected_item_view(self) -> impl IntoView;
+    /// Method is called to show the selected item
+    /// 
+    /// ## Default implementation
+    /// 
+    /// By default it returns the same view as [`selection_list_view`][SingleSelectItemView::selection_list_view]
+    fn selected_item_view(self) -> impl IntoView {
+        self.selection_list_view()
+    }
 }
 
 /// Select field allowing the selection of the single item from a list of options
@@ -107,12 +111,16 @@ where
     Value: SingleSelectValue,
     S1: ToString,
 {
+    let id=id.to_string();
+    let (dropdown_id, _) = signal(format!("{id}-dropdown"));
+
     let store: Store<SingleSelectModel<Value>> = Store::new(SingleSelectModel{
         selection: None,
         count: items.len(),
-        items: items.into_iter().map(|item| SingleSelectItem{
+        items: items.into_iter().enumerate().map(|(idx, item)| SingleSelectItem{
             value: item,
             node_ref: StoredRef::Empty,
+            id: format!("{id}-item-{idx}"),
         }).collect(),
         dropdown: initial_state,
     });
@@ -209,27 +217,6 @@ where
         };
     };
 
-    let selected = value.map(
-        |v| {
-            console_log("value selected");
-            if let Some(value) = v {
-                console_log(&format!("selected value is {}", value.key()));
-                value.to_string()
-            }
-            else {
-                console_log("Selected empty value");
-                String::new()
-            }
-        },
-        |_from, _new| {
-            // let's ignore updates for now
-        }
-    );
-
-    let clear_button_visibility = Signal::derive(move || {
-        value.get().is_some()
-    });
-
     let clear = value.map(
         |v| {
             v.is_some()
@@ -295,9 +282,31 @@ where
             "Escape" => {
                 KeyboardController.escape(store);
             }
+            "Tab" => {
+
+            }
             _ => {
                 console_log("Other key");
             }
+        }
+    };
+
+    let visible = move || value.get().is_some();
+    let label_css = move || if visible() {
+        "leptos-forge-primitives-label absolute forge-text-small text-forgegray-700 duration-300 top-3.5 left-2.4 select-none transform origin-[0] start-2.5 peer-focus:translate-y-0 peer-focus:text-forgegray-700 peer-focus:forge-text-small"
+    }
+    else {
+        "leptos-forge-primitives-label absolute text-forgegray-700 duration-300 top-3.5 left-2.4 select-none transform origin-[0] start-2.5 min-h-[20px] peer-focus:translate-y-0 peer-focus:text-forgegray-700 peer-focus:forge-text-small translate-y-12/10 cursor-text forge-text-standard"
+    };
+
+    let input_css = move || {
+        "leptos-forge-input block w-full min-h-[2rem] select-none forge-text-standard py-1 px-2 peer border-2 border-solid border-forgeblue-800 rounded-sm focus:border-2 focus:border-forgeblue-500 focus:outline-none"
+    };
+
+    let item_view = move || { 
+        match value.get() {
+            Some(v) => v.selected_item_view().into_any(),
+            None => ().into_any()
         }
     };
 
@@ -305,11 +314,10 @@ where
         <div class="leptos-forge-field-box relative pt-8">
             <ClearInputButton
                 clear={clear.write_only()}
-                show={clear_button_visibility}
+                show={visible}
             />
-            <TextInput
-                id={id.to_string()}
-                text=selected
+            <div
+                id
                 node_ref=reference_ref
                 on:focus=focus
                 on:blur=blur
@@ -317,23 +325,39 @@ where
                 on:mouseup=mouseup
                 on:mousemove=mousemove
                 on:keydown=keydown
-            />
-            <TextFieldLabel
-                for_id={id.to_string()}
-                text=label
-            />
+                class=input_css
+                tabindex=0
+                role="combobox"
+                aria-label={label}
+                aria-expanded=show_dropdown
+                aria-controls=dropdown_id
+                aria-activedescendant=move || store.selection().get().map(|selection| {
+                    selection.id
+                })
+                aria-haspopup="listbo"
+            >
+                <Show when=visible>
+                    { item_view }
+                </Show>
+            </div>
+            <span
+                class=label_css
+            >
+                { label }
+            </span>
             <Show
                 when={move || show_dropdown.get()}
+                
             >
                 <div
                     node_ref=floating_ref
+                    id=dropdown_id
                     style:position = move || floating_styles.get().style_position()
                     style:top = move || floating_styles.get().style_top()
                     style:left = move || floating_styles.get().style_left()
                     style:transform = move || floating_styles.get().style_transform()
                     style:will-change = move || floating_styles.get().style_will_change()
-
-                    class="leptos-forge-select-dropdown border-2 border-forgeblue-300 border-b-lg w-full p-2 shadow-lg/20"
+                    class="leptos-forge-select-dropdown border-2 border-forgeblue-300 border-b-lg w-full p-2 shadow-lg/20 bg-forgeblue-50 z-popup"
                 >
                     <ul class="leptos-forge-select-dropdown-list list-none">
                         <ForEnumerate
@@ -422,23 +446,33 @@ where
                     SelectionController.mark_selected(&item.node_ref().get_untracked());
                     // use_swap_class(node_ref, "bg-forgeblue-300", "bg-forgeblue-200");
                     use_remove_class(selected.node_ref, ("bg-forgeblue-300", "bg-forgeblue-200"));
+                    let item = item.get();
                     selection.patch(Some(Selection{
-                        key: *item.value().get().key(),
+                        key: *item.value.key(),
                         index: index.get_untracked(),
                         node_ref: node_ref.into(),
+                        id: item.id.clone(),
                     }));
                 }
             }
             None => {
                 console_log("none item mouseover");
                 use_add_class(node_ref, "bg-forgeblue-300");
+                let item = item.get();
                 selection.patch(Some(Selection{
-                    key: *item.value().get().key(),
+                    key: *item.key(),
                     index: index.get_untracked(),
                     node_ref: node_ref.into(),
+                    id: item.id.clone()
                 }));
             }
         }
+    };
+
+    let item_view = move || {
+        let selection_item = item.get();
+        let value = selection_item.value;
+        value.selection_list_view()
     };
 
     view!{
@@ -451,11 +485,7 @@ where
                 on:mouseover=mouseover
             >
                 <div class="w-full pointer-events-none">
-                    {
-                        let selection_item = item.get();
-                        let value = selection_item.value;
-                        value.selection_list_view()
-                    }
+                    { item_view }
                 </div>
             </button>
         </li>

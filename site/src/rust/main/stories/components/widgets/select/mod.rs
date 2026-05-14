@@ -7,7 +7,9 @@ use forge::RouteDef;
 use leptos::prelude::*;
 use reactive_stores::PatchField;
 use reactive_stores::Store;
+use ui_components::model::Key;
 use ui_components::model::Keyed;
+use ui_components::primitives::input::TextInput;
 use ui_components::widgets::single_select::SingleSelect;
 use ui_components::widgets::single_select::DropdownState;
 use ui_components::widgets::field::TextField;
@@ -25,6 +27,58 @@ const WIDGET_DESC: &str = r############"
  
 The `SingleSelect` widget allows selection of the single element from the list of options by showing a dropdown menu
 
+## Usage
+
+Use it when user should select the value from one of the items from the list.
+
+## Rendering items
+
+Item's on the list should implement the `SingleSelectItemView` trait. 
+
+```rust
+/// Trait which needs to be implemented by the `Value` type so it can be displayed 
+/// using the [SingleSelect]
+pub trait SingleSelectItemView{
+    /// Method is called for every item, so it can display itself on the selection
+    /// list
+    fn selection_list_view(self) -> impl IntoView;
+
+    /// Method is called to show the selected item
+    /// 
+    /// ## Default implementation
+    /// 
+    /// By default it returns the same view as [`selection_list_view`][SingleSelectItemView::selection_list_view]
+    fn selected_item_view(self) -> impl IntoView;
+}
+```
+
+When user opens the dropdown menu, then items on the list are rendered using the
+`SingleSelectItemView::selection_list_view`
+
+Selected item is rendered using the `SingleSelectItemView::selected_item_view`.
+
+If you need to listen to any events inside your custom components you must 
+stop event propagation, otherwise default behavior of the `SingleSelect` component 
+will trigger.
+
+## Behavior
+
+Component tries to replicate as much as possible the behavior of the html `<select>` tag.
+
+- click to open and then click to select
+- mouse down and drag the mouse over item to be selected and mouse up to select
+
+Component enhances the `<select>` tag with
+
+- custom item rendering both on the dropdown menu and selected item
+- adds clear selection button
+
+## Differences between the browsers
+
+In Firefox when using mouse down + drag + mouse up to select the item which is
+above the mouse is not highlighted since Firefox doesn't trigger the `:over`
+pseudoclass in such case.
+
 "############;
 
 /// Sample item
@@ -33,7 +87,7 @@ struct Item {
     /// value of an item
     value: u32,
     /// key of an item
-    key: Uuid,
+    key: Key,
 }
 
 impl SingleSelectItemView for Item {
@@ -66,7 +120,7 @@ impl Display for Item {
 }
 
 impl Keyed for Item {
-    fn key(&self) -> &Uuid {
+    fn key(&self) -> &Key {
         &self.key
     }
 }
@@ -77,19 +131,19 @@ impl Item {
         vec![
             Item{
                 value: 1,
-                key: Uuid::new_v4(),
+                key: Key::random(),
             },
             Item{
                 value: 2,
-                key: Uuid::new_v4(),
+                key: Key::random(),
             },
             Item{
                 value: 3,
-                key: Uuid::new_v4(),
+                key: Key::random(),
             },
             Item{
                 value: 4,
-                key: Uuid::new_v4(),
+                key: Key::random(),
             },
         ]
     }

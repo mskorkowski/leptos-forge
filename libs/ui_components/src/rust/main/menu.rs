@@ -43,6 +43,9 @@ pub fn Navigate<'a, S: ToString + ThreadSafe + Clone>(
     to: S,
     /// label to be shown in the menu
     label: &'static str,
+    /// Label to be used when using assistive technologies when meaning of the
+    /// link can be confusing in the context when just listening
+    aria_label: Option<&'static str>,
     /// class to add to the menu item
     class: &'static str,
     /// Current location of the browser window
@@ -145,7 +148,7 @@ pub fn Navigate<'a, S: ToString + ThreadSafe + Clone>(
 
     view! {
         <div class=class node_ref=div>
-            <A href={to.to_string()} on:click={click} {.. link_class}>{label}</A>
+            <A href={to.to_string()} on:click={click} attr:aria-label={aria_label}  {.. link_class}>{label}</A>
         </div>
     }
 }

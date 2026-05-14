@@ -16,6 +16,7 @@ use ui_components::primitives::markdown::Markdown;
 use utils::prelude::ThreadSafe;
 
 use crate::IntoStory;
+use crate::LeptosForgeConfiguration;
 use crate::views::story::EmbeddedStory;
 
 use super::Section;
@@ -279,6 +280,7 @@ impl PathSpec {
     pub fn as_navigation_view(
         &self,
         label: &'static str,
+        aria_label: Option<&'static str>,
         location: &str,
         store: Store<MenuState>,
     ) -> AnyView {
@@ -286,17 +288,17 @@ impl PathSpec {
 
         match self {
             // we are using `border-l-0!` as a hack to remove the left border which looks nicely when we use headers, but not so nice when we don't
-            Root => view!{ <Navigate to="/" label=label class="ml-6 border-l-0!" location store/> }.into_any(),
+            Root => view!{ <Navigate to="/" label aria_label class="ml-6 border-l-0!" location store/> }.into_any(),
             // we are using `border-l-0!` as a hack to remove the left border which looks nicely when we use headers, but not so nice when we don't
-            Level1(seg1) => view!{ <Navigate to=format!("/{seg1}") label=label class="ml-6 border-l-0!" location store/> }.into_any(),
-            Level2(seg1, seg2) => view!{ <Navigate to=format!("/{seg1}/{seg2}") label=label class="ml-6 pl-6" location store/> }.into_any(),
-            Level3(seg1, seg2, seg3) => view!{ <Navigate to=format!("/{seg1}/{seg2}/{seg3}") label=label class="ml-6 pl-9" location store/> }.into_any(),
-            Level4(seg1, seg2, seg3, seg4) => view!{ <Navigate to=format!("/{seg1}/{seg2}/{seg3}/{seg4}") label=label class="ml-6 pl-12" location store/> }.into_any(),
-            Level5(seg1, seg2, seg3, seg4, seg5) => view!{ <Navigate to=format!("/{seg1}/{seg2}/{seg3}/{seg4}/{seg5}") label=label class="ml-6 pl-15" location store/> }.into_any(),
-            Level6(seg1, seg2, seg3, seg4, seg5, seg6) => view!{ <Navigate to=format!("/{seg1}/{seg2}/{seg3}/{seg4}/{seg5}/{seg6}") label=label class="ml-6 pl-18" location store/> }.into_any(),
-            Level7(seg1, seg2, seg3, seg4, seg5, seg6, seg7) => view!{ <Navigate to=format!("/{seg1}/{seg2}/{seg3}/{seg4}/{seg5}/{seg6}/{seg7}") label=label class="ml-6 pl-21" location store/> }.into_any(),
-            Level8(seg1, seg2, seg3, seg4, seg5, seg6, seg7, seg8) => view!{ <Navigate to=format!("/{seg1}/{seg2}/{seg3}/{seg4}/{seg5}/{seg6}/{seg7}/{seg8}") label=label class="ml-6 pl-24" location store/> }.into_any(),
-            Level9(seg1, seg2, seg3, seg4, seg5, seg6, seg7, seg8, seg9) => view!{ <Navigate to=format!("/{seg1}/{seg2}/{seg3}/{seg4}/{seg5}/{seg6}/{seg7}/{seg8}/{seg9}") label=label class="ml-6 pl-27" location store/> }.into_any(),
+            Level1(seg1) => view!{ <Navigate to=format!("/{seg1}") label aria_label class="ml-6 border-l-0!" location store/> }.into_any(),
+            Level2(seg1, seg2) => view!{ <Navigate to=format!("/{seg1}/{seg2}") label aria_label class="ml-6 pl-6" location store/> }.into_any(),
+            Level3(seg1, seg2, seg3) => view!{ <Navigate to=format!("/{seg1}/{seg2}/{seg3}") label aria_label class="ml-6 pl-9" location store/> }.into_any(),
+            Level4(seg1, seg2, seg3, seg4) => view!{ <Navigate to=format!("/{seg1}/{seg2}/{seg3}/{seg4}") label aria_label class="ml-6 pl-12" location store/> }.into_any(),
+            Level5(seg1, seg2, seg3, seg4, seg5) => view!{ <Navigate to=format!("/{seg1}/{seg2}/{seg3}/{seg4}/{seg5}") label aria_label class="ml-6 pl-15" location store/> }.into_any(),
+            Level6(seg1, seg2, seg3, seg4, seg5, seg6) => view!{ <Navigate to=format!("/{seg1}/{seg2}/{seg3}/{seg4}/{seg5}/{seg6}") label aria_label class="ml-6 pl-18" location store/> }.into_any(),
+            Level7(seg1, seg2, seg3, seg4, seg5, seg6, seg7) => view!{ <Navigate to=format!("/{seg1}/{seg2}/{seg3}/{seg4}/{seg5}/{seg6}/{seg7}") label aria_label class="ml-6 pl-21" location store/> }.into_any(),
+            Level8(seg1, seg2, seg3, seg4, seg5, seg6, seg7, seg8) => view!{ <Navigate to=format!("/{seg1}/{seg2}/{seg3}/{seg4}/{seg5}/{seg6}/{seg7}/{seg8}") label aria_label class="ml-6 pl-24" location store/> }.into_any(),
+            Level9(seg1, seg2, seg3, seg4, seg5, seg6, seg7, seg8, seg9) => view!{ <Navigate to=format!("/{seg1}/{seg2}/{seg3}/{seg4}/{seg5}/{seg6}/{seg7}/{seg8}/{seg9}") label aria_label class="ml-6 pl-27" location store/> }.into_any(),
         }
     }
 }
@@ -310,8 +312,18 @@ pub enum RouteDef<Data> {
         path: &'static str,
         /// Label in the menu
         label: &'static str,
+        /// ARIA label to be set in cases where content of a route link can be confusing
+        /// when using assistive technologies such as screen reader.
+        /// 
+        /// # Example
+        /// 
+        /// The `leptos_forge` has a button primitive. Assistive technology would
+        /// read "button" as it reads the through menu. This can be confusing for
+        /// person using screen reader, since it's harder to understand the context
+        /// of the link in the menu just from it's title
+        aria_label: Option<&'static str>,
         /// component to render when the route is matched
-        component: fn(Store<Data>,) -> AnyView,
+        component: fn(Store<Data>, Store<LeptosForgeConfiguration>,) -> AnyView,
         /// optional children for nested routes
         subroutes: Vec<RouteDef<Data>>,
         /// Returns the view embedded in the section
@@ -365,6 +377,21 @@ pub enum RouteDef<Data> {
     },
 }
 
+impl<Data> RouteDef<Data> {
+    /// Set the `aria_label` for the route
+    pub fn with_aria_label(mut self, aria_label: &'static str) -> Self {
+        match self {
+            RouteDef::Header{..} => {
+                self
+            }
+            RouteDef::Route { aria_label: ref mut field, .. } => {
+                *field = Some(aria_label);
+                self
+            }
+        }
+    }
+}
+
 impl<Data> Clone for RouteDef<Data> {
     fn clone(&self) -> Self {
         match self {
@@ -378,13 +405,16 @@ impl<Data> Clone for RouteDef<Data> {
             Self::Route{ 
                 path, 
                 label, 
+                aria_label,
                 component, 
                 subroutes, 
-                embedded, private 
+                embedded, 
+                private 
             } => {
                 Self::Route{ 
                     path, 
                     label, 
+                    aria_label: *aria_label,
                     component: *component, 
                     subroutes: subroutes.clone(), 
                     embedded: *embedded, 
@@ -439,7 +469,7 @@ impl<Data: 'static> RouteDef<Data> {
     }
 
     /// Converts the route to list of routes that can be used in `leptos_router`
-    pub fn as_routes(&self, prefix: PathSpec, data: Store<Data>) -> Vec<AnyNestedRoute> {
+    pub fn as_routes(&self, prefix: PathSpec, data: Store<Data>, configuration: Store<LeptosForgeConfiguration>, ) -> Vec<AnyNestedRoute> {
         use RouteDef::*;
         match self {
             Route {
@@ -451,7 +481,7 @@ impl<Data: 'static> RouteDef<Data> {
                 let c = *component;
                 let mut routes: Vec<AnyNestedRoute> = vec![
                     my_path.as_route(
-                        move || c(data)
+                        move || c(data, configuration)
                     )
                 ];
 
@@ -464,7 +494,7 @@ impl<Data: 'static> RouteDef<Data> {
                                 _ => true, // I seriously don't understand what is should mean, but hey
                             }
                         })
-                        .flat_map(|r| r.as_routes(my_path, data)),
+                        .flat_map(|r| r.as_routes(my_path, data, configuration)),
                 );
 
                 routes
@@ -482,7 +512,7 @@ impl<Data: 'static> RouteDef<Data> {
                                 _ => true, // I seriously don't understand what is should mean, but hey
                             }
                         })
-                        .flat_map(|r| r.as_routes(my_path, data)),
+                        .flat_map(|r| r.as_routes(my_path, data, configuration)),
                 );
 
                 routes
@@ -500,11 +530,13 @@ impl<Data: 'static> RouteDef<Data> {
         use RouteDef::*;
         match self {
             Route {
-                label, subroutes, ..
+                label, 
+                aria_label,
+                subroutes, ..
             } => {
                 let my_path: PathSpec = self.extend(prefix);
 
-                let mut views = vec![my_path.as_navigation_view(label, location, menu_state)];
+                let mut views = vec![my_path.as_navigation_view(label, *aria_label, location, menu_state)];
 
                 views.extend(
                     subroutes
@@ -560,7 +592,8 @@ impl<Data: 'static> RouteDef<Data> {
         RouteDef::Route {
             path,
             label,
-            component: |data| view! { <Story<S> data /> }.into_any(),
+            aria_label: None,
+            component: |data, configuration| view! { <Story<S> data configuration /> }.into_any(),
             embedded: |data, view, controls, description| {
                 view! {
                     <EmbeddedStory<S> view  controls description data />
@@ -593,7 +626,8 @@ impl<Data: 'static> RouteDef<Data> {
         RouteDef::Route {
             path,
             label,
-            component: |data| view! { <Story<S> data /> }.into_any(),
+            aria_label: None,
+            component: |data, configuration| view! { <Story<S> data configuration /> }.into_any(),
             embedded: |data, view, controls, description| {
                 view! {
                     <EmbeddedStory<S> view  controls description data />
@@ -628,7 +662,8 @@ impl<Data: 'static> RouteDef<Data> {
         RouteDef::Route {
             path,
             label,
-            component: |data| view! { <section::Section<S> data /> }.into_any(),
+            aria_label: None,
+            component: |data, _| view! { <section::Section<S> data/> }.into_any(),
             embedded: |_, _, _, _| {
                 view! { <Markdown src="> Embedding sections is not allowed"  /> }.into_any()
             },

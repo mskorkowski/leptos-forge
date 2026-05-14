@@ -19,6 +19,7 @@
 mod state;
 mod stories;
 
+use forge::LeptosForgeConfiguration;
 use forge::RouteDef;
 use leptos::prelude::*;
 
@@ -79,9 +80,15 @@ pub fn main() {
         ),
     ];
 
+    let mut configuration: LeptosForgeConfiguration = LeptosForgeConfiguration::default();
+    let logo: &mut forge::LogoConfiguration = &mut configuration.visuals.logo;
+    logo.path = Some("/resources/leptos_forge/logo/logo.svg".to_string());
+    logo.alt = Some("Leptos_forge logo".to_string());
+
+
     mount_to_body(move || {
         view! {
-            <App routes logo="/resources/leptos_forge/logo/logo.svg" />
+            <App routes configuration />
         }
     });
 }

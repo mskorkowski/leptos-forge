@@ -41,6 +41,7 @@ impl SelectionController {
                         key: *first.key(),
                         index: 0,
                         node_ref: first.node_ref.clone(),
+                        id: first.id.clone()
                     };
                     Some(selection)
                 }
@@ -55,6 +56,7 @@ impl SelectionController {
                         key: *next.key(),
                         index: old_selection.index + 1,
                         node_ref: next.node_ref.clone(),
+                        id: next.id.clone()
                     };
                     self.mark_unselected(&old_selection.node_ref);
                     Some(selection)
@@ -95,6 +97,7 @@ impl SelectionController {
                         key: *first.key(),
                         index: 0,
                         node_ref: first.node_ref.clone(),
+                        id: first.id.clone()
                     };
                     Some(selection)
                 }
@@ -109,6 +112,7 @@ impl SelectionController {
                         key: *next.key(),
                         index: old_selection.index - 1,
                         node_ref: next.node_ref.clone(),
+                        id: next.id.clone()
                     };
                     self.mark_unselected(&old_selection.node_ref);
                     Some(selection)

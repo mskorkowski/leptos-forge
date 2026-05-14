@@ -16,6 +16,7 @@ use super::control_pane::ControlPane;
 use super::description::Description;
 use super::tab_panel::TabName;
 use crate::IntoStory;
+use crate::LeptosForgeConfiguration;
 use crate::Story;
 use crate::views::canvas::EmbeddedCanvas;
 use crate::views::control_pane::EmbeddedControlPane;
@@ -31,6 +32,8 @@ pub fn Story<S: 'static + IntoStory + Default + Copy + ThreadSafe>(
     _story: PhantomData<S>,
     /// Store with data
     data: Store<<S::Story as Story>::Data>,
+    /// LeptosForge configuration
+    configuration: Store<LeptosForgeConfiguration>,
 ) -> impl IntoView {
     let story = S::default().into_story();
     let canvas = NodeRef::new();
@@ -39,7 +42,7 @@ pub fn Story<S: 'static + IntoStory + Default + Copy + ThreadSafe>(
         Box::new(DescriptionTab {
             text: story.description(),
         }),
-        Box::new(TestsTabs { story, canvas }),
+        Box::new(TestsTabs { story, canvas, configuration }),
     ];
 
     let selector = URwSignal::new(SidePanelTabs::Description);
@@ -122,6 +125,8 @@ struct TestsTabs<StoryImpl: Story> {
     story: StoryImpl,
     /// Canvas upon which story is rendered
     canvas: NodeRef<Div>,
+    /// Configuration of the LeptosForge
+    configuration: Store<LeptosForgeConfiguration>,
 }
 
 impl<StoryImpl> Tab<SidePanelTabs> for TestsTabs<StoryImpl>
@@ -136,12 +141,13 @@ where
         let plays = self.story.plays();
         let canvas = self.canvas;
         let story = self.story;
+        let configuration = self.configuration;
 
         if !plays.is_empty() {
             let tests = plays
                 .iter()
                 .enumerate()
-                .map(|(idx, _play)| TestView::new(story, idx, canvas))
+                .map(|(idx, _play)| TestView::new(story, idx, canvas, configuration))
                 .collect::<Vec<_>>();
 
             let views = tests
