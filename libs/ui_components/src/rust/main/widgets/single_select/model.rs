@@ -9,7 +9,6 @@ use reactive_stores::PatchField;
 use reactive_stores::Store;
 use reactive_stores::StorePath;
 use utils_leptos::stores::stored_ref::StoredRef;
-use uuid::Uuid;
 
 use crate::model::Key;
 use crate::model::Keyed;

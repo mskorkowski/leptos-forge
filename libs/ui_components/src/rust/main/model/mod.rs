@@ -3,7 +3,6 @@
 use std::fmt::Debug;
 use std::fmt::Display;
 
-use reactive_stores::Patch;
 use reactive_stores::PatchField;
 use reactive_stores::Store;
 use uuid::Uuid;
