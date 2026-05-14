@@ -17,7 +17,7 @@ pub fn Logo(
 ) -> impl IntoView {
     view! {
       <div>
-        <img src=src alt=alt />
+        <img src=src class="object-cover" alt=alt />
       </div>
     }
 }
