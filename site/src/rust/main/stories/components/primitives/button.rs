@@ -94,8 +94,8 @@ impl Story for BasicButtonStory {
 
         view! {
             <Button
-                id="button_id"
-                class="bg-forgegray-100 border-forgegray-400 h-12 inline-block px-4 hover:bg-forgegray-200 active:bg-forgegray-300"
+                id="primitive_button_id"
+                class={"bg-forgegray-100 border-forgegray-400 h-12 inline-block px-4 hover:bg-forgegray-200 active:bg-forgegray-300"}
                 click={self.click}
             >
                {text}

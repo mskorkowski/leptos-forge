@@ -102,7 +102,8 @@ pub fn SingleSelect<
     #[prop(into)]
     value: URwSignal<Option<Value>>,
     /// possible values for the select
-    items: Vec<Value>,
+    #[prop(into)]
+    items: Signal<Vec<Value>>,
     /// Initial state of the selection menu
     #[prop(default=DropdownState::Closed)]
     initial_state: DropdownState,
@@ -116,8 +117,8 @@ where
 
     let store: Store<SingleSelectModel<Value>> = Store::new(SingleSelectModel{
         selection: None,
-        count: items.len(),
-        items: items.into_iter().enumerate().map(|(idx, item)| SingleSelectItem{
+        count: items.get_untracked().len(),
+        items: items.get_untracked().into_iter().enumerate().map(|(idx, item)| SingleSelectItem{
             value: item,
             node_ref: StoredRef::Empty,
             id: format!("{id}-item-{idx}"),

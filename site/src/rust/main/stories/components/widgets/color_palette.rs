@@ -8,14 +8,14 @@ use forge::Story;
 use leptos::prelude::*;
 use reactive_stores::Store;
 use ui_components::primitives::switch::Switch;
-use ui_components::widgets::color_pallete::ColorCode;
-use ui_components::widgets::color_pallete::ColorPallete;
-use ui_components::widgets::color_pallete::Grid;
+use ui_components::widgets::color_palette::ColorCode;
+use ui_components::widgets::color_palette::ColorPalette;
+use ui_components::widgets::color_palette::Grid;
 use utils_leptos::signal::URwSignal;
 
 use crate::State;
 
-/// Description of the collor pallete widget
+/// Description of the color palette widget
 const COLOR_PALETTE_DESC: &str = r############"
 # Color palette
  
@@ -44,12 +44,12 @@ impl Section for ColorPaletteSection {
     }
 }
 
-/// Color pallete grid example
+/// Color palette grid example
 const COLOR_PALETTE_GRID_DESC: &str = r############"
 # Color palette
 # Grid
 
-This example shows the grid version of the color pallete. It's useful when color
+This example shows the grid version of the color palette. It's useful when color
 palette in two dimensions because the range is more complex.
 
 > **Marek**: is using them in case of metallic colors in the UI
@@ -83,7 +83,7 @@ impl Story for ColorPaletteGridStory {
         ]);
 
         view!{
-            <ColorPallete colors=grid show_color_name={self.show_names}/>
+            <ColorPalette colors=grid show_color_name={self.show_names}/>
         }
     }
 

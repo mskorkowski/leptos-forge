@@ -47,7 +47,7 @@ impl Story for BasicLogoStory {
 
         view! {
             <div class="relative">
-                <Logo src=file alt=label />
+                <Logo id="leptos-forge-logo-story-logo" src=file alt=label />
             </div>
         }
     }

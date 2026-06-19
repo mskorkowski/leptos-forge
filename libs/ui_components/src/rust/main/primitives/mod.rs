@@ -1,6 +1,7 @@
 //! Primitives for components
 
 pub mod button;
+pub mod footer;
 pub mod input;
 pub mod label;
 pub mod markdown;

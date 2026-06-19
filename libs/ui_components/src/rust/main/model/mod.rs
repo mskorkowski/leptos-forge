@@ -55,13 +55,18 @@ impl Password {
 }
 
 /// Key for collections of values
-#[derive(Debug, Clone, Copy, Store, PartialEq, Eq, Hash)]
+#[derive(Debug, Clone, Copy, Store, PartialEq, Eq, Hash, PartialOrd, Ord)]
 pub struct Key(Uuid);
 
 impl Key {
     /// Generates random key
     pub fn random() -> Self {
         Key(Uuid::new_v4())
+    }
+
+    /// Creates a key uuid from value
+    pub const fn new(uuid: Uuid) -> Self{
+        Key(uuid)
     }
 }
 

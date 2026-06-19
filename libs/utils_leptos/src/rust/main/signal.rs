@@ -30,6 +30,7 @@ use leptos::tachys::view::add_attr::AddAnyAttr;
 
 use leptos::server_fn::serde::Serialize;
 use leptos::server_fn::serde::Serializer;
+use reactive_stores::Field;
 use reactive_stores::StoreField;
 use reactive_stores::Subfield;
 
@@ -42,7 +43,6 @@ use reactive_graph::traits::Get;
 use reactive_graph::traits::ReadUntracked;
 use reactive_graph::traits::Set;
 use reactive_graph::traits::Update;
-use reactive_graph::traits::With;
 use reactive_graph::wrappers::read::Signal;
 use reactive_graph::wrappers::read::SignalReadGuard;
 use reactive_graph::wrappers::write::SignalSetter;
@@ -119,7 +119,7 @@ where
         A: ThreadSafe,
     {
         let read: Signal<T> = self.read_signal;
-        let new_read: Signal<A> = Signal::derive(move || read.with(|t| towards(t)));
+        let new_read: Signal<A> = Signal::derive(move || towards(&read.get()));
 
         let write: SignalSetter<T> = self.write_signal;
         let new_write = SignalSetter::map(move |a: A| {
@@ -454,6 +454,27 @@ where
             defined_at: Location::caller(),
             read_signal: r,
             write_signal: w,
+        }
+    }
+}
+
+impl<T> From<Field<T>> for URwSignal<T> 
+where
+    T: ThreadSafe + Clone,
+{
+    #[track_caller]
+    fn from(value: Field<T>) -> Self {
+        let r: Signal<T> = Signal::derive(move || { value.get() });
+        let w: SignalSetter<T> = SignalSetter::map(move |t: T| {
+            value.update(|v| {
+                *v = t
+            });
+        });
+
+        URwSignal{ 
+            defined_at: Location::caller(), 
+            read_signal: r, 
+            write_signal: w
         }
     }
 }

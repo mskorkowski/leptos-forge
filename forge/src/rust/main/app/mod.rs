@@ -32,14 +32,13 @@ pub fn App<Data>(
     /// configuration of the leptos_forge application
     configuration: LeptosForgeConfiguration,
     /// Initial state of the application store
-    #[prop(default=Data::default(),optional)]
-    initial_state: Data,
+    #[prop(default=Store::new(Data::default()),optional)]
+    store: Store<Data>,
 ) -> impl IntoView 
 where 
     Data: PatchField + Debug + Default + ThreadSafe
 {
     let configuration = Store::new(configuration);
-    let store = Store::new(initial_state);
 
     let menu_defs = {
         let routes = routes.clone();
@@ -77,7 +76,7 @@ where
                     { move || {
                         let logo_config = configuration.visuals().logo();
                         if let Some(logo) = &logo_config.path().get() {
-                            view!{ <Logo src={logo.to_string()} alt={logo_config.alt().get().unwrap_or_else(|| "Logo".to_string())} /> }.into_any()
+                            view!{ <Logo id="leptos-forge-logo" src={logo.to_string()} alt={logo_config.alt().get().unwrap_or_else(|| "Logo".to_string())} /> }.into_any()
                         }
                         else {
                             ().into_any()

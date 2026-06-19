@@ -3,10 +3,11 @@
 use leptos::ev::MouseEvent;
 use leptos::ev::PointerEvent;
 use leptos::prelude::*;
+use utils::prelude::ThreadSafe;
 
 /// Possible button click events
 #[non_exhaustive]
-#[derive(Default, Clone, Copy, Debug)]
+#[derive(Default, Clone, Copy, Debug, PartialEq, Eq)]
 pub enum ButtonClick {
     /// This state can be set to denote that the button is released and no action
     /// should be taken.
@@ -58,7 +59,10 @@ pub enum ButtonClick {
 /// >
 ///
 #[component]
-pub fn Button<S1: ToString, S2: ToString>(
+pub fn Button<
+    S1: ToString, 
+    S2: ToString + ThreadSafe
+>(
     /// Id of the component
     id: S1,
     /// Css classes for the component
