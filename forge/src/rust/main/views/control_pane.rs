@@ -20,7 +20,7 @@ where
 
     view! {
         <div class="leptos-forge-control-pane-box basis-full scrollbox print:hidden">
-            <div class="leptos-forge-control-pane p-4 scrollable">
+            <div class="leptos-forge-control-pane p-4 scrollable isolate">
                 { view }
             </div>
         </div>
