@@ -1,6 +1,7 @@
 //! Primitives containing a input field primitives
 pub mod button;
 
+
 use leptos::attr::Attribute;
 use leptos::ev::Event;
 use leptos::ev::Targeted;
@@ -10,7 +11,9 @@ use leptos::prelude::*;
 use leptos::web_sys::Blob;
 use leptos::web_sys::File;
 use leptos::web_sys::HtmlInputElement;
+use leptos::web_sys::HtmlElement;
 use leptos::web_sys::Url;
+use leptos::wasm_bindgen::JsCast;
 
 use leptos_node_ref::AnyNodeRef;
 
@@ -18,6 +21,7 @@ use utils_leptos::css::use_swap_class;
 use utils_leptos::signal::URwSignal;
 
 use crate::model::Password;
+use crate::model::Focus;
 use button::ClearInputButton;
 use button::PasswordButtonStates;
 
@@ -26,7 +30,7 @@ use button::PasswordButtonStates;
 /// # Also used by
 /// 
 /// This css classes are also used by the `SingleSelect`, unfortunately it was impossible to reuse this classes 
-pub const INPUT_CSS_CLASSES: &str = "leptos-forge-input block w-full forge-text-standard py-1 px-2 peer border-2 border-solid border-forgeblue-800 rounded-sm focus:border-2 focus:border-forgeblue-500 focus:outline-none";
+pub const INPUT_CSS_CLASSES: &str = "leptos-forge-input flex items-center w-full forge-text-standard py-1 px-2 peer border-2 border-solid border-forgeblue-300 rounded-sm focus:border-forgeblue-500 focus:outline-none";
 
 /// Spread component which applies the class attribute to the element with classes specific for the input field element
 pub fn input_class() -> impl Attribute {
@@ -38,7 +42,7 @@ pub fn input_class() -> impl Attribute {
 /// Spread component which applies the class attribute to the element with classes specific for the textarea element
 pub fn textarea_class() -> impl Attribute {
     view! {
-        <{..} class="leptos-forge-textarea block peer py-1 px-2.5 w-full h-full min-h-80 forge-text-standard text-forgegray-900 bg-forgegray-50 rounded-sm border border-forgegray-300 focus:ring-forgeblue-500 focus:border-forgeblue-500" />
+        <{..} class="leptos-forge-textarea block peer py-1 px-2.5 w-full h-full min-h-80 forge-text-standard text-forgegray-900 bg-forgegray-50 rounded-sm border border-2 border-forgeblue-300 focus:ring-forgeblue-500 focus:border-forgeblue-500 outline-none" />
     }
 }
 
@@ -53,10 +57,27 @@ pub fn TextInput<IdValue>(
     /// node reference to the input element
     #[prop(into, default=AnyNodeRef::new())]
     node_ref: AnyNodeRef,
+    /// signals related to focus
+    #[prop(into)]
+    focus: URwSignal<Focus>,
 ) -> impl IntoView
 where
     IdValue: ToString,
 {
+
+    Effect::new(move || {
+        let node = node_ref.get();
+        match (node, focus.get())  {
+            (Some(e), Focus::Grab) => {
+                let _ = e.unchecked_into::<HtmlElement>().focus();
+            }
+            (Some(e), Focus::Blur) => {
+                let _ = e.unchecked_into::<HtmlElement>().blur();
+            }
+            _ => {}
+        }
+    });
+
     let id = id.to_string();
     view! {
         <input
@@ -66,6 +87,8 @@ where
             {..input_class()}
             id=id
             on:input:target=move |ev|{ text.set(ev.target().value()); }
+            on:focus=move |_fe| { focus.set(Focus::In); }
+            on:blur=move |_be| { focus.set(Focus::Out); }
             prop:value=text
             draggable=false
         />
@@ -143,7 +166,7 @@ where
 
         use_swap_class(
             file_name_input,
-            "border-forgeblue-800",
+            "border-forgeblue-300",
             "border-forgeblue-500",
         );
     };
@@ -162,7 +185,7 @@ where
         use_swap_class(
             file_name_input,
             "border-forgeblue-500",
-            "border-forgeblue-800",
+            "border-forgeblue-300",
         );
     };
 
@@ -170,7 +193,7 @@ where
         use_swap_class(
             file_name_input,
             "border-forgeblue-500",
-            "border-forgeblue-800",
+            "border-forgeblue-300",
         );
     };
 
@@ -213,7 +236,7 @@ where
         </label>
         <input
             type="text"
-            class="leptos-forge-input block w-full forge-text-standard py-1 px-2 rounded-sm peer absolute -z-10 top-8 forge-text-standard pl-2.5 border-2 border-solid border-forgeblue-800 outline-none"
+            class="leptos-forge-input block w-full forge-text-standard py-1 px-2 rounded-sm peer absolute -z-10 top-8 forge-text-standard pl-2.5 border-2 border-solid border-forgeblue-300 outline-none"
             placeholder=" "
             node_ref=file_name_input
             id=id on:input:target=move |ev| text.set(ev.target().value())

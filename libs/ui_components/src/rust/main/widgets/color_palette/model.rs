@@ -8,11 +8,11 @@ pub enum ColorCode {
     /// For example tailwind class `"bg-blue-800"`
     CssClass{
         /// Class name
-        cls: String,
+        cls: &'static str,
         /// Color name
-        name: String,
+        name: &'static str,
         /// variable
-        variable: String,
+        variable: &'static str,
     },
     /// Color to be passed into `background-color:` css property
     Color(String),
@@ -25,27 +25,32 @@ pub enum ColorCode {
 
 impl ColorCode{
     /// Create a css color code
-    pub fn css<S1, S2, S3>(cls: S1, name: S2, variable: S3) -> Self 
-    where
-        S1: ToString,
-        S2: ToString,
-        S3: ToString,
-    {
+    pub const fn css (
+        cls: &'static str, 
+        name: &'static str, 
+        variable: &'static str
+    ) -> Self {
+        // ColorCode::CssClass{ 
+        //     cls: cls.to_string(), 
+        //     name: name.to_string(),
+        //     variable: variable.to_string(),
+        // }
         ColorCode::CssClass{ 
-            cls: cls.to_string(), 
-            name: name.to_string(),
-            variable: variable.to_string(),
+            cls, 
+            name,
+            variable,
         }
     }
 
     /// Get the class name
     /// 
     /// If it's not a css class name it returns an empty string
-    pub fn class_name_or_empty(&self) -> &str {
+    pub fn background_class_name_or_empty(&self) -> &str {
         use ColorCode::*;
 
         match self {
-            CssClass { cls, .. } => cls.as_str(),
+            CssClass { cls, .. } => //cls.as_str(),
+                cls, 
             _ => ""
 
         }
@@ -58,7 +63,8 @@ impl ColorCode{
         use ColorCode::*;
 
         match self {
-            CssClass { variable, .. } => variable.as_str(),
+            CssClass { variable, .. } => //variable.as_str(),
+                                                        variable,
             _ => ""
         }
     }

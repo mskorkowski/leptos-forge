@@ -3,8 +3,10 @@
 
 use leptos::prelude::*;
 use reactive_stores::Store;
+use ui_components::model::ButtonClick;
+use ui_components::model::ButtonColorSchema;
+use ui_components::model::Kind;
 use ui_components::primitives::button::Button;
-use ui_components::primitives::button::ButtonClick;
 use ui_components::widgets::field::ReadonlyField;
 use ui_components::widgets::field::TextField;
 use utils_leptos::signal::URwSignal;
@@ -92,10 +94,20 @@ impl Story for BasicButtonStory {
     fn view(&self, _: Store<State>) -> impl IntoView {
         let text: URwSignal<String> = self.text;
 
+        let schema: ButtonColorSchema = ButtonColorSchema{
+            inner: "",
+            outer: "",
+            border: "border-solid border-gray-200",
+            color: "gray-50",
+            background: "bg-gray-800"
+        };
+         
+        let style = Kind::Primary.color(schema);
+
         view! {
             <Button
                 id="primitive_button_id"
-                class={"bg-forgegray-100 border-forgegray-400 h-12 inline-block px-4 hover:bg-forgegray-200 active:bg-forgegray-300"}
+                style=style
                 click={self.click}
             >
                {text}

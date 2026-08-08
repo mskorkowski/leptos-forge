@@ -1,30 +1,13 @@
-//! Button primitive
+//! The most basic clickable button primitive
 
 use leptos::ev::MouseEvent;
 use leptos::ev::PointerEvent;
 use leptos::prelude::*;
 use utils::prelude::ThreadSafe;
 
-/// Possible button click events
-#[non_exhaustive]
-#[derive(Default, Clone, Copy, Debug, PartialEq, Eq)]
-pub enum ButtonClick {
-    /// This state can be set to denote that the button is released and no action
-    /// should be taken.
-    ///
-    /// It is useful as the initial stream state.
-    #[default]
-    Released,
-    /// Single click with left mouse button or
-    /// keyboard based trigger with <kbd>space</kbd> or <kbd>enter</kbd> key
-    LeftClick,
-    /// Single click with right mouse button or
-    /// <kbd>alt</kbd> with <kbd>space</kbd> or <kbd>enter</kbd> key
-    RightClick,
-    /// Single click with middle mouse button or
-    /// <kbd>alt</kbd> + <kbd>shift</kbd> with <kbd>space</kbd> or <kbd>enter</kbd> key
-    MiddleClick,
-}
+use crate::model::ButtonClick;
+use crate::model::ButtonGroup;
+use crate::model::Style;
 
 /// Button primitive
 ///
@@ -59,20 +42,21 @@ pub enum ButtonClick {
 /// >
 ///
 #[component]
-pub fn Button<
-    S1: ToString, 
-    S2: ToString + ThreadSafe
->(
+pub fn Button<S1: ToString>(
     /// Id of the component
     id: S1,
-    /// Css classes for the component
-    class: S2,
     /// Signal triggered when the button is clicked
     #[prop(into)]
     click: SignalSetter<ButtonClick>,
     /// Content of the button element
     #[prop(optional, default=Box::new(|| view!{"Press me!"}.into_any()))]
     children: Children,
+    /// Button group
+    #[prop(into, default=None)]
+    group: Option<ButtonGroup>,
+    /// Style of the button
+    #[prop(into, name = "style")]
+    Style { kind, schema, size }: Style,
 ) -> impl IntoView {
     let on_pointerdown = move |event: PointerEvent| {
         let alt = event.alt_key();
@@ -101,14 +85,56 @@ pub fn Button<
         event.prevent_default();
     };
 
-    view! {
-        <button
-            class={class.to_string()}
-            id={id.to_string()}
-            on:pointerdown=on_pointerdown
-            on:contextmenu=on_contextmenu
-        >
-            {children()}
-        </button>
+    let class = kind.into_button_class(&schema, &size);
+
+    match group {
+        None => view! {
+            <button
+                class={class.to_string()}
+                id={id.to_string()}
+                on:pointerdown=on_pointerdown
+                on:contextmenu=on_contextmenu
+                role="button"
+            >
+                {children()}
+            </button>
+        }
+        .into_any(),
+        Some(ButtonGroup::MultiSelect) => view! {
+            <label
+                class={class.to_string()}
+                for={id.to_string()}
+                on:pointerdown=on_pointerdown
+                on:contextmenu=on_contextmenu
+                role="button"
+            >
+                <input
+                    type="checkbox"
+                    class="peer hidden"
+                    id={id.to_string()}
+                />
+                {children()}
+            </label>
+        }
+        .into_any(),
+        Some(ButtonGroup::SingleSelect(name)) => {
+            view! {
+                //<div
+                //    class="block"
+                //>
+                <label
+                    class={class.to_string()}
+                    for={id.to_string()}
+                    on:pointerdown=on_pointerdown
+                    on:contextmenu=on_contextmenu
+                    role="button"
+                >
+                    <input type="radio" class="peer hidden" id={id.to_string()} name=name />
+                    {children()}
+                </label>
+                // </div>
+            }
+            .into_any()
+        }
     }
 }

@@ -81,9 +81,9 @@ impl Story for MyStory {
                 next(
                     "Check if text was updated",
                     |canvas, _story| {
-                        let Ok(div) = get_by_test_id(canvas, "my-story-text", MatcherOptions::default()) {
+                        let Ok(div) = get_by_test_id(canvas, "my-story-text", MatcherOptions::default()) else {
                             return Err("Div with message was not found on canvas?");
-                        }
+                        };
 
                         let message = div.inner_text();
                         if message.is_empty() {
@@ -97,6 +97,7 @@ impl Story for MyStory {
                         OK(())
                     }
                 )
+                .into()
         }]
     }
 }

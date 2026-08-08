@@ -70,7 +70,7 @@ fn Color(
                     <Show
                         when={move || show_color_name.get()}
                     >
-                        <ColorName name={name.clone()} />
+                        <ColorName name={name} />
                         <span></span>
                     </Show>
                     <span inner_html=||{"&nbsp;"} />
@@ -101,13 +101,24 @@ fn Color(
 
 /// Color name
 #[component]
-fn ColorName(
+fn ColorName<S1: ToString>(
     /// name of the color
-    name: String,
+    name: S1,
 ) -> impl IntoView {
+    let css = 
+        "leptos-forge-colorpalette-color-name \
+         text-center \
+         text-black \
+         forge-text-big \
+         font-bold \
+         align-top \
+         bg-white/50 \
+         backdrop-blur-sm \
+         forge-text-outline-forgegray-50/40
+         forge-text-outline-[1px]";
     view!{
-        <div class="leptos-forge-colorpalette-color-name text-center text-white forge-text-outline-forgegray-950 forge-text-outline-[0.06em] text-2xl font-bold align-top">
-            { name }
+        <div class=css>
+            { name.to_string() }
         </div>
     }
 }

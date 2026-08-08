@@ -28,7 +28,6 @@ impl KeyboardController {
     where
         Value: SingleSelectValue
     {
-        console_log("ArrowDown selected");
         FloatingController.show(model, false);
         SelectionController.select_next(model);
     }
@@ -50,7 +49,6 @@ impl KeyboardController {
     where
         Value: SingleSelectValue
     {
-        console_log("ArrowDown selected");
         FloatingController.show(model, false);
         SelectionController.select_prev(model);
     }
@@ -62,7 +60,6 @@ impl KeyboardController {
     where
         Value: SingleSelectValue
     {
-        console_log("Enter selected");
         SelectionController.select(model, value);
         FloatingController.hide(model);
     }

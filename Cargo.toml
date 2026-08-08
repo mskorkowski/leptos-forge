@@ -7,7 +7,7 @@ members = [
 ]
 
 [workspace.package]
-version = "0.7.0"
+version = "0.8.0"
 edition = "2024"
 rust-version = "1.88"
 license = "MIT"
@@ -17,11 +17,11 @@ homepage = "https://mskorkowski.github.io/"
 [workspace.dependencies]
 # Internal dependencies
 
-forge =         { version = "0.7.0", path = "forge", package = "leptos_forge" }
-utils =         { version = "0.7.0", path = "libs/utils",  package = "leptos_forge_utils" }
-utils_leptos =  { version = "0.7.0", path = "libs/utils_leptos", package = "leptos_forge_utils_leptos" }
-ui_components = { version = "0.7.0", path = "libs/ui_components", package = "leptos_forge_ui_components" }
-build_script =  { version = "0.7.0", path = "libs/build_script", package = "leptos_forge_build_script" }
+forge =         { version = "0.8.0", path = "forge", package = "leptos_forge" }
+utils =         { version = "0.8.0", path = "libs/utils",  package = "leptos_forge_utils" }
+utils_leptos =  { version = "0.8.0", path = "libs/utils_leptos", package = "leptos_forge_utils_leptos" }
+ui_components = { version = "0.8.0", path = "libs/ui_components", package = "leptos_forge_ui_components" }
+build_script =  { version = "0.8.0", path = "libs/build_script", package = "leptos_forge_build_script" }
 
 # External dependencies
 console_error_panic_hook = "0.1.7"
@@ -47,7 +47,7 @@ serde = "1"
 serde_json = "1"
 soft-canonicalize = "0.5.4"
 uuid = { version = "1.11.1", features = ["serde", "v4", "fast-rng"] }
-web-sys = { version = "0.3.69" }
+web-sys = { version = "0.3.69", features = ["ScrollIntoViewOptions", "ScrollLogicalPosition", "ScrollIntoViewContainer"]}
 
 # Build dependencies
 cargo_metadata="0.23.0"

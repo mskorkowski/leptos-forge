@@ -7,6 +7,7 @@ use leptos::web_sys::HtmlElement;
 use reactive_stores::Store;
 use testing_library_dom::MatcherOptions;
 use testing_library_dom::get_by_test_id;
+use ui_components::model::Focus;
 use ui_components::primitives::input::TextInput;
 use ui_components::primitives::label::InlineFieldLabel;
 use ui_components::primitives::label::TextFieldLabel;
@@ -86,11 +87,12 @@ impl Story for BasicLabelStory {
     fn view(&self, _: Store<Self::Data>) -> impl IntoView {
         let label: Signal<String> = self.label.into();
         let text: URwSignal<String> = self.text;
+        let focus: URwSignal<Focus> = URwSignal::new(Focus::Out);
 
         view! {
             <div class="relative pt-8">
-                <TextInput id=INPUT_ID text=text />
-                <TextFieldLabel for_id=INPUT_ID text=label data_testid="label" />
+                <TextInput id=INPUT_ID text=text focus />
+                <TextFieldLabel for_id=INPUT_ID text=label data_testid="label"/>
             </div>
         }
     }
@@ -300,12 +302,16 @@ impl Story for InlineLabelStory {
     fn view(&self, _: Store<Self::Data>) -> impl IntoView {
         let label: Signal<String> = self.label.into();
         let text = "sample text".to_string();
+        // we need `text_field_focus` coz the TextInput doesn't hold us by the hand and requires all params
+        // by design
+        let text_field_focus: URwSignal<Focus> = URwSignal::new(Focus::Out);
+
         view! {
             <div class="relative">
                 <InlineFieldLabel for_id=INLINE_INPUT_ID_1 text=label/> <input type="text" class="forge-text-standard border-1 border-solid border-gray-800 ml-1" id=INLINE_INPUT_ID_1 /><br/>
                 <InlineFieldLabel for_id=INLINE_INPUT_ID_2 text=label/> <input type="checkbox" class="forge-text-standard border-1 border-solid border-gray-800 ml-1" id=INLINE_INPUT_ID_2 /><br/>
                 <InlineFieldLabel for_id=INLINE_INPUT_ID_3 text=label/> <input type="radio" class="forge-text-standard border-1 border-solid border-gray-800 ml-1" id=INLINE_INPUT_ID_2 />
-                <InlineFieldLabel for_id=INLINE_INPUT_ID_4 text=label/> <TextInput id=INLINE_INPUT_ID_4 text />
+                <InlineFieldLabel for_id=INLINE_INPUT_ID_4 text=label/> <TextInput id=INLINE_INPUT_ID_4 text focus=text_field_focus />
             </div>
         }
     }

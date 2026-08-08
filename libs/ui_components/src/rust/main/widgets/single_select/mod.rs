@@ -10,6 +10,7 @@ use leptos::ev::FocusEvent;
 use leptos::ev::KeyboardEvent;
 use leptos::ev::MouseEvent;
 use leptos::ev::PointerEvent;
+use leptos::leptos_dom::logging::console_error;
 use leptos::tachys::renderer::dom::Element;
 use leptos::web_sys::HtmlInputElement;
 use leptos::leptos_dom::logging::console_log;
@@ -138,6 +139,8 @@ where
         UseFloatingOptions::default(),
     );
 
+
+
     // let selection: URwSignal<Arc<Option<EventTarget>>> = URwSignal::new(Arc::new(None));
 
     // let dropdown_state = store.dropdown();
@@ -147,16 +150,20 @@ where
     });
 
     let toggle_dropdown = move |_event: MouseEvent| {
-        console_log("toggle");
         match store.dropdown().get_untracked() {
-            DropdownState::Closed => FloatingController.show(store, true),
+            DropdownState::Closed => {
+                FloatingController.show(store, true);
+            }
             DropdownState::Open | DropdownState::ClickOpen => FloatingController.hide(store),
             DropdownState::ForceOpen => {},
         }
     };
 
+    let span_toggle_dropdown = move |event: MouseEvent| {
+        toggle_dropdown(event)
+    };
+
     let focus = move |_event: FocusEvent| {
-        console_log("Focus");
         FloatingController.show(store, false);
     };
 
@@ -169,7 +176,6 @@ where
     //
     // Chromium browsers fire the `mouseup` event on the element above which the mouse is
     let mouseup = move |e: MouseEvent| {
-        console_log("mouseup - input");
         let resolved_state = store.dropdown().get();
             if let Some(target) = e.target() &&
                 let Some(document) = &(*use_document()) &&
@@ -178,28 +184,17 @@ where
                     e.client_y() as f32,
                 )
             {
-            console_log(&format!("target is {target:?}"));
             if element.class_list().contains("leptos-forge-select-dropdown-item") &&
-               let Ok(event) = CustomEvent::new("mouseup") {
-
-                console_log(&format!("element is {element:?}"));
-                match element.dispatch_event(&event) {
-                    Ok(value) => {
-                        console_log(&format!("dispatch event value is {value:?}"));
-                        return;
-                    }
-                    Err(err) => {
-                        console_log(&format!("dispatch event error is {err:?}"));
-                    }
+                let Ok(event) = CustomEvent::new("mouseup") && 
+                let Err(err) = element.dispatch_event(&event) {
+                    console_error(&format!("dispatch event error is {err:?}"));
                 }
-            }
             
 
             let target = target.value_of();
             if target.has_type::<Element>() {
                 let target = target.unchecked_into::<Element>();
                 if target == element { // we've clicked on the input element
-                    console_log("target is the same element as the one targeted");
                     match resolved_state {
                         DropdownState::Closed => {},
                         DropdownState::Open => {
@@ -212,9 +207,9 @@ where
                     }
                 }
             }
-            else {
-                console_log("target is not an element");
-            }
+            // else {
+            //     console_log("target is not an element");
+            // }
         };
     };
 
@@ -223,20 +218,15 @@ where
             v.is_some()
         },
         move |from, new| {
-            console_log("clear button pressed");
             if new {
                 let _ = from.take();
                 if let Some(input) = reference_ref.get() &&
                    input.has_type::<HtmlInputElement>() {
                  
                     let input = input.unchecked_into::<HtmlInputElement>();
-                    match input.focus() {
-                        Ok(_) => {
-                            console_log("input focused");
-                        }
-                        Err(e) => {
-                            console_log(&format!("input focus error {e:?}"));
-                        }
+
+                    if let Err(e) = input.focus() {
+                        console_error(&format!("input focus error {e:?}"));
                     }
                 }
             }
@@ -244,29 +234,19 @@ where
     );
 
     let mousemove = |event: MouseEvent| {
-        console_log("mousemove event");
         if let Some(document) = &(*use_document()) &&
             let Some(element) = document.element_from_point(
                 event.client_x() as f32,
                 event.client_y() as f32,
             ) &&
             element.class_list().contains("leptos-forge-select-dropdown-item") &&
-            let Ok(event) = CustomEvent::new("mouseover")
-        {
-            console_log(&format!("element is {element:?}"));
-            match element.dispatch_event(&event) {
-                Ok(value) => {
-                    console_log(&format!("dispatch event value is {value:?}"));
-                }
-                Err(err) => {
-                    console_log(&format!("dispatch event error is {err:?}"));
-                }
+            let Ok(event) = CustomEvent::new("mouseover") && 
+            let Err(err) = element.dispatch_event(&event) {
+                console_error(&format!("dispatch event error is {err:?}"));
             }
-        }
     };
 
     let keydown = move |event: KeyboardEvent| {
-        console_log("keydown event");
         event.stop_propagation();
         event.prevent_default();
         event.cancel_bubble();
@@ -283,12 +263,7 @@ where
             "Escape" => {
                 KeyboardController.escape(store);
             }
-            "Tab" => {
-
-            }
-            _ => {
-                console_log("Other key");
-            }
+            _ => {}
         }
     };
 
@@ -301,7 +276,7 @@ where
     };
 
     let input_css = move || {
-        "leptos-forge-input block w-full min-h-[2rem] select-none forge-text-standard py-1 px-2 peer border-2 border-solid border-forgeblue-800 rounded-sm focus:border-2 focus:border-forgeblue-500 focus:outline-none"
+        "leptos-forge-input block w-full min-h-[2rem] select-none forge-text-standard py-1 px-2 peer border-2 border-solid border-forgeblue-300 rounded-sm focus:border-2 focus:border-forgeblue-500 focus:outline-none"
     };
 
     let item_view = move || { 
@@ -343,6 +318,7 @@ where
             </div>
             <span
                 class=label_css
+                // on:mousedown=
             >
                 { label }
             </span>
@@ -358,7 +334,7 @@ where
                     style:left = move || floating_styles.get().style_left()
                     style:transform = move || floating_styles.get().style_transform()
                     style:will-change = move || floating_styles.get().style_will_change()
-                    class="leptos-forge-select-dropdown border-2 border-forgeblue-300 border-b-lg w-full p-2 shadow-lg/20 bg-forgeblue-50 z-popup"
+                    class="leptos-forge-select-dropdown border-2 border-forgeblue-300 border-b-lg w-full p-2 shadow-lg/20 bg-forgeblue-50 z-popup max-h-[300px] h-fit scrollable"
                 >
                     <ul class="leptos-forge-select-dropdown-list list-none">
                         <ForEnumerate
@@ -411,8 +387,16 @@ where
         }
     });
 
-    let css_classes = if let Some(selection) = store.selection().get_untracked() &&
-        selection.key == *item.get_untracked().key()
+    let item_key = *item.get_untracked().key();
+
+    let css_classes = if 
+        // let Some(selection) = store.selection().get_untracked() &&
+        let Some(value) = value.get_untracked() &&
+        // (
+            // selection.key == item_key ||
+             *value.key() == item_key 
+        // )
+
     {
         "leptos-forge-select-dropdown-item mt-1 w-full text-left p-2 hover:bg-forgeblue-200 active:bg-forgeblue-300 pointer-events-auto bg-forgeblue-300"
     }
@@ -422,7 +406,6 @@ where
 
     let onpointerdown = {
         move |_: PointerEvent| {
-            console_log("pointerdown");
             value.set(Some(item.value().get_untracked().clone()));
             FloatingController.hide(store);
         }
@@ -430,23 +413,29 @@ where
     let mouseup = {
         // again we must move the ownership into the Fn()
         move |_: MouseEvent| {
-            console_log("mouseup item");
             value.set(Some(item.value().get_untracked().clone()));
             store.dropdown().set(DropdownState::Closed);
         }
     };   
 
     let mouseover = move |_: MouseEvent| {
-        console_log(&format!("item mouseover {}", index.get_untracked()));
         let selection = store.selection();
         match selection.get_untracked() {
             Some(selected) => {
-                console_log("selection item mouseover");
-                if *item.value().get_untracked().key() != selected.key {
-                    console_log("selection item mouseover - item change");
+                console_log("Mouseover selected");
+                let value = value.get_untracked();
+                let item_key = *item.value().get_untracked().key();
+                if item_key != selected.key {
+                    console_log("Mouseover selected - key change");
                     SelectionController.mark_selected(&item.node_ref().get_untracked());
-                    // use_swap_class(node_ref, "bg-forgeblue-300", "bg-forgeblue-200");
-                    use_remove_class(selected.node_ref, ("bg-forgeblue-300", "bg-forgeblue-200"));
+                    if let Some(value) = value &&
+                        *value.key() == item_key
+                    {
+                        use_swap_class(node_ref, "bg-forgeblue-200", "bg-forgeblue-300");
+                    }
+                    else {
+                        use_remove_class(node_ref, ("bg-forgeblue-300", "bg-forgeblue-200"));
+                    }
                     let item = item.get();
                     selection.patch(Some(Selection{
                         key: *item.value.key(),
@@ -455,9 +444,12 @@ where
                         id: item.id.clone(),
                     }));
                 }
+                else {
+                    console_log("Mouseover selected - key unchange");
+                }
             }
             None => {
-                console_log("none item mouseover");
+                console_log("Mouseover unselected");
                 use_add_class(node_ref, "bg-forgeblue-300");
                 let item = item.get();
                 selection.patch(Some(Selection{

@@ -102,16 +102,34 @@ pub fn Switch<S: ToString>(
         }
     };
 
+    let button_class = "\
+        leptos-forge-switch \
+        inline-block \
+        w-[66px] h-[32px] \
+        border-2 \
+        border-forgeblue-300 \
+        rounded-full \
+        cursor-pointer \
+        transition-colors \
+        bg-linear-[90deg,var(--color-forgegray-200)_0%,var(--color-forgegray-200)_25%,var(--color-forgeblue-300)_75%,var(--color-forgeblue-300)_100%] to=100% \
+        bg-[length:400%_100%] \
+        forge-animate-keep-both \
+        forge-animate-300 \
+        focus:border-forgeblue-500 \
+        focus:outline-none \
+        hover:border-forgeblue-500 \
+    ";
+
     view! {
         <button id={id}
-            class="leptos-forge-switch inline-block w-[66px] h-[32px] border-2 border-forgeblue-800 rounded-full cursor-pointer transition-colors bg-linear-[90deg,var(--color-forgegray-800)_0%,var(--color-forgegray-800)_25%,var(--color-forgeblue-500)_75%,var(--color-forgeblue-500)_100%] to=100% bg-[length:400%_100%] forge-animate-keep-both forge-animate-300 focus:border-forgeblue-500 focus:outline-none"
+            class=button_class
             node_ref = ref_button
             on:click = on_click
             on:animationend = on_animationend
         >
             <div id={id_thumb}
                 inner_html=||{"&nbsp;"}
-                class="size-[28px] rounded-full bg-forgegray-100 transform transition-transform"
+                class="size-[28px] rounded-full bg-forgegray-100 transform transition-transform border-2 border-forgeblue-500 hover:border-forgeblue-500"
                 style:translate= move || {
                     if read.get() {
                         "34px 0px"

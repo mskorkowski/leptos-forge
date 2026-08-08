@@ -1,6 +1,8 @@
+@plugin "./plugins/first_in_seq.js";
+@plugin "./plugins/last_in_seq.js";
+
 @source "../../rust/main";
 
 @import "./common.css";
 @import "./typography.css";
 @import "./markdown.css";
- 

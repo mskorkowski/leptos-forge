@@ -47,7 +47,7 @@ pub fn Card<
 ) -> impl IntoView {
     let id = id.to_string();
     let content_id = format!("{id}-content");
-    let card_classes= "first:mt-0 mt-5 border-2 border-forgeblue-400 first:pt-0 p-3 bg-forgegray-50";
+    let card_classes= "first:mt-0 mt-5 border-2 border-forgeblue-300 p-3 bg-forgegray-50 rounded-md";
     let header_classes= "forge-text-big";
     match (header, footer) {
         (None, None) => {

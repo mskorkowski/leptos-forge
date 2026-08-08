@@ -15,5 +15,8 @@
 
 @utility forge-text-outline-* {
     -webkit-text-stroke-width: calc(--value([line-width]));
-    -webkit-text-stroke-color: --value(--color-*);
+    &{
+        --outline-text-opacity: calc(--modifier(integer) * 1%);
+        -webkit-text-stroke-color: color-mix(in oklab, --value(--color-*) var(--outline-text-opacity, 100%), transparent);
+    }
 }

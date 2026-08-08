@@ -4,6 +4,7 @@
 use std::fmt::Debug;
 
 use leptos::prelude::*;
+use utils_leptos::element::use_scroll_into_view;
 use super::*;
 
 use reactive_stores::Patch;
@@ -70,9 +71,6 @@ impl SelectionController {
 
         if let Some(selection) = selection {
             self.mark_selected(&selection.node_ref);
-
-            console_log(&format!("Selected element at: {}", selection.index));
-
             model.selection().patch(Some(selection))
         }
     }
@@ -161,5 +159,6 @@ impl SelectionController {
     /// Apply the style of selected element
     pub(super) fn mark_selected(&self, node_ref: &StoredRef) {
         use_swap_class(node_ref, "bg-forgeblue-300", "bg-forgeblue-200");
+        use_scroll_into_view(node_ref);
     }
 }

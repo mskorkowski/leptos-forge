@@ -2,7 +2,6 @@
 //! widget
 //! 
 
-use leptos::leptos_dom::logging::console_log;
 use reactive_stores::KeyMap;
 use reactive_stores::Patch;
 use reactive_stores::PatchField;
@@ -25,7 +24,7 @@ where
     pub(super) node_ref: StoredRef,
     /// id of the node 
     ///
-    /// This value is used mainly by the accesibility part of the implementation
+    /// This value is used mainly for the accessibility part of the implementation
     pub(super) id: String,
 }
 
@@ -71,14 +70,9 @@ impl PatchField for Selection {
             notify: &mut dyn FnMut(&StorePath),
             _keys: std::option::Option<&KeyMap>
     ) {
-        console_log("Patching selection");
         if self.key != new.key {
-            console_log("patch selection key changed");
             *self = new;
             notify(path);
-        }
-        else {
-            console_log("patch selection key unchanged")
         }
     }
 }

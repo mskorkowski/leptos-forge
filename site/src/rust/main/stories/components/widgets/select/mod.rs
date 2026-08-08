@@ -145,6 +145,20 @@ impl Item {
             },
         ]
     }
+
+    /// creates the long list of values
+    fn long_data_set() -> Vec<Self> {
+        let mut data: Vec<Item> = vec![];
+
+        for value in 1..200u32 {
+            data.push(Item{
+                value,
+                key: Key::random()
+            });
+        }
+
+        data
+    }
 }
 
 /// story describing the basic label behavior
@@ -201,6 +215,7 @@ impl Story for BasicSingleSelectStory {
     fn subroutes(&self) -> Vec<RouteDef<Self::Data>> {
         vec![
             RouteDef::story::<ForceOpenSingleSelectStory>("force_open", "Force open"),
+            RouteDef::story::<LongpopupSingleSelectStory>("long_popup", "Long dataa set")
         ]
     }
 }
@@ -259,3 +274,57 @@ impl Story for ForceOpenSingleSelectStory {
 }
 
 
+/// story describing the basic label behavior
+#[derive(Clone, Copy, Debug)]
+pub struct LongpopupSingleSelectStory {
+    /// Signal used to set the value of the label
+    label: URwSignal<String>,
+    /// Signal with currently selected value
+    value: URwSignal<Option<Item>>,
+    /// data set
+    items: URwSignal<Vec<Item>>,
+}
+
+impl Default for LongpopupSingleSelectStory {
+    fn default() -> Self {
+        let label = URwSignal::new("SingleSelect".to_string());
+        let items = Item::long_data_set();
+        let value: URwSignal<Option<Item>> = URwSignal::new(items.get(items.len() - 2).cloned());
+        let items: URwSignal<Vec<Item>> = URwSignal::new(items);
+        LongpopupSingleSelectStory{
+            label,
+            value,
+            items,
+        }
+    }
+}
+
+
+impl Story for LongpopupSingleSelectStory {
+    type Data = State;
+
+    fn view(&self, _state: Store<Self::Data>) -> impl IntoView {
+        view! {
+            <div class="relative">
+                <SingleSelect
+                    id="leptos-forge-1-select"
+                    label={self.label}
+                    value={self.value}
+                    items={self.items}
+                />
+            </div>
+        }
+    }
+
+    fn controls(&self, _state: Store<Self::Data>) -> impl IntoView {
+        let label: URwSignal<String> = self.label;
+
+        view! {
+            <TextField text=label label="Alternative text" id="leptos-forge-2-alt-text"/> 
+        }
+    }
+
+    fn description(&self) -> &'static str {
+        WIDGET_DESC
+    }
+}

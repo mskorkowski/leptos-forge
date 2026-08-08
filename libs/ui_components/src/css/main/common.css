@@ -59,7 +59,7 @@
   --color-forgeblue-700: hsl(209deg 100.00% 35.48%);
   --color-forgeblue-800: hsl(209deg 100.00% 28.27%);
   --color-forgeblue-900: hsl(209deg 100.00% 23.33%);
-  --color-forgeblue-950: hsl(209deg 100.00% 13.47%); 
+  --color-forgeblue-950: hsl(209deg 100.00% 13.47%);
 
   --animate-background-slide-left: background-slide-left;
 
@@ -82,12 +82,12 @@
         background-position: left;
     }
   }
-  
+
 }
 
 /*
 * Container element which we can layout however you would like to which will
-* have a scrollable content potentially 
+* have a scrollable content potentially
 */
 @utility scrollbox {
   @apply relative;
@@ -101,8 +101,22 @@
 * Scrollable element inside the scrollbox
 */
 @utility scrollable {
-  @apply absolute top-0 left-0 right-0 bottom-0 overflow-auto;
+  @apply absolute top-0 left-0 right-0 bottom-0 overflow-auto py-5;
+
+	/* background:
+    linear-gradient(#2bff00 33%, rgba(43,255,0, 0)),
+    linear-gradient(rgba(43,255,0, 0), #2bff00 66%) 0 100%,
+    radial-gradient(farthest-side at 50% 0, rgba(255,0,0, 0.5), rgba(0,0,0,0)),
+    radial-gradient(farthest-side at 50% 100%, rgba(255,0,0, 0.5), rgba(0,0,0,0)) 0 100%;
+  background-color: #2bff00;
+  background-repeat: no-repeat;
+  background-attachment: local, local, scroll, scroll;
+  background-size: 100% 84px, 100% 84px, 100% 28px, 100% 28px; */
 }
+
+/* @utility scrollable-* {
+
+} */
 
 @utility relscrollable-* {
   @apply relative;

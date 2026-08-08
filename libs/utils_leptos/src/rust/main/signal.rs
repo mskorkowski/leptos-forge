@@ -13,6 +13,7 @@ use std::panic::Location;
 use leptos::attr::Attribute;
 use leptos::attr::AttributeValue;
 use leptos::attr::any_attribute::AnyAttribute;
+use leptos::prelude::MaybeProp;
 use leptos::prelude::Track;
 use leptos::prelude::guards::ReadGuard;
 use leptos::tachys::html::property::IntoProperty;
@@ -491,5 +492,43 @@ where
 impl<T: ThreadSafe + Default> Default for URwSignal<T> {
     fn default() -> Self {
         URwSignal::new(T::default())
+    }
+}
+
+impl<T> From<URwSignal<T>> for URwSignal<Option<T>> 
+where
+    T: ThreadSafe + Clone {
+
+
+    fn from(value: URwSignal<T>) -> Self {
+        value.map(
+            |v| Some(v.clone()), 
+            |v, new| {
+                if let Some(n) = new {
+                    *v = n;
+                }
+            }    
+        )
+    }
+}
+
+impl<T> From<URwSignal<T>> for Signal<Option<T>> 
+where
+    T: ThreadSafe + Clone 
+{
+    fn from(value: URwSignal<T>) -> Self {
+        let signal: URwSignal<Option<T>> = value.into();
+        let signal: Signal<Option<T>> = signal.into();
+        signal
+    }
+}
+
+impl<T> From<URwSignal<T>> for MaybeProp<T> 
+where
+    T: ThreadSafe + Clone 
+{
+    fn from(value: URwSignal<T>) -> Self {
+        let value: Signal<Option<T>> = value.into();
+        value.into()
     }
 }

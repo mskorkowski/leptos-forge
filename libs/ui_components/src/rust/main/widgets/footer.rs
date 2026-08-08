@@ -4,6 +4,10 @@
 
 use leptos::prelude::*;
 
+use crate::model::ButtonClick;
+use crate::model::ButtonColorSchema;
+use crate::model::Kind;
+use crate::model::Size;
 use crate::primitives::footer::Footer as FooterPrimitive;
 
 use super::button::*;
@@ -25,9 +29,11 @@ pub fn SaveCancelButton<Id: ToString>(
     let cancel_id: String = format!("{}-cancel", id);
     let save_id: String = format!("{}-save", id);
 
-    let schema = ColorSchema{
-        border: "border-1 border-solid border-forgeblue-500",
-        color: "fg-forgegray-800",
+    let schema = ButtonColorSchema{
+        outer: "",
+        inner: "",
+        border: "border-solid border-forgeblue-500 first:rounded-l-sm last:rounded-r-sm border-t-2 border-b-2 border-r-2 first:border-l-2 hover:bg-forgeblue-100",
+        color: "text-forgegray-800",
         background: "bg-forgeblue-300"
     };
 

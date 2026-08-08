@@ -1,16 +1,23 @@
 //! Text filed story
 //!
 
+mod focus_tests;
+
+use forge::Play;
 use forge::RouteDef;
+use forge::test_id;
 use leptos::prelude::*;
 
 use reactive_stores::Store;
+use ui_components::model::Focus;
 use ui_components::widgets::field::TextField;
 use utils_leptos::signal::URwSignal;
 
 use forge::Story;
 
 use crate::State;
+use crate::stories::components::widgets::text_field::focus_tests::human_interaction_valid;
+use crate::stories::components::widgets::text_field::focus_tests::programmatic_interaction_valid;
 
 /// Description of the empty text field widget story
 const TEXT_FIELD_EMPTY_DESC: &str = r############"
@@ -41,14 +48,17 @@ pub struct BasicTextFieldStory {
     label: URwSignal<String>,
     /// Signal used to set the value of the text field
     text: URwSignal<String>,
+    /// focus signal
+    focus: URwSignal<Focus>,
 }
 
 impl Default for BasicTextFieldStory {
     fn default() -> Self {
         let label: URwSignal<String> = URwSignal::new("Text field label".to_string());
         let text: URwSignal<String> = URwSignal::new("".to_string());
+        let focus: URwSignal<Focus> = URwSignal::new(Focus::Out);
 
-        BasicTextFieldStory { label, text }
+        BasicTextFieldStory { label, text, focus }
     }
 }
 
@@ -58,9 +68,10 @@ impl Story for BasicTextFieldStory {
     fn view(&self, _: Store<Self::Data>) -> impl IntoView {
         let label: Signal<String> = self.label.into();
         let text: URwSignal<String> = self.text;
+        let focus: URwSignal<Focus> = self.focus;
 
         view! {
-            <TextField id="basic-input" text=text label=label />
+            <TextField id="leptos-forge-1-basic-text-field" text label focus />
         }
     }
 
@@ -69,8 +80,8 @@ impl Story for BasicTextFieldStory {
         let text: URwSignal<String> = self.text;
 
         view! {
-            <TextField id="leptos-forge-1-label-text-input" text=label label={"Label".to_string()} />
-            <TextField id="leptos-forge-1-label-text-input" text=text label={"Text".to_string()} />
+            <TextField id="leptos-forge-1-label-input" text=label label={"Label".to_string()} />
+            <TextField id="leptos-forge-1-text-input" text=text label={"Text".to_string()} />
         }
     }
 
@@ -82,6 +93,13 @@ impl Story for BasicTextFieldStory {
         vec![RouteDef::story::<NonemptyTextFieldStory>(
             "nonempty", "Nonempty",
         )]
+    }
+
+    fn plays(&self) -> Vec<Box<dyn Play<Story = Self>>> {
+        vec![
+            programmatic_interaction_valid(),
+            human_interaction_valid(),
+        ]
     }
 }
 

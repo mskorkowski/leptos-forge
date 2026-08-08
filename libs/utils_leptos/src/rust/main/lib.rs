@@ -6,5 +6,6 @@
 extern crate leptos;
 
 pub mod css;
+pub mod element;
 pub mod signal;
 pub mod stores;

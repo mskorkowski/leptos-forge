@@ -3,7 +3,6 @@
 
 use std::fmt::Debug;
 
-use leptos::leptos_dom::logging::console_log;
 use leptos_use::core::ElementMaybeSignal;
 use leptos_use::core::IntoElementMaybeSignal;
 use reactive_graph::traits::GetUntracked;
@@ -97,7 +96,7 @@ impl ToClassDef for (&str, &str, &str, &str, &str) {
 
 /// Switches a class/classes for an element
 ///
-/// To be exact it adds one class while removing the other.
+/// To be exact it first removes classes and later adds classes to the element
 pub fn use_swap_class<E, M, C1, C2>(target: E, remove_class: C1, add_class: C2)
 where
     E: IntoElementMaybeSignal<Element, M>,
@@ -107,13 +106,9 @@ where
 {
     let target: ElementMaybeSignal<Element> = target.into_element_maybe_signal();
     if let Some(node) = target.get_untracked() {
-        console_log("\tSwapping classes");
         let class_list = node.class_list();
         remove_class.remove(&class_list);
         add_class.add(&class_list);
-    }
-    else {
-        console_log("Empty signal");
     }
 }
 

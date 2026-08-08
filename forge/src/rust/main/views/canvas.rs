@@ -24,7 +24,7 @@ where
 
     view! {
         <div class="leptos-forge-canvas-box basis-2/3 justify-items-start scrollbox print:basis-full print:flex-auto print:overflow-visible print:w-auto print:h-auto">
-            <div class="leptos-forge-canvas scrollable m-4 bg-forgegray-100 print:bg-white print:overflow-visible print:w-auto print:h-auto print:relative" node_ref=node_ref>
+            <div class="leptos-forge-canvas scrollable py-0 m-4 bg-forgegray-100 print:bg-white print:overflow-visible print:w-auto print:h-auto print:relative" node_ref=node_ref>
                 { view }
             </div>
         </div>
