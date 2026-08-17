@@ -85,6 +85,11 @@ pub enum Kind {
     /// # Usage
     /// 
     /// It should be used for the cases like default choice or call to action
+    /// 
+    /// # Tailwind integration
+    /// 
+    /// `leptos-forge` defines a custom variant `primary:` which will trigger for
+    /// children of this kind.
     Primary,
     /// Secondary button
     /// 
@@ -96,17 +101,27 @@ pub enum Kind {
     /// 
     /// It should be used for the secondary choices like "cancel" in the "Save
     /// changes dialog".
+    /// 
+    /// # Tailwind integration
+    /// 
+    /// `leptos-forge` defines a custom variant `secondary:` which will trigger for
+    /// children of this kind.
     #[default]
     Secondary,
-    /// Invisible button
+    /// Ghost button
     /// 
     /// It doesn't have any button cues
     /// 
     /// # Usage
     /// 
-    /// It should be used in places like menu buttons where you don't need
+    /// It should be used in places like menu where you don't need
     /// extra affordance indicators 
-    Invisible
+    /// 
+    /// # Tailwind integration
+    /// 
+    /// `leptos-forge` defines a custom variant `ghost:` which will trigger for
+    /// children of this kind.
+    Ghost
 }
 
 impl Kind{
@@ -116,19 +131,11 @@ impl Kind{
         use Kind::*;
 
         match self {
-            Primary => format!("{} {} {} {} {} {}", schema.outer, schema.inner, schema.background, schema.border, schema.color, size.into_css_class()),
-            Secondary => format!("{} {} {} {} {}", schema.outer, schema.inner, schema.border, schema.color, size.into_css_class()),
-            Invisible => format!("{} {} {} {}", schema.outer, schema.inner, schema.color, size.into_css_class()),
+            Primary => format!("primary {} {} {} {} {} {}", schema.outer, schema.inner, schema.background, schema.border, schema.color, size.into_css_class()),
+            Secondary => format!("secondary {} {} {} {} {} {}", schema.outer, schema.inner, schema.background, schema.border, schema.color, size.into_css_class()),
+            Ghost => format!("ghost {} {} {} {} {} {}", schema.outer, schema.inner, schema.background, schema.border, schema.color, size.into_css_class()),
         }
     }
-
-    // pub(crate) fn into_outer_box_class(&self, schema: &ButtonColorSchema, size: &Size) -> String {
-    //     match self {
-    //         Primary => format!("{} {} {} {} {}", schema.outer, schema.background, schema.border, schema.color, size.into_css_class()),
-    //         Secondary => format!("{} {} {} {}", schema.outer, schema.border, schema.color, size.into_css_class()),
-    //         Invisible => format!("{} {} {}", schema.outer, schema.color, size.into_css_class()),
-    //     }
-    // }
 
     /// Creates a style of the button
     /// 

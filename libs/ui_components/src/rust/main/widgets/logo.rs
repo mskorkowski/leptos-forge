@@ -3,10 +3,12 @@ use leptos::prelude::*;
 
 use reactive_stores::PatchField;
 use reactive_stores::Store;
+use serde::Deserialize;
+use serde::Serialize;
 use utils_leptos::signal::URwSignal;
 
 /// Position of an image
-#[derive(Debug, Clone, Copy, PartialEq, Store, Default)]
+#[derive(Debug, Clone, Copy, PartialEq, Store, Default, Serialize, Deserialize)]
 pub enum Position{
     /// Translation vector (x,y) in `px` for an image
     Translation(i32, i32),

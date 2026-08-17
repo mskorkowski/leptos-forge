@@ -12,6 +12,7 @@ pub use tests::test_id;
 use utils::prelude::ThreadSafe;
 
 use crate::RouteDef;
+use crate::LeptosForgeConfiguration;
 
 /// One step in the testing process
 ///
@@ -123,6 +124,21 @@ pub trait Story: Default + Copy {
 
     /// List of controls for the story
     fn controls(&self, _data: Store<Self::Data>) -> impl IntoView {}
+
+    /// List of controls for the story with access to the leptos-forge state.
+    /// 
+    /// **If possible don't use it.**
+    /// 
+    /// This list of controls can interact with a state of the fore application
+    /// If possible you should prefer the [controls][Story::controls] method.
+    /// 
+    /// This method deliberately has ugly name so you are warned to not use it.
+    /// By default it just routes the request to the [controls][Story::controls].
+    /// 
+    /// If you override this method, the [controls][Story::controls] will not be called.
+    fn controls_with_forge_state(&self, data: Store<Self::Data>, _configuration: Store<LeptosForgeConfiguration>) -> impl IntoView {
+        self.controls(data)
+    }
 
     /// Description of the story
     fn description(&self) -> &'static str {

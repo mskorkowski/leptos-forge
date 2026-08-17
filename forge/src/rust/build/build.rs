@@ -9,7 +9,7 @@
 //! 1. Monitor the changes in the `src/css/main.css` file and rebuild the project when there are changes
 
 // use build_print::error;
-use build_print::info;
+// use build_print::info;
 // use build_print::println;
 // use build_print::warn;
 // use cargo_metadata::camino::Utf8PathBuf;
@@ -18,7 +18,7 @@ use build_print::info;
 // use chrono::DateTime;
 // use chrono::Local;
 // use chrono::Utc;
-use std::env::current_dir;
+// use std::env::current_dir;
 // use std::fs::metadata;
 // use std::path::Path;
 // use std::process::Command;
@@ -27,7 +27,7 @@ use std::env::current_dir;
 // use serde_json::Error;
 
 /// Tag to prefix the output lines so we know from where it comes from
-const CRATE_TAG: &str = "forge";
+// const CRATE_TAG: &str = "forge";
 
 // /// Name of the crate
 // const CRATE: &str = "leptos_forge";
@@ -49,12 +49,12 @@ const CRATE_TAG: &str = "forge";
 // }
 
 /// Simple helper function to print the multiline information message to the cargo output
-fn info<S1: ToString, S2: ToString>(stage: S1, s: S2) {
-    let stage = stage.to_string();
-    for line in s.to_string().split("\n") {
-        info!("[{CRATE_TAG}][{stage}] {line}");
-    }
-}
+// fn info<S1: ToString, S2: ToString>(stage: S1, s: S2) {
+//     let stage = stage.to_string();
+//     for line in s.to_string().split("\n") {
+//         info!("[{CRATE_TAG}][{stage}] {line}");
+//     }
+// }
 
 // /// Simple helper function to print a normal multiline text to the cargo output
 // fn println<S1: ToString, S2: ToString>(stage: S1, s: S2) {
@@ -136,20 +136,20 @@ fn info<S1: ToString, S2: ToString>(stage: S1, s: S2) {
 
 /// Entry point for the build script.
 fn main() {
-    let stage = "start";
-    info(stage, "leptos_forge: Running build script!\n");
-    info(stage,format!(
-        "\tCurrent directory: {}",
-        current_dir()
-            .expect("Must have some current directory, no?")
-            .display()
-    ));
-    info(stage,format!("\tOUT_DIR:           {}", std::env::var("OUT_DIR").expect("Cargo doc requires that this variable is set: https://doc.rust-lang.org/cargo/reference/environment-variables.html#environment-variables-cargo-sets-for-build-scripts")));
-    info(stage,format!(
-        "\tCARGO_FEATURE_CLEAN_RESOURCES: {:?}",
-        std::env::var("CARGO_FEATURE_CLEAN_RESOURCES")
-    ));
-    info(stage,"");
+    // let stage = "start";
+    // info(stage, "leptos_forge: Running build script!\n");
+    // info(stage,format!(
+    //     "\tCurrent directory: {}",
+    //     current_dir()
+    //         .expect("Must have some current directory, no?")
+    //         .display()
+    // ));
+    // info(stage,format!("\tOUT_DIR:           {}", std::env::var("OUT_DIR").expect("Cargo doc requires that this variable is set: https://doc.rust-lang.org/cargo/reference/environment-variables.html#environment-variables-cargo-sets-for-build-scripts")));
+    // info(stage,format!(
+    //     "\tCARGO_FEATURE_CLEAN_RESOURCES: {:?}",
+    //     std::env::var("CARGO_FEATURE_CLEAN_RESOURCES")
+    // ));
+    // info(stage,"");
     // Print all environment variables.
     // for (key, value) in std::env::vars() {
     //     info(format!("\t\t{key}: {value}"));

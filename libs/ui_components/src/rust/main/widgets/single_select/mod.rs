@@ -310,7 +310,7 @@ where
                 aria-activedescendant=move || store.selection().get().map(|selection| {
                     selection.id
                 })
-                aria-haspopup="listbo"
+                aria-haspopup="listbox"
             >
                 <Show when=visible>
                     { item_view }
@@ -318,7 +318,7 @@ where
             </div>
             <span
                 class=label_css
-                // on:mousedown=
+                on:mousedown=span_toggle_dropdown
             >
                 { label }
             </span>
@@ -339,7 +339,7 @@ where
                     <ul class="leptos-forge-select-dropdown-list list-none">
                         <ForEnumerate
                             each= move || store.items()
-                            key = |item| *item.value().get().key()
+                            key = |item| item.value().get().key()
                             let(index,item)
                         >
                             <SingleSelectItemComponent
@@ -387,14 +387,14 @@ where
         }
     });
 
-    let item_key = *item.get_untracked().key();
+    let item_key = item.get_untracked().key();
 
     let css_classes = if 
         // let Some(selection) = store.selection().get_untracked() &&
         let Some(value) = value.get_untracked() &&
         // (
             // selection.key == item_key ||
-             *value.key() == item_key 
+             value.key() == item_key 
         // )
 
     {
@@ -424,12 +424,12 @@ where
             Some(selected) => {
                 console_log("Mouseover selected");
                 let value = value.get_untracked();
-                let item_key = *item.value().get_untracked().key();
+                let item_key = item.value().get_untracked().key();
                 if item_key != selected.key {
                     console_log("Mouseover selected - key change");
                     SelectionController.mark_selected(&item.node_ref().get_untracked());
                     if let Some(value) = value &&
-                        *value.key() == item_key
+                        value.key() == item_key
                     {
                         use_swap_class(node_ref, "bg-forgeblue-200", "bg-forgeblue-300");
                     }
@@ -438,7 +438,7 @@ where
                     }
                     let item = item.get();
                     selection.patch(Some(Selection{
-                        key: *item.value.key(),
+                        key: item.value.key(),
                         index: index.get_untracked(),
                         node_ref: node_ref.into(),
                         id: item.id.clone(),
@@ -453,7 +453,7 @@ where
                 use_add_class(node_ref, "bg-forgeblue-300");
                 let item = item.get();
                 selection.patch(Some(Selection{
-                    key: *item.key(),
+                    key: item.key(),
                     index: index.get_untracked(),
                     node_ref: node_ref.into(),
                     id: item.id.clone()

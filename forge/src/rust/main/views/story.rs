@@ -15,8 +15,11 @@ use super::component_panel::ComponentPanel;
 use super::control_pane::ControlPane;
 use super::description::Description;
 use super::tab_panel::TabName;
+use crate::ControlPanelConfigurationStoreFields;
+use crate::DocumentationPanelConfigurationStoreFields;
 use crate::IntoStory;
 use crate::LeptosForgeConfiguration;
+use crate::LeptosForgeConfigurationStoreFields;
 use crate::Story;
 use crate::views::canvas::EmbeddedCanvas;
 use crate::views::control_pane::EmbeddedControlPane;
@@ -37,29 +40,38 @@ pub fn Story<S: 'static + IntoStory + Default + Copy + ThreadSafe>(
 ) -> impl IntoView {
     let story = S::default().into_story();
     let canvas = NodeRef::new();
-
-    let tabs: Vec<Box<dyn Tab<SidePanelTabs> + 'static>> = vec![
-        Box::new(DescriptionTab {
-            text: story.description(),
-        }),
-        Box::new(TestsTabs { story, canvas, configuration }),
-    ];
-
     let selector = URwSignal::new(SidePanelTabs::Description);
 
     view! {
         <>
             <ComponentPanel>
-                <Canvas story=story node_ref=canvas data />
-                <TabPanel
-                    id="side-panel"
-                    tabs
-                    selector
-                />
+                <Canvas story=story node_ref=canvas data configuration />
+                <Show
+                    when=move || configuration.documentation_panel().visible().get()
+                >
+                    <TabPanel
+                        id="side-panel"
+                        tabs={
+                            let tabs: Vec<Box<dyn Tab<SidePanelTabs> + 'static>> = vec![
+                                Box::new(DescriptionTab {
+                                    text: story.description(),
+                                }),
+                                Box::new(TestsTabs { story, canvas, configuration }),
+                            ];
+
+                            tabs
+                        }
+                        selector
+                    />
+                </Show>
             </ComponentPanel>
-            <div class="flex flex-col basis-1/3 first:basis-1/1 px-4 py-4 overflow-auto print:hidden print:basis-0 min-w-xs w-xs shrink-0 @md:shrink-1">
-                <ControlPane story=story data />
-            </div>
+            <Show
+                    when=move || configuration.control_panel().visible().get()
+            >
+                <div class="flex flex-col basis-1/3 first:basis-1/1 px-4 py-4 overflow-auto print:hidden print:basis-0 min-w-xs w-xs shrink-0 @md:shrink-1">
+                    <ControlPane story=story data configuration/>
+                </div>
+            </Show>
         </>
     }
 }

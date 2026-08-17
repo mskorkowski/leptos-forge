@@ -2,6 +2,7 @@
 
 use leptos::prelude::*;
 use leptos_node_ref::AnyNodeRef;
+use leptos::web_sys::Blob;
 use utils_leptos::css::use_swap_class;
 
 use crate::model::Password;
@@ -171,7 +172,10 @@ pub fn Codearea(
 pub fn BlobFile(
     /// url to the blob pointing to the selected file
     #[prop(into)]
-    file: URwSignal<String>,
+    file_url: URwSignal<String>,
+    /// signal with blob
+    #[prop(into, optional, default=None)]
+    file: Option<URwSignal<Blob>>,
     /// value of the label
     #[prop(into)]
     label: Signal<String>,
@@ -179,8 +183,8 @@ pub fn BlobFile(
     id: &'static str,
 ) -> impl IntoView {
     view! {
-        <div class="leptos-forge-field-box relative pt-8">
-            <BlobFileInput id=id file=file />
+        <div class="leptos-forge-field-box relative pt-8 isolate">
+            <BlobFileInput id=id file_url=file_url file />
             <TextFieldLabel for_id=id text=label force_z_index=-10 />
         </div>
     }

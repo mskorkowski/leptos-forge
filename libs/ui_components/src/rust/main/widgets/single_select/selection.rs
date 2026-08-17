@@ -39,7 +39,7 @@ impl SelectionController {
                                         // select first
                     let first = &items[0];
                     let selection = Selection{
-                        key: *first.key(),
+                        key: first.key(),
                         index: 0,
                         node_ref: first.node_ref.clone(),
                         id: first.id.clone()
@@ -54,7 +54,7 @@ impl SelectionController {
                 if items.len() > old_selection.index + 1 {
                     let next = &items[old_selection.index + 1];
                     let selection = Selection {
-                        key: *next.key(),
+                        key: next.key(),
                         index: old_selection.index + 1,
                         node_ref: next.node_ref.clone(),
                         id: next.id.clone()
@@ -92,7 +92,7 @@ impl SelectionController {
                                         // select first
                     let first = &items[0];
                     let selection = Selection{
-                        key: *first.key(),
+                        key: first.key(),
                         index: 0,
                         node_ref: first.node_ref.clone(),
                         id: first.id.clone()
@@ -107,7 +107,7 @@ impl SelectionController {
                 if old_selection.index > 0 {
                     let next = &items[old_selection.index - 1];
                     let selection = Selection {
-                        key: *next.key(),
+                        key: next.key(),
                         index: old_selection.index - 1,
                         node_ref: next.node_ref.clone(),
                         id: next.id.clone()

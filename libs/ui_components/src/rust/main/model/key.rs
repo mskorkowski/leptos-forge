@@ -6,12 +6,14 @@ use std::fmt::Debug;
 
 use reactive_stores::PatchField;
 use reactive_stores::Store;
+use serde::Deserialize;
+use serde::Serialize;
 use uuid::Uuid;
 
 
 
 /// Key for collections of values
-#[derive(Debug, Clone, Copy, Store, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[derive(Debug, Clone, Copy, Store, PartialEq, Eq, Hash, PartialOrd, Ord, Serialize, Deserialize)]
 pub struct Key(Uuid);
 
 impl Key {
@@ -61,5 +63,5 @@ impl PatchField for Key{
 /// - [`SingleSelect`][crate::widgets::single_select::SingleSelect] so it can track the selected item
 pub trait Keyed {
     /// Returns a sable key for this instance
-    fn key(&self) -> &Key;
+    fn key(&self) -> Key;
 }

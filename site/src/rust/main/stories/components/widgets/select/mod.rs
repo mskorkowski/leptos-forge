@@ -118,8 +118,8 @@ impl Display for Item {
 }
 
 impl Keyed for Item {
-    fn key(&self) -> &Key {
-        &self.key
+    fn key(&self) -> Key {
+        self.key
     }
 }
 

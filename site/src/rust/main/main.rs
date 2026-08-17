@@ -81,7 +81,7 @@ pub fn main() {
     ];
 
     let mut configuration: LeptosForgeConfiguration = LeptosForgeConfiguration::default();
-    let logo: &mut forge::LogoConfiguration = &mut configuration.visuals.logo;
+    let logo: &mut forge::LogoConfiguration = &mut configuration.logo;
     logo.path = Some("/resources/leptos_forge/logo/logo.svg".to_string());
     logo.alt = Some("Leptos_forge logo".to_string());
 

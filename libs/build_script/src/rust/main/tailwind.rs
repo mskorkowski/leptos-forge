@@ -1,8 +1,10 @@
 //! Tailwind integration with for build scripts
 
+use std::borrow::Cow;
 use std::collections::HashMap;
 use std::collections::HashSet;
 use std::env;
+use std::fmt::Display;
 use std::fs::File;
 use std::fs::create_dir_all;
 use std::hash::Hash;
@@ -36,6 +38,33 @@ const GENERATED_CSS_FILE_PREFIX: &str = r###"
 /* Import all dependencies */
 
 "###;
+
+/// Print's 
+fn output_printer<S1: Display>(
+    console: &Console<'_>,
+    kind: S1,
+    message: &Cow<'_, str>,
+    error: bool,
+) {
+    if !message.trim().is_empty() {
+        if error {
+            console.error(&format!("\n--------[ {kind} ]------------------------\n\n"));
+            console.error(message);
+        }
+        else {
+            console.info(&format!("\n--------[ {kind} ]------------------------\n\n"));
+            console.info(message);
+        }
+    }
+    else {
+        if error {
+            console.error(&format!("\n--------[ {kind}: EMPTY ]------------------------\n"));
+        }
+        else {
+            console.info(&format!("\n--------[ {kind}: EMPTY ]------------------------\n"));
+        }
+    }
+}
 
 /// Cargo configuration for tailwind integration
 #[derive(Debug, serde::Deserialize)]
@@ -366,23 +395,20 @@ impl<'this> Tailwind<'this> {
         self.console.info(&format!("\ntailwindcss command:\n\n\t\t{:?}", tailwind));
         let output = tailwind.output().expect("Do you have a tailwind in your execution path?");
 
-        if !output.status.success() {
-            self.console.error(&format!("Tailwind Stopped with an {}", output.status));
-            self.console.error(&"\n--------[ STDOUT ]------------------------\n\n");
-            self.console.println(&String::from_utf8_lossy(&output.stdout));
-            self.console.error(&"\n--------[ STDERR ]------------------------\n\n");
-            self.console.error(&String::from_utf8_lossy(&output.stderr));
-        } else {
-            self.console.info(&"Tailwind run successfully");
-            self.console.info(&"");
-            self.console.info(&"--------[ STDOUT ]------------------------");
-            self.console.info(&"");
-            self.console.info(&String::from_utf8_lossy(&output.stdout));
-            self.console.info(&"");
-            self.console.info(&"--------[ STDERR ]------------------------");
-            self.console.info(&"");
-            self.console.info(&String::from_utf8_lossy(&output.stderr));
-        }
+        let error = !output.status.success();
+
+        output_printer(
+            self.console, 
+            "STDOUT", 
+            &String::from_utf8_lossy(&output.stdout), 
+            error
+        );
+        output_printer(
+            self.console, 
+            "STDOUT", 
+            &String::from_utf8_lossy(&output.stderr), 
+            error
+        );
 
         Ok(output_path)
     }

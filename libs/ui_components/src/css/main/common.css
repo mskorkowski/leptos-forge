@@ -114,10 +114,6 @@
   background-size: 100% 84px, 100% 84px, 100% 28px, 100% 28px; */
 }
 
-/* @utility scrollable-* {
-
-} */
-
 @utility relscrollable-* {
   @apply relative;
   max-height: calc(---value(integer) * var(--spacing));
@@ -168,3 +164,7 @@
 .z-popup {
   z-index: 20;
 }
+
+@custom-variant primary (&:where(.primary, .primary *));
+@custom-variant secondary (&:where(.secondary, .secondary *));
+@custom-variant ghost (&:where(.ghost, .ghost *));

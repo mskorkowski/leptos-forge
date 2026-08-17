@@ -1,0 +1,11 @@
+
+@custom-variant canvas-dark (&:where(.dark-canvas, .dark-canvas *));
+@custom-variant canvas-light (&:where(.light-canvas, .light-canvas *));
+
+.leptos-forge-canvas {
+    @apply bg-[repeating-conic-gradient(var(--color-forgegray-100)_0%_25%,var(--color-forgegray-300)_0%_50%)]
+        dark:bg-[repeating-conic-gradient(var(--color-forgegray-900)_0%_25%,var(--color-forgegray-800)_0%_50%)]
+        canvas-dark:bg-[repeating-conic-gradient(var(--color-forgegray-900)_0%_25%,var(--color-forgegray-800)_0%_50%)]!
+        canvas-light:bg-[repeating-conic-gradient(var(--color-forgegray-100)_0%_25%,var(--color-forgegray-300)_0%_50%)]!
+        bg-[size:40px_40px];
+}

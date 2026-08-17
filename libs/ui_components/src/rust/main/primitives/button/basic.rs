@@ -3,7 +3,6 @@
 use leptos::ev::MouseEvent;
 use leptos::ev::PointerEvent;
 use leptos::prelude::*;
-use utils::prelude::ThreadSafe;
 
 use crate::model::ButtonClick;
 use crate::model::ButtonGroup;

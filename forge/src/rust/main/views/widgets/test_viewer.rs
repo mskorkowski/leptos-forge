@@ -16,7 +16,6 @@ use reactive_stores::StoreFieldIterator;
 use reactive_stores::StorePath;
 use ui_components::widgets::details::DetailsParts;
 
-use crate::FunctionalConfigurationStoreFields;
 use crate::LeptosForgeConfiguration;
 use crate::LeptosForgeConfigurationStoreFields;
 use crate::Story;
@@ -350,7 +349,7 @@ impl<S: 'static + Story> DetailsParts for TestView<S> {
         let steps: Vec<Box<dyn Step<Story = S> + 'static>> = play_to_run.steps();
 
         let play_test = move |_| {
-            let step_delay = configuration.functional().tests_runner().step_delay().get();
+            let step_delay = configuration.tests_runner().step_delay().get();
             play_steps(step_delay, state, story, play, canvas);
         };
 

@@ -13,12 +13,12 @@ use reactive_stores::Store;
 use ui_components::menu::MenuState;
 use utils::prelude::ThreadSafe;
 
+use crate::views::menu_panel::MenuPanel;
+
 use super::navigation::PathSpec;
 use super::navigation::RouteDef;
-use ui_components::layout::main_menu::MainMenu;
 use ui_components::layout::root::Root;
 use ui_components::menu::Menu;
-use ui_components::widgets::logo::Logo;
 
 use super::views::content::Content;
 
@@ -30,7 +30,8 @@ pub fn App<Data>(
     /// The routing information for the Leptos Forge
     routes: Vec<RouteDef<Data>>,
     /// configuration of the leptos_forge application
-    configuration: LeptosForgeConfiguration,
+    #[prop(into, default=Store::new(LeptosForgeConfiguration::default()),optional)]
+    configuration: Store<LeptosForgeConfiguration>,
     /// Initial state of the application store
     #[prop(default=Store::new(Data::default()),optional)]
     store: Store<Data>,
@@ -38,8 +39,6 @@ pub fn App<Data>(
 where 
     Data: PatchField + Debug + Default + ThreadSafe
 {
-    let configuration = Store::new(configuration);
-
     let menu_defs = {
         let routes = routes.clone();
         move || {
@@ -69,21 +68,25 @@ where
         }
     };
 
+    let (set_is_routing, set_is_routing_setter) = signal(false);
+
+    // Whenever we are navigating away we should reset the ui visibility
+    Effect::new(move || {
+        if set_is_routing.get() {
+            configuration.menu().visible().set(true);
+            configuration.control_panel().visible().set(true);
+            configuration.documentation_panel().visible().set(true);
+        }
+    });
+
     view! {
-        <Router>
+        <Router
+            set_is_routing=set_is_routing_setter
+        >
             <Root>
-                <MainMenu>
-                    { move || {
-                        let logo_config = configuration.visuals().logo();
-                        if let Some(logo) = &logo_config.path().get() {
-                            view!{ <Logo id="leptos-forge-logo" src={logo.to_string()} alt={logo_config.alt().get().unwrap_or_else(|| "Logo".to_string())} /> }.into_any()
-                        }
-                        else {
-                            ().into_any()
-                        }
-                    }}
+                <MenuPanel configuration>
                     <Menu children=ToChildren::to_children(menu_defs) />
-                </MainMenu>
+                </MenuPanel>
                 <Content>
                     <Routes fallback=|| "404" children=ToChildren::to_children(route_defs) />
                 </Content>

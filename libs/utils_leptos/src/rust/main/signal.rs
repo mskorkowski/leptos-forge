@@ -32,6 +32,7 @@ use leptos::tachys::view::add_attr::AddAnyAttr;
 use leptos::server_fn::serde::Serialize;
 use leptos::server_fn::serde::Serializer;
 use reactive_stores::Field;
+use reactive_stores::Store;
 use reactive_stores::StoreField;
 use reactive_stores::Subfield;
 
@@ -484,6 +485,7 @@ impl<T> From<URwSignal<T>> for SignalSetter<T>
 where
     T: Send + Sync + 'static,
 {
+    #[track_caller]
     fn from(value: URwSignal<T>) -> Self {
         value.write_signal
     }
@@ -499,7 +501,7 @@ impl<T> From<URwSignal<T>> for URwSignal<Option<T>>
 where
     T: ThreadSafe + Clone {
 
-
+    #[track_caller]
     fn from(value: URwSignal<T>) -> Self {
         value.map(
             |v| Some(v.clone()), 
@@ -516,6 +518,7 @@ impl<T> From<URwSignal<T>> for Signal<Option<T>>
 where
     T: ThreadSafe + Clone 
 {
+    #[track_caller]
     fn from(value: URwSignal<T>) -> Self {
         let signal: URwSignal<Option<T>> = value.into();
         let signal: Signal<Option<T>> = signal.into();
@@ -527,8 +530,42 @@ impl<T> From<URwSignal<T>> for MaybeProp<T>
 where
     T: ThreadSafe + Clone 
 {
+    #[track_caller]
     fn from(value: URwSignal<T>) -> Self {
         let value: Signal<Option<T>> = value.into();
+        value.into()
+    }
+}
+
+impl<T> URwSignal<Option<T>> 
+where
+    T: ThreadSafe + Clone
+{
+    /// Unwrap implementation for a singla of `Option<T>`.
+    /// 
+    /// # Panics!
+    /// 
+    /// It will panic any time the signal has None as a value
+    pub fn unwrap(&self) -> URwSignal<T> {
+        self.map(
+            |v| {
+                v.as_ref().unwrap().clone()
+            },
+            |v, n| {
+                v.replace(n);
+            }
+        )
+    }
+}
+
+impl<T> From<Store<T>> for URwSignal<T> 
+where
+    T: ThreadSafe + Clone
+{
+    #[track_caller]
+    fn from(value: Store<T>) -> Self {
+        let value: Field<T> = value.into();
+
         value.into()
     }
 }

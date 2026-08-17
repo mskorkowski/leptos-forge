@@ -1,13 +1,13 @@
 # Leptos Forge
 
-Leptos Forge is the library which helps with creating and testing user interfaces 
+Leptos Forge is the library which helps with creating and testing user interfaces
 written in Rust and [Leptos](https://leptos.dev/).
 
 The most recent documentation is available at [leptos_forge site](https://mskorkowski.github.io).
 
 > **Warning**
 >
-> Leptos Forge is still at the early stages of development and is really 
+> Leptos Forge is still at the early stages of development and is really
 > a bare-bones project. Many of the developer experience features are not yet
 > implemented.
 
@@ -16,11 +16,11 @@ The most recent documentation is available at [leptos_forge site](https://mskork
 Parts released to `crates.io` are considered as good enough for others to use
 
 - `leptos_forge_build_script`
-    - readable output handling for cargo build scripts
-    - reliable integration with tailwindcss cli 
+  - readable output handling for cargo build scripts
+  - reliable integration with tailwindcss cli
 - `leptos_forge_utils_leptos`
-    - **URwSignal** - generic purpose read/write signal
-    - css classes manipulation add/remove/swap
+  - **URwSignal** - generic purpose read/write signal
+  - css classes manipulation add/remove/swap
     - **StoredRef** - wrapper type which allows to keep the `Element` in the leptos store
 - `leptos_forge_utils`
   Probably useless outside of the `leptos_forge` codebase
@@ -34,7 +34,6 @@ with
 |:-----------------------|:---------------|
 | 0.6.0-                 | 0.8            |
 
-
 ## Features
 
 - **Trivial integration with Leptos** - You can use Leptos components directly in your Forge stories without any additional setup
@@ -43,7 +42,7 @@ with
 
 ## Leptos Forge vs Storybook
 
-[Storybook](https://storybook.js.org/) is a popular tool used to create frontend components in isolation and test them and was a big 
+[Storybook](https://storybook.js.org/) is a popular tool used to create frontend components in isolation and test them and was a big
 inspiration for Leptos Forge. However, Leptos Forge has some unique features that make it different from Storybook:
 
 | Feature | Leptos Forge | Storybook |
@@ -57,7 +56,7 @@ inspiration for Leptos Forge. However, Leptos Forge has some unique features tha
 
 ## Version numbers and how stable it is?
 
-For versions `1+` we will follow the `SemVer` specification but it's still a far away future. 
+For versions `1+` we will follow the `SemVer` specification but it's still a far away future.
 
 To make it a bit easier to play with the current version of the project we will use the convention similar to the `SemVer`, but breaking
 changes instead of major version will update a minor version number and we will create a migration information. Nonbreaking changes will

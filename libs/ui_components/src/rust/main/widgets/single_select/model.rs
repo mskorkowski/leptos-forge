@@ -32,7 +32,7 @@ impl<Value> Keyed for SingleSelectItem<Value>
 where
     Value: Clone + Keyed + PatchField,
 {
-    fn key(&self) -> &Key {
+    fn key(&self) -> Key {
         self.value.key()
     }
 }
@@ -145,7 +145,7 @@ where
     /// id of the item with focus
     pub(super) selection: Option<Selection>,
     /// list of items to choose from
-    #[store(key: Key = |counter| *counter.value.key())]
+    #[store(key: Key = |counter| counter.value.key())]
     pub(super) items: Vec<SingleSelectItem<Value>>,
     /// how many items are in the list
     pub(super) count: usize,

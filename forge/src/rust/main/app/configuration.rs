@@ -1,5 +1,6 @@
 //! Module contains the configuration setting for the leptos_forge application
 //! 
+use reactive_stores::PatchField;
 use reactive_stores::Store;
 use reactive_stores::Patch;
 
@@ -16,17 +17,26 @@ use reactive_stores::Patch;
 ///    Currently only test runner configuration
 #[derive(Debug, Store, Patch, Default)]
 pub struct LeptosForgeConfiguration {
-    /// Configuration of visual part of the leptos_forge application
-    pub visuals: VisualConfiguration,
-    /// Configuration of the functional part of the leptos_forge application
-    pub functional: FunctionalConfiguration
+    /// Configuration of the logo
+    pub logo: LogoConfiguration,
+    /// Configuration of the test runner
+    pub tests_runner: TestRunnerConfiguration,
+    /// Canvas configuration
+    pub canvas: CanvasConfiguration,
+    /// Menu configuration
+    pub menu: MenuConfiguration,
+    /// control panel configuration
+    pub control_panel: ControlPanelConfiguration,
+    /// documentation panel configuration
+    /// 
+    /// Documentation panel also contains a test runner facilities
+    pub documentation_panel: DocumentationPanelConfiguration,
 }
 
-/// Describes the visual aspect of the leptos_forge application
-#[derive(Debug, Store, Patch, Default)]
-pub struct VisualConfiguration {
-    /// Configuration of the logo at the top of the menu
-    pub logo: LogoConfiguration
+impl Into<Store<LeptosForgeConfiguration>> for LeptosForgeConfiguration {
+    fn into(self) -> Store<LeptosForgeConfiguration> {
+        Store::new(self)
+    }
 }
 
 /// Configuration of the logo at the top of the menu
@@ -42,13 +52,6 @@ pub struct LogoConfiguration {
     pub path: Option<String>,
     /// Alternative text
     pub alt: Option<String>
-}
-
-/// Configuration of the functional parts of the leptos_forge application
-#[derive(Debug, Store, Patch, Default)]
-pub struct FunctionalConfiguration {
-    /// Configuration of the test runner
-    pub tests_runner: TestRunnerConfiguration
 }
 
 /// Configuration of the test runner
@@ -77,6 +80,128 @@ impl Default for TestRunnerConfiguration {
         Self {
             step_delay: 250,
             validation_delay: 50,
+        }
+    }
+}
+
+/// Configuration of the canvas
+#[derive(Debug, Clone, Copy, Store, Patch)]
+pub struct CanvasConfiguration {
+    /// Decides wherever background of the canvas is light or dark checkers pattern
+    /// 
+    /// - **`None`** - system theme dependant, default value
+    /// - **[`Some(ForgeTheme::Light)`][ForgeTheme::Light]** - use light themed checkers
+    /// - **[`Some(ForgeTheme::Dark)`][ForgeTheme::Dark]** - use dark themed checkers
+    pub background: Option<ForgeTheme>,
+}
+
+impl Default for CanvasConfiguration {
+    fn default() -> Self {
+        Self{ 
+            background: None 
+        }
+    }
+}
+
+/// Enumeration of possible themes
+#[derive(Debug, Clone, Copy, Store, PartialEq)]
+pub enum ForgeTheme {
+    /// Use light theme
+    Light,
+    /// Use dark theme
+    Dark
+}
+
+impl PatchField for ForgeTheme {
+    fn patch_field(
+        &mut self,
+        new: Self,
+        path: &reactive_stores::StorePath,
+        notify: &mut dyn FnMut(&reactive_stores::StorePath),
+        _keys: Option<&reactive_stores::KeyMap>,
+    ) {
+        if *self != new {
+            *self = new;
+            notify(path);
+        }
+    }
+}
+
+/// Configuration of the menu bar
+#[derive(Debug, Clone, Copy, Store, Patch)]
+pub struct MenuConfiguration {
+    /// Controls visibility of the menu bar
+    /// 
+    /// # Default value
+    /// 
+    /// By default the menu bar is visible (this value is set to `true`).
+    /// 
+    /// # UX consideration
+    /// 
+    /// Setting it to `false` will remove the menu bar from the ui. If you
+    /// decide to change this value you should provide some means other
+    /// then reload to bring the menu bar back
+    visible: bool,
+}
+
+impl Default for MenuConfiguration {
+    fn default() -> Self {
+        Self {
+            visible: true,
+        }
+    }
+}
+
+/// Configuration of the control panel
+/// 
+/// Control panel is visible only when showing the stories directly
+#[derive(Debug, Clone, Copy, Store, Patch)]
+pub struct ControlPanelConfiguration {
+    /// Controls visibility of the control panel
+    /// 
+    /// # Default value
+    /// 
+    /// By default the control panel is visible (this value is set to `true`).
+    /// 
+    /// # UX consideration
+    /// 
+    /// Setting it to `false` will remove the control panel from the ui. If you
+    /// decide to change this value you should provide some means other
+    /// then reload to revert the control panel back
+    visible: bool,
+}
+
+impl Default for ControlPanelConfiguration {
+    fn default() -> Self {
+        Self {
+            visible: true,
+        }
+    }
+}
+
+/// Configuration of the documentation panel
+/// 
+/// Documentation panel is visible only when showing the stories directly
+#[derive(Debug, Clone, Copy, Store, Patch)]
+pub struct DocumentationPanelConfiguration {
+    /// Controls visibility of the documentation panel
+    /// 
+    /// # Default value
+    /// 
+    /// By default the documentation panel is visible (this value is set to `true`).
+    /// 
+    /// # UX consideration
+    /// 
+    /// Setting it to `false` will remove the documentation panel from the ui. If you
+    /// decide to change this value you should provide some means other
+    /// then reload to revert the documentation panel back
+    visible: bool,
+}
+
+impl Default for DocumentationPanelConfiguration {
+    fn default() -> Self {
+        Self {
+            visible: true,
         }
     }
 }
