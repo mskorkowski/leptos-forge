@@ -15,9 +15,9 @@ homepage.workspace = true
 path = "src/rust/main/lib.rs"
 
 [dependencies]
-base64.workspace = true
-icondata.workspace = true
 floating-ui-leptos.workspace = true
+icondata.workspace = true
+js-sys.workspace = true
 leptos.workspace = true
 leptos_router.workspace = true
 leptos_icons.workspace = true

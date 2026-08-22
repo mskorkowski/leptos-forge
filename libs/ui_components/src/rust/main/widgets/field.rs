@@ -171,11 +171,17 @@ pub fn Codearea(
 #[component]
 pub fn BlobFile(
     /// url to the blob pointing to the selected file
-    #[prop(into)]
-    file_url: URwSignal<String>,
+    #[prop(into, optional, default=None.into())]
+    file_url: Option<URwSignal<String>>,
     /// signal with blob
-    #[prop(into, optional, default=None)]
+    #[prop(into, optional, default=None.into())]
     file: Option<URwSignal<Blob>>,
+    /// signal with a file name
+    /// 
+    /// If signal contains the value `None`, it means no file is currently selected
+    /// If signal is `Some` then, there is a file which was selected
+    #[prop(into, optional, default=None)]
+    file_name: Option<SignalSetter<Option<String>>>,
     /// value of the label
     #[prop(into)]
     label: Signal<String>,
@@ -184,7 +190,7 @@ pub fn BlobFile(
 ) -> impl IntoView {
     view! {
         <div class="leptos-forge-field-box relative pt-8 isolate">
-            <BlobFileInput id=id file_url=file_url file />
+            <BlobFileInput id=id file_url=file_url file file_name />
             <TextFieldLabel for_id=id text=label force_z_index=-10 />
         </div>
     }

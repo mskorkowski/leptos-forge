@@ -8,12 +8,14 @@
 //! 3. Believing  in the intelligence of the user (that might be somewhat questionable from time to time, I agree)
 //!
 
+use std::ops::Deref;
 use std::panic::Location;
 
 use leptos::attr::Attribute;
 use leptos::attr::AttributeValue;
 use leptos::attr::any_attribute::AnyAttribute;
 use leptos::prelude::MaybeProp;
+use leptos::prelude::Read;
 use leptos::prelude::Track;
 use leptos::prelude::guards::ReadGuard;
 use leptos::tachys::html::property::IntoProperty;
@@ -193,14 +195,14 @@ where
     }
 }
 
-impl<T> Get for URwSignal<T>
-where
-    T: ThreadSafe + Clone,
+impl<T> Read for URwSignal<T>
+where 
+    T: ThreadSafe + Clone
 {
-    type Value = T;
+    type Value = ReadGuard<T, SignalReadGuard<T, SyncStorage>>;
 
-    fn try_get(&self) -> Option<Self::Value> {
-        self.read_signal.try_get()
+    fn try_read(&self) -> Option<Self::Value> {
+        self.read_signal.try_read()
     }
 }
 
