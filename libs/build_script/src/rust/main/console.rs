@@ -1,5 +1,39 @@
-//! Handles formatted output for the build scripts
+//! Handles output for the build scripts
 //! 
+//! # Basic usage
+//! 
+//! ```toml
+//! [build-dependencies]
+//! leptos_forge_build_script = "0.6"
+//! ```
+//! 
+//! In your build script:
+//! 
+//! ```rust,no_run
+//! # #[allow(clippy::needless_doctest_main)]
+//! use leptos_forge_build_script::console::{
+//!   Console,
+//!   ConsoleConfiguration,
+//! };
+//! 
+//! 
+//! fn main() {
+//! 
+//!   let console_configuration = ConsoleConfiguration::default();
+//!   let console = Console::new("crate_name", &console_configuration);
+//! 
+//!   console.info(&"This is an info message"); // Prints
+//!                                             // info:  [crate_name]  This is an info message
+//! 
+//!   let x = 3;
+//!   console.warn(&format!("The x = {x}"));    // Prints
+//!                                             // warning:  [crate_name]  The x = 3
+//! 
+//! }
+//! ```
+//! 
+//! For printing colorful messages uses [`build_print`] crate.
+
 
 use std::marker::PhantomData;
 
@@ -7,12 +41,25 @@ use build_print::error;
 use build_print::info;
 use build_print::warn;
 
+/// How verbose the output should be
+#[derive(PartialEq, Eq, PartialOrd, Ord)]
+pub enum LogLevel {
+    /// Only print errors
+    ERROR,
+    /// Print errors and warnings
+    WARNING,
+    /// Print errors, warnings and info
+    INFO,
+}
+
 /// Configuration of the [`Console`]
 pub struct ConsoleConfiguration {
     /// Wherever we should enable [`build_print`] support
     /// 
     /// Default: `true`
     build_print: bool,
+    /// Level at which messages should be printed
+    log_level: LogLevel,
 }
 
 impl ConsoleConfiguration {
@@ -24,12 +71,21 @@ impl ConsoleConfiguration {
         self.build_print = false;
         self
     }
+
+    /// Console will print the messages up to this level only
+    pub fn log_level(mut self, log_level: LogLevel) -> Self {
+        self.log_level = log_level;
+        self
+    }
 }
 
 
 impl Default for ConsoleConfiguration {
     fn default() -> Self {
-        Self { build_print: true }
+        Self { 
+            build_print: true,
+            log_level: LogLevel::INFO,
+        }
     }
 }
 
@@ -93,6 +149,10 @@ impl<'this> Console<'this> {
 
     /// Simple helper function to print the multiline error message to the cargo output
     pub fn error<S: ToString>(&self, s: &S) {
+        if self.configuration.log_level < LogLevel::ERROR {
+            return;
+        }
+
         for line in s.to_string().split("\n") {
             if self.configuration.build_print {
                 error!("{} {line}", self.tags);
@@ -105,6 +165,11 @@ impl<'this> Console<'this> {
 
     /// Simple helper function to print the multiline warning message to the cargo output
     pub fn warn<S: ToString>(&self, s: &S) {
+
+        if self.configuration.log_level < LogLevel::WARNING {
+            return;
+        }
+
         for line in s.to_string().split("\n") {
             if self.configuration.build_print {
                 warn!("{}  {line}", self.tags);
@@ -117,6 +182,10 @@ impl<'this> Console<'this> {
 
     /// Simple helper function to print the multiline information message to the cargo output
     pub fn info<S: ToString>(&self, s: &S) {
+        if self.configuration.log_level < LogLevel::INFO {
+            return;
+        }
+
         for line in s.to_string().split("\n") {
             if self.configuration.build_print {
                 info!("{}  {line}", self.tags);
@@ -128,6 +197,8 @@ impl<'this> Console<'this> {
     }
 
     /// Simple helper function to print a normal multiline text to the cargo output
+    /// 
+    /// It's never suppressed by the log level
     pub fn println<S: ToString>(&self, s: &S) {
         for line in s.to_string().split("\n") {
             if self.configuration.build_print {
