@@ -8,7 +8,6 @@
 //! 3. Believing  in the intelligence of the user (that might be somewhat questionable from time to time, I agree)
 //!
 
-use std::ops::Deref;
 use std::panic::Location;
 
 use leptos::attr::Attribute;
@@ -545,7 +544,7 @@ where
 {
     /// Unwrap implementation for a singla of `Option<T>`.
     /// 
-    /// # Panics!
+    /// # Panics
     /// 
     /// It will panic any time the signal has None as a value
     pub fn unwrap(&self) -> URwSignal<T> {

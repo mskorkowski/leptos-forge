@@ -151,6 +151,14 @@ impl Kind{
     }
 }
 
+impl<Schema: IntoButtonColorSchema> Add<Schema> for Kind {
+    type Output = Style;
+
+    fn add(self, rhs: Schema) -> Self::Output {
+        self.color(rhs)
+    }
+}
+
 /// Size of the button
 #[derive(Debug, Clone, Copy, Default)]
 pub enum Size {
@@ -161,6 +169,15 @@ pub enum Size {
     Normal,
     /// Small sized button
     Small,
+    /// Unsized button
+    /// 
+    /// This will not imply the size of the button so you must provide all the
+    /// bits on your own using [ButtonColorSchema].
+    /// 
+    /// You should use [Big][Size::Big], [Normal][Size::Normal] or [Small][Size::Small]
+    /// whenever it's possible. This variant is for special cases where normal
+    /// ui buttons are not really an option
+    Unsized,
 }
 
 impl Size {
@@ -171,7 +188,8 @@ impl Size {
         match self {
             Big => "px-3 py-2",
             Normal => "px-2 py-1.5",
-            Small => "px-1"
+            Small => "px-1",
+            Unsized => "",
         }
     }
 

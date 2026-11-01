@@ -18,7 +18,8 @@ pub fn Button<
     Id: ToString,
 >(
     /// Id of the button
-    id: Id,
+    #[prop(optional, default=None)]
+    id: Option<Id>,
     /// Signal which triggers on clicks
     /// Signal triggered when the button is clicked
     #[prop(into)]

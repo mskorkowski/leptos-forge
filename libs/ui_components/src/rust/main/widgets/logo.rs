@@ -49,6 +49,13 @@ impl PatchField for Position {
     }
 }
 
+/// CSS classes of the logo
+const LOGO_CSS_CLASSES: &str = "\
+    leptos-forge-logo \
+    object-fit \
+    md:object-cover \
+";
+
 /// Company logo
 #[component]
 pub fn Logo<S1: ToString>(
@@ -72,7 +79,7 @@ pub fn Logo<S1: ToString>(
                 id={id.to_string()}
                 src=src 
                 alt=alt 
-                class="leptos-forge-logo object-cover"
+                class=LOGO_CSS_CLASSES
                 style:object-position=move || { position.get().to_css() }
             />
         </div>

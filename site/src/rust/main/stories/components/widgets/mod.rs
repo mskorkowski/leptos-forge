@@ -8,6 +8,7 @@ pub mod password;
 pub mod select;
 pub mod text_field;
 pub mod textarea;
+pub mod toolbar;
 
 use codearea::BasicCodeareaStory;
 use color_palette::ColorPaletteSection;
@@ -17,6 +18,7 @@ use logo::BasicLogoStory;
 use password::BasicPasswordFieldStory;
 use text_field::BasicTextFieldStory;
 use textarea::BasicTextareaStory;
+use toolbar::ToolbarSection;
 
 use crate::State;
 use crate::stories::components::widgets::select::BasicSingleSelectStory;
@@ -52,6 +54,7 @@ impl Section for Widgets {
             RouteDef::story::<BasicTextareaStory>("textarea", "Textarea"),
             RouteDef::story::<BasicSingleSelectStory>("single_select", "SingleSelect"),
             RouteDef::section::<ColorPaletteSection>("color_pallete", "Color Pallete"),
+            RouteDef::section::<ToolbarSection>("toolbar", "Toolbar"),
         ]
     }
 }

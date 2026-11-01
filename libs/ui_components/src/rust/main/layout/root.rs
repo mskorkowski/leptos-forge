@@ -3,12 +3,26 @@
 
 use leptos::prelude::*;
 
+/// CSS classes for the root element
+const ROOT_CSS_CLASSES: &str = "\
+    leptos-forge-layout-root \
+    w-dvw \
+    h-dvh \
+    flex \
+    flex-col \
+    py-0 \
+    md:flex-row \
+    print:w-auto \
+    print:h-auto \
+    print:overflow-visible
+";
+
 /// Root component of the application, using it allows seamless integration
 /// with other layout components from this crate
 #[component]
 pub fn Root(children: Children) -> impl IntoView {
     view! {
-        <div class="leptos-forge-layout-root w-dvw h-dvh flex flex-col sm:flex-row py-0 print:w-auto print:h-auto print:overflow-visible">
+        <div class=ROOT_CSS_CLASSES>
           { children() }
         </div>
     }

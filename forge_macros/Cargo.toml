@@ -1,0 +1,25 @@
+[package]
+# Name of the create
+#
+# If for some reason there is a need to change a crate name, then you also need
+# to update the build script, because we've hardcoded the crate name there
+name = "leptos_forge_macros"
+license.workspace = true
+description = "Macros streamlining the leptos_forge usage"
+version.workspace = true
+edition.workspace = true
+readme = "../README.md"
+repository.workspace = true
+homepage.workspace = true
+
+[lib]
+path = "src/rust/main/lib.rs"
+
+[dependencies]
+
+
+[features]
+default = []
+
+[lints]
+workspace = true

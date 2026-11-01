@@ -106,7 +106,7 @@ impl Story for BasicButtonStory {
 
         view! {
             <Button
-                id="primitive_button_id"
+                id=Some("primitive_button_id")
                 style=style
                 click={self.click}
             >

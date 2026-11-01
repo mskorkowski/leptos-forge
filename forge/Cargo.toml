@@ -23,6 +23,7 @@ path = "src/rust/main/lib.rs"
 [dependencies]
 document-features.workspace = true
 leptos = { workspace = true, features = ["csr"] }
+leptos-node-ref.workspace = true
 leptos_router.workspace = true
 reactive_stores.workspace = true
 utils.workspace = true

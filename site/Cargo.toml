@@ -14,13 +14,16 @@ name = "site"
 path = "src/rust/main/main.rs"
 
 [dependencies]
+icondata.workspace = true
 leptos = { workspace = true, features = ["csr"] }
 leptos-node-ref.workspace = true
 leptos-use.workspace = true
+leptos_icons.workspace = true
 reactive_stores.workspace = true
 js-sys.workspace = true
 
 forge.workspace = true
+utils.workspace = true
 utils_leptos.workspace = true 
 ui_components.workspace = true
 

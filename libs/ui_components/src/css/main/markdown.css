@@ -6,15 +6,15 @@
     @apply pt-2 mb-6 font-bold text-forgeblue-950;
 }
 
-.markdown > h1:first-child {
+.markdown h1:first-child {
     @apply text-5xl md:text-6xl lg:text-7xl 2xl:text-8xl font-bold text-forgeblue-950;
 }
 
-.markdown > h1:first-child:has(+ h1) {
+.markdown h1:first-child:has(+ h1) {
     @apply inline-block;
 }
 
-.markdown > h1:first-child + h1 {
+.markdown h1:first-child + h1 {
     @apply inline-block text-4xl pt-0 text-forgegray-700 font-bold;
 }
 

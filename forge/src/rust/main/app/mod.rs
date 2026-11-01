@@ -6,12 +6,19 @@ use std::fmt::Debug;
 
 use leptos::prelude::*;
 use leptos::tachys::view::iterators::StaticVec;
+use leptos_node_ref::AnyNodeRef;
 use leptos_router::components::Router;
 use leptos_router::components::Routes;
 use reactive_stores::PatchField;
 use reactive_stores::Store;
 use ui_components::menu::MenuState;
+use ui_components::menu::MenuStateStoreFields;
+use ui_components::menu::Header;
+use ui_components::model::Visibility;
+use ui_components::widgets::logo::Logo;
 use utils::prelude::ThreadSafe;
+use utils_leptos::signal::URwSignal;
+
 
 use crate::views::menu_panel::MenuPanel;
 
@@ -23,6 +30,12 @@ use ui_components::menu::Menu;
 use super::views::content::Content;
 
 pub use configuration::*;
+
+/// Classes for the logo element
+const LOGO_CLASSES: &str = "\
+    max-w-(--forge-main-menu-width) \
+    peer-checked:hidden \
+";
 
 /// Main application component
 #[component]
@@ -39,10 +52,14 @@ pub fn App<Data>(
 where 
     Data: PatchField + Debug + Default + ThreadSafe
 {
+    let menu_parent_ref = AnyNodeRef::new();
+    let menu = Store::new(MenuState::new());
+    let menu_visibility: URwSignal<Visibility> = menu.visibility().into();
+
     let menu_defs = {
         let routes = routes.clone();
         move || {
-            let menu = Store::new(MenuState::new());
+            
 
             let window = window();
             let location = window.location();
@@ -84,8 +101,34 @@ where
             set_is_routing=set_is_routing_setter
         >
             <Root>
-                <MenuPanel configuration>
-                    <Menu children=ToChildren::to_children(menu_defs) />
+                <MenuPanel
+                    menu_parent_ref
+                    configuration
+                >
+                    <Menu
+                        parent=menu_parent_ref
+                        visibility=menu_visibility
+                        children=ToChildren::to_children(menu_defs)
+                    >
+                        <Header slot>
+                            { move || {
+                                let logo_config = configuration.logo();
+                                if let Some(logo) = &logo_config.path().get() {
+                                    view!{ 
+                                        <Logo
+                                            id="leptos-forge-logo"
+                                            src={logo.to_string()}
+                                            alt={logo_config.alt().get().unwrap_or_else(|| "Logo".to_string())}
+                                            attr:class=LOGO_CLASSES
+                                        /> 
+                                    }.into_any()
+                                }
+                                else {
+                                    ().into_any()
+                                }
+                            }}
+                        </Header>
+                    </Menu>
                 </MenuPanel>
                 <Content>
                     <Routes fallback=|| "404" children=ToChildren::to_children(route_defs) />

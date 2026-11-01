@@ -33,9 +33,9 @@ pub struct LeptosForgeConfiguration {
     pub documentation_panel: DocumentationPanelConfiguration,
 }
 
-impl Into<Store<LeptosForgeConfiguration>> for LeptosForgeConfiguration {
-    fn into(self) -> Store<LeptosForgeConfiguration> {
-        Store::new(self)
+impl From<LeptosForgeConfiguration> for Store<LeptosForgeConfiguration> {
+    fn from(val: LeptosForgeConfiguration) -> Self {
+        Store::new(val)
     }
 }
 
@@ -95,6 +95,7 @@ pub struct CanvasConfiguration {
     pub background: Option<ForgeTheme>,
 }
 
+#[allow(clippy::derivable_impls)]
 impl Default for CanvasConfiguration {
     fn default() -> Self {
         Self{ 

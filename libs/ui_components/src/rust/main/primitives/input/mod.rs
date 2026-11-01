@@ -30,7 +30,22 @@ use button::PasswordButtonStates;
 /// # Also used by
 /// 
 /// This css classes are also used by the `SingleSelect`, unfortunately it was impossible to reuse this classes 
-pub const INPUT_CSS_CLASSES: &str = "leptos-forge-input flex items-center w-full forge-text-standard py-1 px-2 peer border-2 border-solid border-forgeblue-300 rounded-sm focus:border-forgeblue-500 focus:outline-none";
+pub const INPUT_CSS_CLASSES: &str = "\
+    leptos-forge-input \
+    flex \
+    items-center \
+    w-full \
+    forge-text-standard \
+    py-1 \
+    px-2 \
+    peer \
+    border-2 \
+    border-solid \
+    border-forgeblue-300 \
+    rounded-sm \
+    focus:border-forgeblue-500 \
+    focus:outline-none \
+";
 
 /// Spread component which applies the class attribute to the element with classes specific for the input field element
 pub fn input_class() -> impl Attribute {
@@ -39,10 +54,30 @@ pub fn input_class() -> impl Attribute {
     }
 }
 
+/// CSS classes for the textarea field
+pub const TEXTAREA_CLASSES: &str = "\
+    leptos-forge-textarea \
+    block \
+    peer \
+    py-1 \
+    px-2.5 \
+    w-full \
+    h-full \
+    min-h-80 \
+    forge-text-standard \
+    text-forgegray-900 \
+    bg-forgegray-50 \
+    rounded-sm border \
+    border-2 border-forgeblue-300 \
+    focus:ring-forgeblue-500 \
+    focus:border-forgeblue-500 \
+    outline-none \
+";
+
 /// Spread component which applies the class attribute to the element with classes specific for the textarea element
 pub fn textarea_class() -> impl Attribute {
     view! {
-        <{..} class="leptos-forge-textarea block peer py-1 px-2.5 w-full h-full min-h-80 forge-text-standard text-forgegray-900 bg-forgegray-50 rounded-sm border border-2 border-forgeblue-300 focus:ring-forgeblue-500 focus:border-forgeblue-500 outline-none" />
+        <{..} class=TEXTAREA_CLASSES />
     }
 }
 

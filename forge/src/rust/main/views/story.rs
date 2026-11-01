@@ -68,7 +68,7 @@ pub fn Story<S: 'static + IntoStory + Default + Copy + ThreadSafe>(
             <Show
                     when=move || configuration.control_panel().visible().get()
             >
-                <div class="flex flex-col basis-1/3 first:basis-1/1 px-4 py-4 overflow-auto print:hidden print:basis-0 min-w-xs w-xs shrink-0 @md:shrink-1">
+                <div class="flex flex-col basis-1/3 first:basis-1/1 px-4 py-4 overflow-auto hidden md:visible print:hidden print:basis-0 min-w-xs w-xs shrink-0 @md:shrink-1">
                     <ControlPane story=story data configuration/>
                 </div>
             </Show>
