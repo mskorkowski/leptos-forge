@@ -45,29 +45,29 @@ enum MenuItems {
 }
 
 impl ToolbarItemView for MenuItems {
-    fn icon(&self) -> impl IntoView {
+    fn icon(&self) -> Option<AnyView> {
         use MenuItems::*;
         match self {
-            Home => view!{
+            Home => Some(view!{
                 <Icon icon=icondata::MdiHome />
-            }.into_any(),
-            Tasks => view!{
+            }.into_any()),
+            Tasks => Some(view!{
                 <Icon icon=icondata::MdiFormatListChecks />
-            }.into_any(),
-            Emails => view!{
+            }.into_any()),
+            Emails => Some(view!{
                 <Icon icon=icondata::MdiEmailOutline />
-            }.into_any(),
-            Search => ().into_any()
+            }.into_any()),
+            Search => None
         }
     }
 
-    fn label(&self) -> impl IntoView {
+    fn label(&self) -> Option<AnyView> {
         use MenuItems::*;
         match self {
-            Home => "Home".into_any(),
-            Tasks => "Tasks".into_any(),
-            Emails => "Emails".into_any(),
-            Search => ().into_any()
+            Home => Some("Home".into_any()),
+            Tasks => Some("Tasks".into_any()),
+            Emails => Some("Emails".into_any()),
+            Search => None
         }
     }
 

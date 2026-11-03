@@ -41,9 +41,7 @@ use crate::model::Style;
 /// >
 ///
 #[component]
-pub fn Button<S1: ToString>(
-    /// Id of the component
-    id: Option<S1>,
+pub fn Button(
     /// Signal triggered when the button is clicked
     #[prop(into)]
     click: SignalSetter<ButtonClick>,
@@ -85,7 +83,6 @@ pub fn Button<S1: ToString>(
     };
 
     let class = kind.into_button_class(&schema, &size);
-    let id = id.as_ref().map(|s| s.to_string());
 
     match group {
         None => view! {
@@ -103,7 +100,6 @@ pub fn Button<S1: ToString>(
         Some(ButtonGroup::MultiSelect) => view! {
             <label
                 class={class.to_string()}
-                for={id}
                 on:pointerdown=on_pointerdown
                 on:contextmenu=on_contextmenu
                 role="button"
@@ -111,7 +107,6 @@ pub fn Button<S1: ToString>(
                 <input
                     type="checkbox"
                     class="peer hidden"
-                    id
                 />
                 {children()}
             </label>
@@ -124,7 +119,6 @@ pub fn Button<S1: ToString>(
                 //>
                 <label
                     class={class.to_string()}
-                    for=id
                     on:pointerdown=on_pointerdown
                     on:contextmenu=on_contextmenu
                     role="button"
@@ -132,7 +126,6 @@ pub fn Button<S1: ToString>(
                     <input 
                         type="radio" 
                         class="peer hidden" 
-                        id
                         name=name 
                     />
                     {children()}

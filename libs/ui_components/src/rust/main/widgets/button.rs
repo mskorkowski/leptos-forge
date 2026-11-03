@@ -10,17 +10,9 @@ use crate::model::Style;
 pub use super::super::primitives::button::Button as PrimitiveButton;
 
 
-
-
 /// Button widget
 #[component]
-pub fn Button<
-    Id: ToString,
->(
-    /// Id of the button
-    #[prop(optional, default=None)]
-    id: Option<Id>,
-    /// Signal which triggers on clicks
+pub fn Button(
     /// Signal triggered when the button is clicked
     #[prop(into)]
     click: SignalSetter<ButtonClick>,
@@ -35,8 +27,7 @@ pub fn Button<
     group: Option<ButtonGroup>,
 ) -> impl IntoView {
     view!{
-        <PrimitiveButton<Id>
-            id
+        <PrimitiveButton
             click
             group
             children

@@ -1,6 +1,7 @@
 //! Stories about widgets
 //!
 
+pub mod buttons;
 pub mod codearea;
 pub mod color_palette;
 pub mod logo;
@@ -21,6 +22,7 @@ use textarea::BasicTextareaStory;
 use toolbar::ToolbarSection;
 
 use crate::State;
+use crate::stories::components::widgets::buttons::ButtonsSection;
 use crate::stories::components::widgets::select::BasicSingleSelectStory;
 
 
@@ -47,6 +49,7 @@ impl Section for Widgets {
 
     fn subroutes(&self) -> Vec<RouteDef<Self::Data>> {
         vec![
+            RouteDef::section::<ButtonsSection>("buttons", "Buttons"),
             RouteDef::story::<BasicCodeareaStory>("codearea", "Codearea"),
             RouteDef::story::<BasicLogoStory>("logo", "Logo"),
             RouteDef::story::<BasicTextFieldStory>("text_field", "TextField"),

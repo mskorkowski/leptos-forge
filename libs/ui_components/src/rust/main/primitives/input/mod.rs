@@ -45,6 +45,10 @@ pub const INPUT_CSS_CLASSES: &str = "\
     rounded-sm \
     focus:border-forgeblue-500 \
     focus:outline-none \
+    bg-forgegray-100 \
+    dark:bg-forgegray-800 \
+    text-forgegray-700 \
+    dark:text-forgegray-200 \
 ";
 
 /// Spread component which applies the class attribute to the element with classes specific for the input field element
@@ -72,6 +76,10 @@ pub const TEXTAREA_CLASSES: &str = "\
     focus:ring-forgeblue-500 \
     focus:border-forgeblue-500 \
     outline-none \
+    bg-forgegray-100 \
+    dark:bg-forgegray-800 \
+    text-forgegray-700 \
+    dark:text-forgegray-200 \
 ";
 
 /// Spread component which applies the class attribute to the element with classes specific for the textarea element

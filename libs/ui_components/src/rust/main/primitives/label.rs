@@ -2,6 +2,31 @@
 
 use leptos::prelude::*;
 
+/// CSS classes for the text field label
+const LABEL_CSS_CLASSES: &'static str = "\
+    leptos-forge-primitives-label \
+    absolute \
+    forge-text-small \
+    text-forgegray-700 \
+    dark:text-forgegray-200 \
+    duration-300 \
+    top-3.5 \
+    left-2.4 \
+    select-none \
+    transform \
+    origin-[0] \
+    start-2.5 \
+    peer-focus:translate-y-0 \
+    peer-focus:text-forgegray-700 \
+    peer-focus:dark:text-forgegray-200 \
+    peer-focus:forge-text-small \
+    peer-placeholder-shown:translate-y-12/10 \
+    peer-placeholder-shown:cursor-text \
+    peer-placeholder-shown:text-forgegray-700 \
+    peer-placeholder-shown:dark:text-forgegray-200 \
+    peer-placeholder-shown:forge-text-standard
+";
+
 /// Label component for inputs like
 ///
 /// - `<input type="text">`
@@ -32,7 +57,7 @@ pub fn TextFieldLabel<S: ToString>(
 
     view! {
         <label
-            for={for_id.to_string()} class="leptos-forge-primitives-label absolute forge-text-small text-forgegray-700 duration-300 top-3.5 left-2.4 select-none transform origin-[0] start-2.5 peer-focus:translate-y-0 peer-focus:text-forgegray-700 peer-focus:forge-text-small peer-placeholder-shown:translate-y-12/10 peer-placeholder-shown:cursor-text peer-placeholder-shown:text-forgegray-700 peer-placeholder-shown:forge-text-standard"
+            for={for_id.to_string()} class=LABEL_CSS_CLASSES
             style:z-index={{z_index.to_string()}}
             {..test_data}
         >

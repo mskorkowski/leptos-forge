@@ -125,6 +125,22 @@ controlscontrols
     assert_eq!(result, expected);
 }
 
+#[test]
+fn md_failing_to_compile_story() {
+    let markdown = "<Story of=\"basic_button\" />";
+
+    let expected = vec![MarkdownToken::Story{ 
+        story: Some("basic_button"), 
+        len: markdown.len(), 
+        controls: false 
+    }];
+
+    let parser = MarkdownParser::new();
+    let result = parser.parse(markdown);
+
+    assert_eq!(result, expected);
+}
+
 mod internal {
     use crate::views::section::markdown::MarkdownToken;
     use crate::views::section::markdown::OfAttribute;

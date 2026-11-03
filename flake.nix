@@ -2,9 +2,7 @@
   description = "A basic Rust devshell for NixOS users developing Leptos";
 
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-26.05";
-    # nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
-    # nixpkgs-stable.url = "github:NixOS/nixpkgs/nixos-26.05";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     rust-overlay.url = "github:oxalica/rust-overlay";
     flake-utils.url = "github:numtide/flake-utils";
   };
@@ -23,9 +21,6 @@
         pkgs = import nixpkgs {
           inherit system overlays;
         };
-        # pkgs-stable = import nixpkgs-stable { 
-        #   inherit system; 
-        # };
       in
       with pkgs;
       {
@@ -40,9 +35,8 @@
               # cargo-make
               trunk
               tailwindcss_4
-              swc
               # clang
-              #lld
+              # lld
               cargo-shear
               (rust-bin.selectLatestNightlyWith (
                 toolchain:
@@ -54,6 +48,9 @@
                   targets = [ "wasm32-unknown-unknown" ];
                 }
               ))
+            ]
+            ++ pkgs.lib.optionals pkg.stdenv.isDarwin [
+              darwin.apple_sdk.frameworks.SystemConfiguration
             ];
 
           shellHook = '''';

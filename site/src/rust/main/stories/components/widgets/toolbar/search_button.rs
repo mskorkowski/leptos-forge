@@ -3,6 +3,7 @@
 
 use forge::Story;
 use reactive_stores::Store;
+use ui_components::model::ButtonClick;
 use ui_components::widgets::toolbar::SearchMenuItem;
 use ui_components::widgets::toolbar::ToolbarContainer;
 use ui_components::widgets::toolbar::ToolbarItemView;
@@ -40,17 +41,17 @@ enum MenuItems {
 }
 
 impl ToolbarItemView for MenuItems {
-    fn icon(&self) -> impl IntoView {
+    fn icon(&self) -> Option<AnyView> {
         use MenuItems::*;
         match self {
-            Search => ().into_any()
+            Search => None
         }
     }
 
-    fn label(&self) -> impl IntoView {
+    fn label(&self) -> Option<AnyView> {
         use MenuItems::*;
         match self {
-            Search => ().into_any()
+            Search => None
         }
     }
 
@@ -73,7 +74,7 @@ impl Enumerable for MenuItems {
 #[derive(Debug, Clone, Copy, Default, Store)]
 pub struct SearchButtonStory {
     /// signal tracking selection of items in the menu
-    state: URwSignal<MenuItems>,
+    state: URwSignal<ButtonClick>,
 }
 
 impl Story for SearchButtonStory {
@@ -83,15 +84,14 @@ impl Story for SearchButtonStory {
         DESCRIPTION_SEARCH_BUTTON
     }
 
-    fn view(&self, data: Store<Self::Data>) -> impl IntoView {
+    fn view(&self, _data: Store<Self::Data>) -> impl IntoView {
         
-        let state = self.state.write_only();
+        let state: SignalSetter<ButtonClick> = self.state.write_only();
 
         view!{
             <ToolbarContainer>
-                <SearchMenuItem 
-                    item=MenuItems::Search
-                    state=Some(state)
+                <SearchMenuItem
+                    click_in=state
                 />
             </ToolbarContainer>
         }

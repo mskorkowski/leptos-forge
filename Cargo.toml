@@ -9,7 +9,7 @@ members = [
 [workspace.package]
 version = "0.8.1"
 edition = "2024"
-rust-version = "1.88"
+# rust-version = "1.88"
 license = "MIT"
 repository = "https://github.com/mskorkowski/leptos-forge"
 homepage = "https://mskorkowski.github.io/"

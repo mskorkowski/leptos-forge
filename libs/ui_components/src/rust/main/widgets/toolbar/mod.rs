@@ -317,7 +317,6 @@ pub fn Toolbar<Items>(
 where
     Items: Enumerable + ThreadSafe + ToolbarItemView + Copy
 {
-
     view!{
         <ToolbarContainer>
             <div class=CSS_CLASSES_GENERIC_ITEM_CONTAINER>
@@ -335,11 +334,12 @@ where
             {
                 match search {
                     Some(search)  => {
+                        let (search_click_out, search_click_in) = signal(ButtonClick::Released);
+
                         view!{
                             <Separator />
                             <SearchMenuItem 
-                                item=search
-                                state=selection
+                                click_in=search_click_in
                             />
                         }.into_any()
                     },
@@ -394,53 +394,13 @@ where
     );
 
     view!{
-        <Button<String>
-            id={item.id().to_string()}
+        <Button
             style=TOOLBAR_BUTTON_STYLE
             click=click_in
         >
             <Icon item />
             <Label item />
-        </Button<String>>
-    }
-}
-
-/// Search button menu item
-/// 
-/// This component depends on the [ToolbarContainer] to provide the html/css
-/// environment
-#[component]
-pub fn SearchMenuItem<Item>(
-    /// Value of the signal when menu item has been triggered
-    item: Item,
-    /// signal with the toolbar state
-    state: Option<SignalSetter<Item>>,
-) -> impl IntoView 
-where
-    Item: ThreadSafe + Copy + ToolbarItemView,
-{
-
-    let (click_out, click_in) = signal(ButtonClick::Released);
-
-    Effect::watch(
-        move || click_out.get(), 
-        move |value, _prev, _| {
-            use ButtonClick::*;
-            if value == &LeftClick
-                && let Some(state) = state {
-                    state.set(item);
-                }
-        }, 
-        false
-    );
-
-    view!{
-        <Button<String>
-            click=click_in
-            style=SINGLE_BUTTON_STYLE
-        >
-            <leptos_icons::Icon icon=icondata::MdiMagnify />
-        </Button<String>>
+        </Button>
     }
 }
 

@@ -7,10 +7,15 @@ use leptos_icons::Icon;
 use utils::prelude::ThreadSafe;
 use utils_leptos::signal::URwSignal;
 
+const INPUT_BUTTON_ICON_CLASS: &'static str = "\
+    leptos-forge-input-button-icon \
+    mx-[4px] \
+";
+
 /// Common class for icons in input buttons
 pub fn input_button_icon_class() -> impl Attribute {
     view! {
-        <{..} class="leptos-forge-input-button-icon mx-[4px]" />
+        <{..} class=INPUT_BUTTON_ICON_CLASS />
     }
 }
 
@@ -42,12 +47,19 @@ pub fn ClearInputButton(
 
     view! {
         <button class="
-                absolute 
+                absolute
+                active:bg-forgeblue-500
+                active:border-forgeblue-500
+                active:text-forgeblue-100
                 forge-text-standard
                 text-forgegray-800
+                dark:text-forgegray-200
                 bg-forgegray-100
-                hover:bg-forgeblue-800 
+                dark:bg-forgegray-800
+                hover:bg-forgeblue-800
+                dark:hover:bg-forgeblue-200 
                 hover:text-forgeblue-100 
+                dark:hover:text-forgeblue-800
                 border-forgeblue-800 
                 justify-center
                 items-center
@@ -58,10 +70,7 @@ pub fn ClearInputButton(
                 appearance-none
                 rounded-sm
                 cursor-pointer
-                leading-0
-                active:bg-forgeblue-500
-                active:border-forgeblue-500
-                active:text-forgeblue-100 
+                leading-0 
                 mt-[calc(var(--spacing)*6.7)]
             " 
             on:click=on_click

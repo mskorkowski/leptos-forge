@@ -18,6 +18,7 @@
 
 mod state;
 mod stories;
+mod styles;
 
 use forge::LeptosForgeConfiguration;
 use forge::RouteDef;
