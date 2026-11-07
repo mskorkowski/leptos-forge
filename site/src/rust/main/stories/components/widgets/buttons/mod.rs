@@ -8,7 +8,7 @@ use forge::Section;
 use crate::State;
 use crate::stories::components::widgets::buttons::basic_button::BasicButtonStory;
 
-
+/// Describes buttons
 const BUTTONS_SECTION: &'static str = r############"
 # Buttons
 

@@ -15,7 +15,6 @@ use ui_components::widgets::button::Button;
 
 use crate::State;
 use crate::styles;
-use crate::styles::Styles;
 
 /// Story for the basic button
 /// 
@@ -82,7 +81,12 @@ impl Story for BasicButtonStory {
         let (click_out, click_in) = signal(ButtonClick::Released);
 
         view!{
-            <div class="grid grid-cols-3 grid-rows-3 gap-4">
+            <div class="grid grid-cols-4 grid-rows-4 gap-4">
+                <div/>
+                <div>Big</div>
+                <div>Normal</div>
+                <div>Small</div>
+                <div>Primary</div>
                 <div>
                     <Button 
                         click=click_in
@@ -107,6 +111,7 @@ impl Story for BasicButtonStory {
                         {label}
                     </Button>
                 </div>
+                <div>Secondary</div>
                 <div>
                     <Button 
                         click=click_in
@@ -130,6 +135,9 @@ impl Story for BasicButtonStory {
                     >
                         {label}
                     </Button>
+                </div>
+                <div>
+                    Ghost
                 </div>
                 <div>
                     <Button 

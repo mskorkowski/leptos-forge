@@ -7,7 +7,10 @@ use leptos_icons::Icon;
 use utils::prelude::ThreadSafe;
 use utils_leptos::signal::URwSignal;
 
-const INPUT_BUTTON_ICON_CLASS: &'static str = "\
+/// Input button icon classes
+/// 
+/// Used by the [input_button_icon_class]
+const INPUT_BUTTON_ICON_CLASS: &str = "\
     leptos-forge-input-button-icon \
     mx-[4px] \
 ";
